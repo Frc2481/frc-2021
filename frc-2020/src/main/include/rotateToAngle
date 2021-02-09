@@ -1,0 +1,102 @@
+/*----------------------------------------------------------------------------*/
+/* Copyright (c) 2019 FIRST. All Rights Reserved.                             */
+/* Open Source Software - may be modified and shared by FRC teams. The code   */
+/* must be accompanied by the FIRST BSD license file in the root directory of */
+/* the project.                                                               */
+/*----------------------------------------------------------------------------*/
+
+#pragma once
+
+#include <frc2/command/CommandBase.h>
+#include <frc2/command/CommandHelper.h>
+#include "RobotContainer.h"
+#include "subsystems/DriveSubsystem.h"
+#include <wpi/math>
+#include <frc/smartdashboard/SmartDashboard.h>
+#include <frc/controller/ProfiledPIDController.h>
+#include "RobotParameters.h"
+#include "Utils/NormalizeToRange.h"
+#include "Utils/TrajectoryGenerator1D.h"
+#include "Utils/NormalizeToRange.h"
+using namespace nt;
+
+class RotateToAngleCommand
+    : public frc2::CommandHelper<frc2::CommandBase, RotateToAngleCommand> {
+
+ private:
+  TrajectoryGenerator1D* trajectoryGenerator;
+  
+  double m_turnInput;
+  double m_targetZone;
+  double m_targetYaw;
+  bool m_tv;
+  double m_pathIndex;
+  DriveSubsystem* m_drive;
+  frc2::PIDController m_turningPIDController{
+      2, 0, 0};
+  std::vector<TrajectoryGenerator1D::waypoint_t> m_path;
+ public:
+  RotateToAngleCommand(DriveSubsystem* driveTrain, double targetYaw, double targetZone){
+    m_drive = driveTrain;
+    m_targetZone = targetZone;
+    m_targetYaw = targetYaw;
+    AddRequirements(m_drive);
+  }
+
+  void Initialize() override{
+    m_turnInput = m_drive->GetPose().Rotation().Degrees().to<double>();
+    double yawDiff = normalizeToRange::NormalizeToRange(normalizeToRange::RangedDifference(m_targetYaw - m_turnInput,-180,180)/2+m_turnInput,-180,180,true);
+    
+    m_path.push_back(m_turnInput,0);
+    m_path.push_back(yawDiff,RobotParameters::k_maxYawRate);
+    m_path.push_back(m_targetYaw,0);
+    trajectoryGenerator = new TrajectoryGenerator1D(m_path,50,RobotParameters::k_maxYawRate,RobotParameters::k_maxYawAccel, RobotParameters::k_maxYawDeccel);
+
+
+    trajectoryGenerator.setIsContinous(true, -180,180);
+    trajectoryGenerator.generatePath();
+    
+    m_turningPIDController.EnableContinuousInput(-180,180);
+  }
+
+  void Execute() override{
+    m_turnInput = m_drive->GetPose().Rotation().Degrees().to<double>();
+    
+    for(int j = m_pathIndex; j < (int)m_path.size(); j++){
+			printf("point looking at: %d\n", j);
+			
+			double diff = m_turnInput - m_path[j].speed;
+			if(distToPoint < distToClosestPoint){
+				if(MATH_CONSTANTS_PI/2 > diffAngle && fabs(m_path[j].vel) > RobotParameters::k_minRobotVelocity){
+					m_pathIndex = j;
+					distToClosestPoint = distToPoint;
+					driftingAway = 0;
+				}else{
+					skipped++;
+				}
+			}else{
+				driftingAway++;
+				if(driftingAway >= m_maxDrifting){
+					break;
+				}
+			}
+		}
+    double yawRate = m_turningPIDController.Calculate(m_turnInput, m_targetYaw); //pid tune motor controller
+
+    m_drive->Drive(units::meters_per_second_t(0), // set the driveTrain
+                   units::meters_per_second_t(0),
+                   units::degrees_per_second_t(yawRate),
+                   false);
+    frc::SmartDashboard::PutNumber("YawRate", yawRate);
+    frc::SmartDashboard::PutNumber("m_turnInput", m_turnInput);
+  }
+
+  void End(bool interrupted) override{
+    m_drive->Drive(0_mps,0_mps,0_rpm,false);//STOP DRIVE TRAIN
+  }
+
+  bool IsFinished() override{
+    return fabs(normalizeToRange::RangedDifference(m_turnInput - m_targetYaw,-180, 180)) <= m_targetZone;
+  }
+};
+
