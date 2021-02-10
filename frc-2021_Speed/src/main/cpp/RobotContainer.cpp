@@ -35,7 +35,7 @@
 #include "commands/Intake/SetLeftIntakeSpeed.h"
 #include "commands/Intake/SetRightIntakeSpeed.h"
 
-
+#include "commands/Autos/AutoLeftCommandGroup.h"
 
 using namespace DriveConstants;
 
@@ -101,9 +101,7 @@ void RobotContainer::ConfigureButtonBindings(){
 }
 
 frc2::Command* RobotContainer::GetAutonomousCommand() {
-  
-  return nullptr;
-//  return new AutoLeftCommandGroup(&m_follower, &m_drive, &m_shooter, &m_feeder, &m_intake);
+  return new AutoLeftCommandGroup(&m_follower, &m_drive);
 }
 
 frc2::InstantCommand* RobotContainer::GetBrakeCommand(){

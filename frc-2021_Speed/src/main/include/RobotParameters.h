@@ -18,7 +18,7 @@ namespace RobotParameters {
     static constexpr double k_steerEncoderToWheelGearRatio = 1; // gear ratio from steer encoder to wheel
     static constexpr double k_driveMotorGearRatio = 16.0/26.0*(15.0/45.0);
     static constexpr double k_ticksPerRev = 2048.0;//ticks per 100ms
-    static constexpr double k_driveMotorEncoderTicksToMPS = (1/k_ticksPerRev)*(1/k_driveMotorGearRatio)*k_wheelRad*3.14159265*2;//*10
+    static constexpr double k_driveMotorEncoderTicksToMPS = (1/k_ticksPerRev)*(1/k_driveMotorGearRatio)*k_wheelRad*3.14159265*2;//
     static constexpr double k_driveMotorEncoderTicksToMeters = (1/k_ticksPerRev)*(1/k_driveMotorGearRatio)*k_wheelRad*3.14159265*2;
     static constexpr double k_minRobotVelocity = .07;//3*.0254;
     static constexpr double k_minRobotYawRate = 10;//3*.0254;

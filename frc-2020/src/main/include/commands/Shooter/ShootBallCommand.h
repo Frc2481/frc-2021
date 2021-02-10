@@ -37,6 +37,7 @@ class ShootBallCommand
     // }else{//TODO work on
     //   m_shooter->setCloseShot(false);
     // }
+    m_feeder->setSensorPos(0);
     if(!m_shooter->isShooterOn()){
       m_finished = true;
     }

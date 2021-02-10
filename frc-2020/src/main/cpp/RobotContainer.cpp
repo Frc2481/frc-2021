@@ -41,7 +41,7 @@
 
 #include "commands/Autos/AutoLeftCommandGroup.h"
 // #include "commands/Autos/AutoRightCommandGroup.h"
-// #include "commands/Autos/AutoTestCommandGroup.h"
+#include "commands/Autos/AutoTestCommandGroup.h"
 
 
 #include <frc/geometry/Pose2d.h>
@@ -106,8 +106,8 @@ RobotContainer::RobotContainer(): m_driverController(0),
   frc::SmartDashboard::PutNumber("limeLight Izone", RobotParameters::k_limeLightIZone);
 
   frc::SmartDashboard::PutNumber("Lime light X", 0);
-    frc::SmartDashboard::PutNumber("Lime light Y", 0);
-    frc::SmartDashboard::PutNumber("Lime light yaw", 0);
+  frc::SmartDashboard::PutNumber("Lime light Y", 0);
+  frc::SmartDashboard::PutNumber("Lime light yaw", 0);
   frc::SmartDashboard::PutData("limelight to angle", new LimeLightRotateToTargetCommand(&m_drive,.01));
   frc::SmartDashboard::PutNumber("motion magic target angle", 0);
   frc::SmartDashboard::PutData("motion magic to angle", new RotateWithMotionMagic(&m_drive, 20,1,true));
@@ -161,8 +161,8 @@ RobotContainer::RobotContainer(): m_driverController(0),
     m_climber.zeroPos();
   },{&m_climber}));
    
-   frc::SmartDashboard::PutNumber("climberSetPos", 0);
-   frc::SmartDashboard::PutData("climb to pos", new frc2::InstantCommand([this]{
+  frc::SmartDashboard::PutNumber("climberSetPos", 0);
+  frc::SmartDashboard::PutData("climb to pos", new frc2::InstantCommand([this]{
     m_climber.goToPos(frc::SmartDashboard::GetNumber("climberSetPos", 0));
   },{&m_climber}));
 
@@ -256,12 +256,13 @@ void RobotContainer::ConfigureButtonBindings(){
 frc2::Command* RobotContainer::GetAutonomousCommand() {
   
   // return nullptr;
- return new AutoLeftCommandGroup(&m_follower, &m_drive, &m_shooter, &m_feeder, &m_intake);
+  return new AutoLeftCommandGroup(&m_follower, &m_drive, &m_shooter, &m_feeder, &m_intake);
+  // return new AutoTestCommandGroup(&m_follower, &m_drive, &m_shooter, &m_feeder, &m_intake); //
 }
 
 frc2::InstantCommand* RobotContainer::GetBrakeCommand(){
   return new frc2::InstantCommand([this]{m_drive.setBrake(); TurnLimeLightOff();},{&m_drive});
 }
-  frc2::InstantCommand* RobotContainer::GetCoastCommand(){
-    return new frc2::InstantCommand([this]{m_drive.setCoast();},{&m_drive});
-  }
+frc2::InstantCommand* RobotContainer::GetCoastCommand(){
+  return new frc2::InstantCommand([this]{m_drive.setCoast();},{&m_drive});
+}

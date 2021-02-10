@@ -19,13 +19,13 @@
     }
     
     void IntakeSubsystem::extend(){
-        printf("----------extend----------\n");
+        // printf("----------extend----------\n");
         m_intakeExtended = true;
         m_intakeSolenoid.Set(m_intakeSolenoid.kForward);//frc::DoubleSolenoid::Value::kReverse);//TODO uncomment
     }
     void IntakeSubsystem::retract(){
         m_intakeExtended = false;
-        printf("----------retract----------\n");
+        // printf("----------retract----------\n");
         m_intakeSolenoid.Set(m_intakeSolenoid.kReverse);//Set(frc::DoubleSolenoid::Value::kForward);//TODO uncomment
     }
     bool IntakeSubsystem::isIntakeExtended(){
