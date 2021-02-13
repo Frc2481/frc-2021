@@ -10,6 +10,7 @@
 
 VictorMotorController::VictorMotorController(int motorID, const std::string &name): CommonMotorController(motorID, name){
     m_pMotor = new VictorSPX(motorID);
+    
 }
 void  VictorMotorController::SetStatusFramePeriod(StatusFrameEnhanced frame, uint8_t periodMs, int timeoutMs){
     m_pMotor->SetStatusFramePeriod(frame, periodMs, timeoutMs);
@@ -107,6 +108,7 @@ void VictorMotorController::SetVelocityConversionFactor(double factor){
 double VictorMotorController::GetClosedLoopError(){
     return m_pMotor->GetClosedLoopError();
 }
+
 ControlMode VictorMotorController::CommonModeToControllMode(CommonModes mode){
     switch(mode)
     {

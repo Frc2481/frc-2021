@@ -8,8 +8,8 @@
 #include <ctre/Phoenix.h>
 
 #include "components/VictorMotorController.h"
-#include <frc/DigitalInput.h>
-
+// #include <frc/DigitalInput.h>
+#include <frc/Servo.h>
 class IntakeSubsystem : public frc2::SubsystemBase {
     
 public:
@@ -22,13 +22,14 @@ public:
    void setRightSpeed(double speed);
    double getLeftSpeed();
    double getRightSpeed();
-   double getBeamBreak();
+   void setRightCurrent(double amp);
    
+   double getServoAngle();
+   void setServoAngle(double angle);
 private: 
     double leftSpeed;
     double rightSpeed;
-    frc::DigitalInput* m_beamBreak;
     VictorMotorController* m_rightMotor;
     VictorMotorController* m_leftMotor;
-    
+    frc::Servo* m_servo;
     };

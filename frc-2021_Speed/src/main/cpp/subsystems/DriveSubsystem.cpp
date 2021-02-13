@@ -8,7 +8,7 @@
 #include "subsystems/DriveSubsystem.h"
 
 #include <frc/geometry/Rotation2d.h>
-#include <units/units.h>
+#include <units/angle.h>
 
 #include "Constants.h"
 #include <frc/smartdashboard/SmartDashboard.h>
@@ -77,6 +77,11 @@ void DriveSubsystem::Periodic() {
   frc::SmartDashboard::PutNumber("br state speed", m_rearRight.GetState().speed.to<double>());
   frc::SmartDashboard::PutNumber("bl state angle", m_rearLeft.GetState().angle.Degrees().to<double>());
   frc::SmartDashboard::PutNumber("bl state speed", m_rearLeft.GetState().speed.to<double>());
+  frc::SmartDashboard::PutNumber("fr encoder ticks", fabs(m_frontRight.getDriveEncoder()));
+  frc::SmartDashboard::PutNumber("fl encoder ticks", fabs(m_frontLeft.getDriveEncoder()));
+  frc::SmartDashboard::PutNumber("br encoder ticks", fabs(m_rearRight.getDriveEncoder()));
+  frc::SmartDashboard::PutNumber("bl encoder ticks", fabs(m_rearLeft.getDriveEncoder()));
+
   frc::SmartDashboard::PutNumber("Odometry X", GetPose().Translation().X().to<double>()*39.3701);//
   frc::SmartDashboard::PutNumber("Odometry Y", GetPose().Translation().Y().to<double>()*39.3701);//*39.3701
   frc::SmartDashboard::PutNumber("Odometry Yaw", GetPose().Rotation().Degrees().to<double>());    
@@ -88,7 +93,7 @@ void DriveSubsystem::Drive(units::meters_per_second_t xSpeed,
                            bool fieldRelative, bool percentMode) {
 
   // adjust to max speeds
-  double base = .01;
+  double base = .1;
   if(fabs(rot.to<double>()) > base){
     rot = rot * 2.2;
   }
@@ -112,13 +117,8 @@ frc::SmartDashboard::PutNumber("driveMotorVelpreNormAngle",states[0].angle.Degre
   frc::SmartDashboard::PutNumber("fl", fl.speed.to<double>());
   frc::SmartDashboard::PutNumber("br", br.speed.to<double>());
   frc::SmartDashboard::PutNumber("bl", bl.speed.to<double>());
-  // frc::SmartDashboard::PutNumber("RobotVelocityX",GetRobotVelocity().vy.to<double>());
-  // frc::SmartDashboard::PutNumber("RobotVelocityY",GetRobotVelocity().vx.to<double>());
-  // printf("fr angle: %3f, fl angle: %3f, br angle: %3f, bl angle: %3f\n", 
-  //         m_frontRight.GetState().angle.Degrees().to<double>(),
-  //         m_frontLeft.GetState().angle.Degrees().to<double>(),
-  //         m_rearRight.GetState().angle.Degrees().to<double>(),
-  //         m_rearLeft.GetState().angle.Degrees().to<double>());
+  frc::SmartDashboard::PutNumber("RobotVelocityX",GetRobotVelocity().vy.to<double>());
+  frc::SmartDashboard::PutNumber("RobotVelocityY",GetRobotVelocity().vx.to<double>());
 
   
 }
@@ -231,4 +231,11 @@ void DriveSubsystem::setBrake(){
   m_frontLeft.setBrake();
   m_rearRight.setBrake();
   m_rearLeft.setBrake();
+}
+
+void DriveSubsystem::resetDriveEncoders(){
+  m_frontRight.resetDriveEncoder();
+  m_frontLeft.resetDriveEncoder();
+  m_rearRight.resetDriveEncoder();
+  m_rearLeft.resetDriveEncoder();
 }

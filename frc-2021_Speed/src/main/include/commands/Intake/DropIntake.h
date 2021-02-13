@@ -6,22 +6,21 @@
 
 #include <frc2/command/CommandHelper.h>
 #include <frc2/command/InstantCommand.h>
+
 #include "subsystems/IntakeSubsystem.h"
-class CheckBeamBreak
+#include "Constants.h"
+
+class DropIntake
     : public frc2::CommandHelper<frc2::InstantCommand,
-                                 CheckBeamBreak> {
+                                 DropIntake> {
  private:
  IntakeSubsystem* m_pIntake;
  public:
-  CheckBeamBreak(IntakeSubsystem* intake){
+  DropIntake(IntakeSubsystem* intake){
     m_pIntake = intake;
-    AddRequirements(m_pIntake);
   }
 
   void Initialize() override{
-    if(m_pIntake->getBeamBreak()){
-      m_pIntake->setLeftSpeed(0);//TODO check if it is right or left
-    }
+    m_pIntake->setServoAngle(180);
   }
-
 };

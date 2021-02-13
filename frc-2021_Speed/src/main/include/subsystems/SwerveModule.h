@@ -8,7 +8,7 @@
 #pragma once
 
 #include <ctre/Phoenix.h>
-#include <rev/CANSparkMax.h>
+// #include <rev/CANSparkMax.h>
 #include <frc/Encoder.h>
 #include <frc/Spark.h>
 #include <frc/controller/PIDController.h>
@@ -46,6 +46,8 @@ class SwerveModule {
     void setCoast();
     void setBrake();
     void DriveArc(double arcLength, double wheelAngle);
+    double getDriveEncoder();
+    void resetDriveEncoder();
  private:
   // We have to use meters here instead of radians due to the fact that
   // ProfiledPIDController's constraints only take in meters per second and

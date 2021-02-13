@@ -29,6 +29,8 @@
 
 #include "subsystems/IntakeSubsystem.h"
 #include "subsystems/DriveSubsystem.h"
+
+#include <frc/PowerDistributionPanel.h>
 class RobotContainer {
  public:
   RobotContainer();
@@ -42,7 +44,7 @@ class RobotContainer {
 
   DriveSubsystem m_drive;
   IntakeSubsystem m_intake;
-
+  frc::PowerDistributionPanel m_PDP{0};
   SwerveDrivePathFollower m_follower;
 
   

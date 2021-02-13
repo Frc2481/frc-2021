@@ -176,3 +176,11 @@ void SwerveModule::DriveArc(double arcLength, double wheelAngle){
   m_driveMotor->ConfigMotionAcceleration(((RobotParameters::k_maxSpeed)/RobotParameters::k_driveMotorEncoderTicksToMPS)*2);
   m_driveMotor->Set(CommonModes::MotionMagic, m_driveMotor->GetPos() + arcLength/RobotParameters::k_driveMotorEncoderTicksToMeters);
 }
+
+double SwerveModule::getDriveEncoder(){
+  return m_driveMotor->GetPos();
+}
+
+void SwerveModule::resetDriveEncoder(){
+  m_driveMotor->SetEncoderPosition(0.0);
+}

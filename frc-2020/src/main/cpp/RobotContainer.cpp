@@ -40,14 +40,15 @@
 
 
 #include "commands/Autos/AutoLeftCommandGroup.h"
-// #include "commands/Autos/AutoRightCommandGroup.h"
+#include "commands/Autos/AutoLeftCommandGroupStrafe.h"
 #include "commands/Autos/AutoTestCommandGroup.h"
-
+#include "commands/Autos/FordAuto.h"
 
 #include <frc/geometry/Pose2d.h>
 #include <frc/geometry/Translation2d.h>
 #include <frc/smartdashboard/SmartDashboard.h>
-#include <units/units.h>
+#include <units/angle.h>
+#include <units/velocity.h>
 #include "Constants.h"
 #include <frc2/command/WaitCommand.h>
 
@@ -256,7 +257,8 @@ void RobotContainer::ConfigureButtonBindings(){
 frc2::Command* RobotContainer::GetAutonomousCommand() {
   
   // return nullptr;
-  return new AutoLeftCommandGroup(&m_follower, &m_drive, &m_shooter, &m_feeder, &m_intake);
+  return new FordAuto(&m_follower, &m_drive, &m_shooter, &m_feeder, &m_intake);
+  // return new AutoLeftCommandGroup(&m_follower, &m_drive, &m_shooter, &m_feeder, &m_intake);
   // return new AutoTestCommandGroup(&m_follower, &m_drive, &m_shooter, &m_feeder, &m_intake); //
 }
 

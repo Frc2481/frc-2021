@@ -12,7 +12,8 @@
 #include "Utils/SwerveDrivePathFollower.h"
 #include <vector>
 #include "subsystems/DriveSubsystem.h"
-#include "units/units.h"
+#include <units/velocity.h>
+#include <units/angle.h>
 #include <frc/smartdashboard/SmartDashboard.h>
 #include <iostream>
 #include <fstream>
@@ -56,12 +57,12 @@ class PathFollowerCommand : public frc2::CommandHelper<frc2::CommandBase, PathFo
   void Execute() override{
     
     m_pFollower.Update(m_pDriveSubsystem->GetPose());
-    // frc::SmartDashboard::PutNumber("follow path command x", m_pFollower.getPointPos(20).Translation().X().to<double>());
-    // frc::SmartDashboard::PutNumber("follow path command y", m_pFollower.getPointPos(20).Translation().Y().to<double>());
+    frc::SmartDashboard::PutNumber("follow path command x", m_pFollower.getPointPos(20).Translation().X().to<double>());
+    frc::SmartDashboard::PutNumber("follow path command y", m_pFollower.getPointPos(20).Translation().Y().to<double>());
     // frc::SmartDashboard::PutNumber("actual x vel", m_pDriveSubsystem->GetRobotVelocity().vx.to<double>());
     // frc::SmartDashboard::PutNumber("actual y vel", m_pDriveSubsystem->GetRobotVelocity().vy.to<double>());
-    // frc::SmartDashboard::PutNumber("x path vel", m_pFollower.getXVel());
-    // frc::SmartDashboard::PutNumber("y path vel", m_pFollower.getYVel());
+    frc::SmartDashboard::PutNumber("x path vel", m_pFollower.getXVel());
+    frc::SmartDashboard::PutNumber("y path vel", m_pFollower.getYVel());
     // frc::SmartDashboard::PutNumber("total diff", m_pFollower.getYVel() - m_pDriveSubsystem->GetRobotVelocity().vy.to<double>());
     // m_File << m_pDriveSubsystem->GetRobotVelocity().vx.to<double>() << ",";
     // m_File << m_pDriveSubsystem->GetRobotVelocity().vy.to<double>() << ",";

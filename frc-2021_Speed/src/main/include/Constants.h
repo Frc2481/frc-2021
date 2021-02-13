@@ -8,7 +8,8 @@
 #include <frc/geometry/Translation2d.h>
 #include <frc/kinematics/SwerveDriveKinematics.h>
 #include <frc/trajectory/TrapezoidProfile.h>
-#include <units/units.h>
+#include <units/angle.h>
+#include <units/velocity.h>
 #include <wpi/math>
 
 #include "RobotParameters.h"
@@ -38,13 +39,10 @@ namespace FalconIDs{
 
 }
 namespace VictorIDs{
-    static constexpr int kRightIntakeID = 11;
-    static constexpr int kLeftIntakeID = 12;
+    static constexpr int kFrontIntakeID = 9;
+    static constexpr int kLeftIntakeID = 10;
 }
 
-namespace BeamBreaks{
-    static constexpr int kBeamBreakID = 762;
-}
 namespace DriveConstants {
 
 constexpr bool kFrontLeftTurningEncoderReversed = true;
@@ -87,10 +85,6 @@ using radians_per_second_squared_t =
                          units::inverse<units::squared<units::second>>>;
 
 constexpr auto kMaxSpeed = units::meters_per_second_t(RobotParameters::k_maxSpeed);
-constexpr auto kMaxAcceleration = units::meters_per_second_squared_t(3);
-constexpr auto kMaxAngularSpeed = units::radians_per_second_t(3.142);
-constexpr auto kMaxAngularAcceleration =
-    units::unit_t<radians_per_second_squared_t>(3.142);
 
 constexpr double kPXController = 0.5;
 constexpr double kPYController = 0.5;
@@ -128,9 +122,12 @@ namespace LimeLightConstants{
     static constexpr double kTargetHeight =  2.03;//m
 }
 namespace IntakeConstants{
-    static constexpr double kDefaultIntakeRollerSpeed = -.7; //TODO: Improve these speeds
+    static constexpr double kMaxIntakeAmp = 25.0;
+    static constexpr double kRightIntakeSpeed = 1.0;
+    static constexpr double kRightIntakeReverse = -1.0;
+    static constexpr double kLeftIntakeSpeed = 1.0;
 }
 namespace PathConstants{
     static constexpr double kMinLookAhead = 6*.0254;
-    static constexpr double kMaxLookAhead = 24*.0254;
+    static constexpr double kMaxLookAhead = RobotParameters::k_maxSpeed * .16255997;//calculated constant based off of last years robot and max look ahead
 }

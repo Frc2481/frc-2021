@@ -111,7 +111,7 @@ class AutoLeftCommandGroup
       
       frc2::ParallelRaceGroup{
         ShootBallCommand(m_shooter, m_feeder),
-        frc2::WaitCommand(2_s)//5
+        frc2::WaitCommand(2.5_s)//5
       },
       
       frc2::ParallelRaceGroup{

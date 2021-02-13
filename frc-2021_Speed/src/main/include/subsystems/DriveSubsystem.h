@@ -108,6 +108,7 @@ frc::SwerveModuleState getBackLeftMotor();
 void tuneDrivePID(double p, double i, double d, double f);
 void tuneSteerPID(double p, double i, double d);
 void stop();
+void resetDriveEncoders();
 frc::ChassisSpeeds GetRobotVelocity();
 
   units::meter_t kTrackWidth =

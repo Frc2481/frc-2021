@@ -12,14 +12,10 @@
 #include <frc/geometry/Pose2d.h>
 #include <frc/geometry/Translation2d.h>
 #include <frc/smartdashboard/SmartDashboard.h>
-#include <units/units.h>
+#include <units/angle.h>
+// #include <units/
 #include "Constants.h"
 #include <frc2/command/WaitCommand.h>
-
-
-// #include "commands/ReadColorSensorCommand.h"
-// #include "commands/RotatePanelCommand.h"
-// #include "commands/RotatePanelToColor.h"
 
 
 #include "commands/Drive/DriveOpenLoopCommand.h"
@@ -27,15 +23,19 @@
 #include "commands/Drive/DriveWithJoystickCommand.h"
 #include "commands/Drive/RotateWithMotionMagic.h"
 
-// #include "commands/LimeLight/LimeLightRotateToTargetCommand.h"
-// #include "commands/LimeLight/LimeLightSwerveDriveRotateToTargetCommand.h"
-// #include "commands/LimeLight/LimelightUpdatePose.h"
+#include "commands/LimeLight/LimelightUpdatePose.h"
 
-#include "commands/Intake/CheckBeamBreak.h"
 #include "commands/Intake/SetLeftIntakeSpeed.h"
 #include "commands/Intake/SetRightIntakeSpeed.h"
+#include "commands/Intake/IntakesDefaultCommand.h"
+#include "commands/Intake/ToggleIntakeCommand.h"
+#include "commands/Intake/DropBallsCommand.h"
+#include "commands/Intake/DropIntake.h"
 
 #include "commands/Autos/AutoLeftCommandGroup.h"
+#include "commands/Autos/TestSpeedsAuto.h"
+#include "commands/Autos/GalacticSearchPathARed.h"
+#include "commands/Autos/GalacticSearchPathBRed.h"
 
 using namespace DriveConstants;
 
@@ -44,22 +44,10 @@ RobotContainer::RobotContainer(): m_driverController(0),
                                   m_tDpadAux(&m_auxController, XBOX_DPAD_TOP),
                                   m_bDpadAux(&m_auxController, XBOX_DPAD_BOTTOM){
   ConfigureButtonBindings();
-frc::SmartDashboard::PutData("motion magic to angle", new RotateWithMotionMagic(&m_drive, 20,1,false));
-  // frc::SmartDashboard::PutNumber("drive P", 0.1);//5
-  // frc::SmartDashboard::PutNumber("drive I", 0);
-  // frc::SmartDashboard::PutNumber("drive D", 0);//10
-  // frc::SmartDashboard::PutNumber("drive F", 1023/(RobotParameters::k_maxSpeed/RobotParameters::k_driveMotorEncoderTicksToMPS));//10
-
-  
-  // frc::SmartDashboard::PutData("updatDrivePID", new frc2::InstantCommand([this]{
-  //   m_drive.tuneDrivePID(frc::SmartDashboard::GetNumber("drive P", .1),
-  //               frc::SmartDashboard::GetNumber("drive I", 0),
-  //               frc::SmartDashboard::GetNumber("drive D", 0),
-  //               frc::SmartDashboard::GetNumber("drive F", 1023/(RobotParameters::k_maxSpeed/RobotParameters::k_driveMotorEncoderTicksToMPS)));
-  // },{&m_drive}));
+  frc::SmartDashboard::PutData("motion magic to angle", new RotateWithMotionMagic(&m_drive, 20,1,false));
 
   m_drive.SetDefaultCommand(DriveWithJoystickCommand(&m_drive, &m_driverController)); 
-
+  // m_intake.SetDefaultCommand(IntakesDefaultCommand(&m_intake));
 }
 
 class InstantDisabledCommand : public frc2::InstantCommand {
@@ -75,6 +63,13 @@ public:
 
 
 void RobotContainer::ConfigureButtonBindings(){
+  frc::SmartDashboard::PutData("Reset Drive Encoders", new InstantDisabledCommand([this](){
+    m_drive.resetDriveEncoders();
+  }));
+  
+  frc::SmartDashboard::PutData("Get Current of 9", new InstantDisabledCommand([this](){
+    frc::SmartDashboard::PutNumber("Current 9", m_PDP.GetCurrent(9));
+  }));
   frc::SmartDashboard::PutData("Zero Steer Encoders", new InstantDisabledCommand([this](){
     m_drive.ResetEncoders();
   }));
@@ -96,8 +91,11 @@ void RobotContainer::ConfigureButtonBindings(){
                               },{&m_drive}));
                     
     m_lBumperDriver.WhenPressed(new frc2::InstantCommand([this]{m_drive.toggleFieldCentricForJoystick();},{&m_drive}));
+    m_yButtonDriver.WhenPressed(new IntakesDefaultCommand(&m_intake, &m_PDP));//ToggleIntakeCommand(&m_intake));
+    m_bButtonDriver.WhileHeld(new DropBallsCommand(&m_intake));
+    m_aButtonDriver.WhenPressed(new DropIntake(&m_intake));
+    m_rTriggerDriver.WhileHeld(new IntakesDefaultCommand(&m_intake, &m_PDP));
     //operator
-
 }
 
 frc2::Command* RobotContainer::GetAutonomousCommand() {

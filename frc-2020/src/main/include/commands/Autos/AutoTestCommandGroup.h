@@ -18,8 +18,7 @@
 #include "commands/pathCommands/AutoSwerveFollowPathCommand.h"
 #include "commands/pathCommands/WaitForPathToFinishCommand.h"
 #include "commands/pathCommands/PathFollowerCommand.h"
-#include "commands/pathCommands/WaitForPosCommand.h"
-#include "commands/pathCommands/FollowPathToPosCommandGroup.h"
+#include "commands/pathCommands/PathFollowerShootingCommand.h"
 
 
 #include "commands/Drive/DriveOpenLoopCommand.h"
@@ -64,80 +63,15 @@ class AutoTestCommandGroup
                       IntakeSubsystem* m_intake){
 
     //  double metersToInches = 39.3701;
-    std::vector<SwerveDrivePathGenerator::waypoint_t> start;
-    start.push_back(SwerveDrivePathGenerator::waypoint_t {RobotParameters::k_robotLength/2.0, 120 + RobotParameters::k_wheelBase/2.0, 90, 0, 0});//start
-    start.push_back(SwerveDrivePathGenerator::waypoint_t {56, 206, 17, 1000, 10000});
-    start.push_back(SwerveDrivePathGenerator::waypoint_t {101.67+2.39-2.868-.877+3, 231.5-6.577-0.877+2.86+20, 17, 0, 0});//pick up ball 4 and 5
-
-    std::vector<SwerveDrivePathGenerator::waypoint_t> first;
-    first.push_back(SwerveDrivePathGenerator::waypoint_t {101.67+2.39-2.868+3, 231.5-6.577-0.877+20, 17, 0, 0});//pick up ball 4 and 5
-    first.push_back(SwerveDrivePathGenerator::waypoint_t {101.67+2.39-2.868-12, 231.5-6.577-0.877-3.5, 90, RobotParameters::k_maxSpeed*39.38, 0});//pick up ball 4 and 5
-    first.push_back(SwerveDrivePathGenerator::waypoint_t {77.2, 231.5-6.577-0.877-7.01+2.86+2.86, 180, 0, 0});//pick up ball 4 and 5
-
-    std::vector<SwerveDrivePathGenerator::waypoint_t> second;
-    second.push_back(SwerveDrivePathGenerator::waypoint_t {77.2, 231.5-6.577-0.877-7.01+2.86+2.86, 188, 0, 0});//pick up ball 4 and 5 77.2, 217.04
-    second.push_back(SwerveDrivePathGenerator::waypoint_t {36, 189, 90, (RobotParameters::k_maxSpeed)*39.38, 0}); // move
-    second.push_back(SwerveDrivePathGenerator::waypoint_t {32, 320, 90, 0, 0}); // shoot
+      std::vector<SwerveDrivePathGenerator::waypoint_t> start;
+    start.push_back(SwerveDrivePathGenerator::waypoint_t {0, 0, 0, 0, 0});//start
+    start.push_back(SwerveDrivePathGenerator::waypoint_t {-90, 0, 0, 100, 0});
+    start.push_back(SwerveDrivePathGenerator::waypoint_t {-180, 0, 0, 0, 0});//pick up ball 4 and 5
     std::vector<SwerveDrivePathGenerator::waypoint_t> tempWaypoints;//if meters
     
 
     AddCommands(
-      frc2::ParallelRaceGroup{
-        FeederDefaultCommand(m_feeder),
-        frc2::SequentialCommandGroup{
-          // TurnLimeLightOff(),
-          ExtendIntakeCommand(m_intake),
-          PathFollowerCommand(m_drive, start, "start path" ,true),//head to end
-          frc2::ParallelCommandGroup{
-            PathFollowerCommand(m_drive, first, "first path"),
-            RetractIntakeCommand(m_intake)
-          },
-          StartShooterCommand(m_shooter),
-          frc2::ParallelCommandGroup{
-            SetShooterSpeedCommand(m_shooter,ShooterConstants::kDefaultShooterShortSpeed),
-            RotateWithMotionMagic(m_drive, 97,1, true)
-            // TurnLimeLightOn(),
-            // LimeLightRotateTillOnTarget(m_drive, 97, 2)
-            
-          }
-        }
-      },
-      
-      frc2::ParallelRaceGroup{
-        ShootBallCommand(m_shooter, m_feeder),
-        frc2::WaitCommand(2_s)//5
-      },
-      
-      frc2::ParallelRaceGroup{
-        FeederDefaultCommand(m_feeder),
-        frc2::SequentialCommandGroup{
-          frc2::ParallelCommandGroup{
-            StopShooterCommand(m_shooter),
-            // TurnLimeLightOff(),
-            ExtendIntakeCommand(m_intake),
-            PathFollowerCommand(m_drive, second,"balls 6-8"),
-          },
-        }
-      },
-      frc2::ParallelCommandGroup{
-        RetractIntakeCommand(m_intake),
-        StartShooterCommand(m_shooter),
-      },
-      frc2::ParallelCommandGroup{
-        frc2::ParallelRaceGroup{
-          QueFeederCommand(m_feeder,FeederConstants::kShootingFeederSpeed),
-          RotateWithMotionMagic(m_drive, 97, 1, true)
-        },
-        SetShooterSpeedCommand(m_shooter,ShooterConstants::kDefaultShooterShortSpeed)
-      },
-      FarShotCommand(m_shooter),
-      frc2::ParallelRaceGroup{
-        ShootBallCommand(m_shooter, m_feeder),
-        frc2::WaitCommand(3_s)
-      },
-      
-      StopShooterCommand(m_shooter)
-          // TurnLimeLightOff()
+          PathFollowerShootingCommand(m_drive, m_shooter, m_feeder, 1, start, "start path" ,true)//head to end
     );
   }
 };
