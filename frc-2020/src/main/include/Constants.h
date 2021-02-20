@@ -152,7 +152,7 @@ namespace IndexerConstants{
 // static constexpr double test = -(1 -.059) /(1-.38) +1;
 namespace FeederConstants{
     static constexpr double kDefaultFeederSpeed = .8;
-    static constexpr double kIntakeBallDistance = 30;//28 - 35 tested
+    static constexpr double kIntakeBallDistance = 35;//28 - 35 tested was 30
     static constexpr double kLastBallDistance = 26;//28 - 35 tested
     static constexpr double kShootingFarFeederSpeed = .5;//28 - 35 tested
     static constexpr double kShootingFeederSpeed = 1;//28 - 35 tested

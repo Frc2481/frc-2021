@@ -28,6 +28,7 @@ class PathFollowerCommand : public frc2::CommandHelper<frc2::CommandBase, PathFo
   bool m_zero;
   frc2::Timer m_timer;
   std::string m_name;
+  double metersToInches = 39.3701;
  public:
   PathFollowerCommand(DriveSubsystem* driveTrain,
                       std::vector<SwerveDrivePathGenerator::waypoint_t> &waypoints, const std::string &name,
@@ -59,10 +60,10 @@ class PathFollowerCommand : public frc2::CommandHelper<frc2::CommandBase, PathFo
     m_pFollower.Update(m_pDriveSubsystem->GetPose());
     frc::SmartDashboard::PutNumber("follow path command x", m_pFollower.getPointPos(20).Translation().X().to<double>());
     frc::SmartDashboard::PutNumber("follow path command y", m_pFollower.getPointPos(20).Translation().Y().to<double>());
-    // frc::SmartDashboard::PutNumber("actual x vel", m_pDriveSubsystem->GetRobotVelocity().vx.to<double>());
-    // frc::SmartDashboard::PutNumber("actual y vel", m_pDriveSubsystem->GetRobotVelocity().vy.to<double>());
-    frc::SmartDashboard::PutNumber("x path vel", m_pFollower.getXVel());
-    frc::SmartDashboard::PutNumber("y path vel", m_pFollower.getYVel());
+    frc::SmartDashboard::PutNumber("actual x vel", m_pDriveSubsystem->GetRobotVelocity().vx.to<double>());
+    frc::SmartDashboard::PutNumber("actual y vel", m_pDriveSubsystem->GetRobotVelocity().vy.to<double>());
+    frc::SmartDashboard::PutNumber("x path vel", m_pFollower.getXVel()*metersToInches);
+    frc::SmartDashboard::PutNumber("y path vel", m_pFollower.getYVel()*metersToInches);
     // frc::SmartDashboard::PutNumber("total diff", m_pFollower.getYVel() - m_pDriveSubsystem->GetRobotVelocity().vy.to<double>());
     // m_File << m_pDriveSubsystem->GetRobotVelocity().vx.to<double>() << ",";
     // m_File << m_pDriveSubsystem->GetRobotVelocity().vy.to<double>() << ",";

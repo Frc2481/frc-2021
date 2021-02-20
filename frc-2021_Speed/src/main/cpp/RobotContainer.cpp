@@ -33,9 +33,16 @@
 #include "commands/Intake/DropIntake.h"
 
 #include "commands/Autos/AutoLeftCommandGroup.h"
-#include "commands/Autos/TestSpeedsAuto.h"
-#include "commands/Autos/GalacticSearchPathARed.h"
-#include "commands/Autos/GalacticSearchPathBRed.h"
+#include "commands/Autos/TestSpeedsAuto.h"//T
+#include "commands/Autos/GalacticSearchPathARed.h"//A default
+#include "commands/Autos/GalacticSearchPathBRed.h"//B
+#include "commands/Autos/GalacticSearchPathABlue.h"//C
+#include "commands/Autos/GalacticSearchPathBBlue.h"//D
+#include "commands/Autos/AutoNavPathA.h"//E
+#include "commands/Autos/AutoNavPathB.h"//F
+#include "commands/Autos/AutoNavPathC.h"//G
+
+#include <frc/DriverStation.h>
 
 using namespace DriveConstants;
 
@@ -99,7 +106,34 @@ void RobotContainer::ConfigureButtonBindings(){
 }
 
 frc2::Command* RobotContainer::GetAutonomousCommand() {
-  return new AutoLeftCommandGroup(&m_follower, &m_drive);
+  std::string gameData;
+  gameData = frc::DriverStation::GetInstance().GetGameSpecificMessage();
+  if(gameData.length() > 0){
+    
+    switch(gameData[0]){
+      case 'A':
+        return new GalacticSearchPathARed(&m_follower, &m_drive, &m_intake, &m_PDP);
+      case 'B':
+        return new GalacticSearchPathBRed(&m_follower, &m_drive, &m_intake, &m_PDP);
+      case 'C':
+        return new GalacticSearchPathABlue(&m_follower, &m_drive, &m_intake, &m_PDP);
+      case 'D':
+        return new GalacticSearchPathBBlue(&m_follower, &m_drive, &m_intake, &m_PDP);
+      case 'E':
+        return new AutoNavPathA(&m_follower, &m_drive);
+      case 'F':
+        return new AutoNavPathB(&m_follower, &m_drive);
+      case 'G':
+        return new AutoNavPathC(&m_follower, &m_drive);
+      case 'T':
+        return new TestSpeedsAuto(&m_follower, &m_drive);
+      default:
+        return new GalacticSearchPathARed(&m_follower, &m_drive, &m_intake, &m_PDP);
+    }
+  }else{
+    return new GalacticSearchPathARed(&m_follower, &m_drive, &m_intake, &m_PDP);
+  }
+  
 }
 
 frc2::InstantCommand* RobotContainer::GetBrakeCommand(){

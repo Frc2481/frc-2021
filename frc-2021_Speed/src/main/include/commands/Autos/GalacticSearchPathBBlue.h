@@ -1,4 +1,4 @@
-/*----------------------------------------------------------------------------*/
+ /*----------------------------------------------------------------------------*/
 /* Copyright (c) 2019 FIRST. All Rights Reserved.                             */
 /* Open Source Software - may be modified and shared by FRC teams. The code   */
 /* must be accompanied by the FIRST BSD license file in the root directory of */
@@ -31,25 +31,25 @@
 #include "commands/Intake/IntakesDefaultCommand.h"
 #include "commands/Intake/DropIntake.h"
 
-class GalacticSearchPathBRed
+class GalacticSearchPathBBlue
     : public frc2::CommandHelper<frc2::SequentialCommandGroup,
-                                 GalacticSearchPathBRed> {
+                                 GalacticSearchPathBBlue> {
  private:
   
  public:
-  GalacticSearchPathBRed(SwerveDrivePathFollower* m_follower,
+  GalacticSearchPathBBlue(SwerveDrivePathFollower* m_follower,
                       DriveSubsystem* m_drive,
                       IntakeSubsystem* m_intake,
                       frc::PowerDistributionPanel* m_PDP){
 
      double metersToInches = 39.3701;
     std::vector<SwerveDrivePathGenerator::waypoint_t> path;
-    path.push_back(SwerveDrivePathGenerator::waypoint_t {43.5, 120, 90, 0, 0});//start path
-    path.push_back(SwerveDrivePathGenerator::waypoint_t {90, 120, 90, RobotParameters::k_maxSpeed*metersToInches, 0});//pick up ball 1
-    path.push_back(SwerveDrivePathGenerator::waypoint_t {150, 60, 45, RobotParameters::k_maxSpeed*metersToInches, 0});//pick up ball 2
-    path.push_back(SwerveDrivePathGenerator::waypoint_t {210, 120, 45, RobotParameters::k_maxSpeed*metersToInches, 0});//pick up ball 3
-    path.push_back(SwerveDrivePathGenerator::waypoint_t {330, 120, 45, RobotParameters::k_maxSpeed*metersToInches, 0});//head to end
-    path.push_back(SwerveDrivePathGenerator::waypoint_t {360, 120, 45, 0, 0});//final 30in after endzone
+    path.push_back(SwerveDrivePathGenerator::waypoint_t {43.5, 60, 90, 0, 0});//start path
+    path.push_back(SwerveDrivePathGenerator::waypoint_t {180, 60, 90, RobotParameters::k_maxSpeed*metersToInches, 0});//pick up ball 1
+    path.push_back(SwerveDrivePathGenerator::waypoint_t {240, 120, 45, RobotParameters::k_maxSpeed*metersToInches, 0});//pick up ball 2
+    path.push_back(SwerveDrivePathGenerator::waypoint_t {300, 60, 45, RobotParameters::k_maxSpeed*metersToInches, 0});//pick up ball 3
+    path.push_back(SwerveDrivePathGenerator::waypoint_t {330, 60, 45, RobotParameters::k_maxSpeed*metersToInches, 0});//head to end
+    path.push_back(SwerveDrivePathGenerator::waypoint_t {360, 60, 45, 0, 0});//final 30in after endzone
 
     std::vector<SwerveDrivePathGenerator::waypoint_t> tempWaypoints;//if meters
     
@@ -57,6 +57,7 @@ class GalacticSearchPathBRed
       frc2::ParallelCommandGroup{
         DropIntake(m_intake),
         IntakesDefaultCommand(m_intake,m_PDP),
+
         PathFollowerCommand(m_drive, path, "path path" ,true),
       }
     );

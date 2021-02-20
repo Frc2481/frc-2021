@@ -63,14 +63,16 @@ class FordAuto
 
      double metersToInches = 39.3701;
     std::vector<SwerveDrivePathGenerator::waypoint_t> one;
-    one.push_back(SwerveDrivePathGenerator::waypoint_t {190, 120, 180, 0, 0});//start
-    one.push_back(SwerveDrivePathGenerator::waypoint_t {190, 135, 162, RobotParameters::k_maxSpeed*metersToInches,0});
-    one.push_back(SwerveDrivePathGenerator::waypoint_t {190, 246, 162, 0, 0});//shoot 1 - 3
+    one.push_back(SwerveDrivePathGenerator::waypoint_t {187, 120, 140, 0, 0});//start
+    one.push_back(SwerveDrivePathGenerator::waypoint_t {187, 135, 151, RobotParameters::k_maxSpeed*metersToInches,0});
+    one.push_back(SwerveDrivePathGenerator::waypoint_t {187, 246, 162, 0, 0});//shoot 1 - 3
 
     std::vector<SwerveDrivePathGenerator::waypoint_t> two;
-    two.push_back(SwerveDrivePathGenerator::waypoint_t {190, 246, 162, 0, 0});//start
-    two.push_back(SwerveDrivePathGenerator::waypoint_t {190.68/2, 247.88/2, 162, RobotParameters::k_maxSpeed*metersToInches,0});
-    two.push_back(SwerveDrivePathGenerator::waypoint_t {190.68, 247.88, 162, 0, 0});//shoot 1 - 3
+    two.push_back(SwerveDrivePathGenerator::waypoint_t {187, 246, 162, 0, 0});//start
+    two.push_back(SwerveDrivePathGenerator::waypoint_t {167, 258.34, 180, RobotParameters::k_maxSpeed*metersToInches, 0});//grab 4 - 5
+    two.push_back(SwerveDrivePathGenerator::waypoint_t {173, 258.34, 180, 0, 0});//grab 4 - 5
+
+
     // std::vector<SwerveDrivePathGenerator::waypoint_t> two;
     // two.push_back(SwerveDrivePathGenerator::waypoint_t {156, 240, 180, 0, 0});//pick up ball 4 and 5
     // two.push_back(SwerveDrivePathGenerator::waypoint_t {101.67+2.39-2.868-12, 231.5-6.577-0.877-3.5, 90, RobotParameters::k_maxSpeed*39.38, 0});//pick up ball 4 and 5
@@ -90,8 +92,15 @@ class FordAuto
     
 
     AddCommands(
-        PathFollowerShootingCommand(m_drive, m_shooter, m_feeder, 1, one, "start path" ,true),
-        PathFollowerCommand(m_drive, two, "first path")
+      StartShooterCommand(m_shooter),
+      SetShooterSpeedCommand(m_shooter,ShooterConstants::kDefaultShooterShortSpeed),
+      PathFollowerShootingCommand(m_drive, m_shooter, m_feeder, .3, one, "start path" ,true, false),
+      frc2::ParallelRaceGroup{
+        ShootBallCommand(m_shooter, m_feeder),
+        frc2::WaitCommand(2_s)
+      },
+      ExtendIntakeCommand(m_intake),
+      PathFollowerCommand(m_drive, two, "first path")
       // frc2::ParallelRaceGroup{
       //   FeederDefaultCommand(m_feeder),
       //   frc2::SequentialCommandGroup{

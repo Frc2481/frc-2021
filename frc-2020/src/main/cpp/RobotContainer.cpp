@@ -257,8 +257,8 @@ void RobotContainer::ConfigureButtonBindings(){
 frc2::Command* RobotContainer::GetAutonomousCommand() {
   
   // return nullptr;
-  return new FordAuto(&m_follower, &m_drive, &m_shooter, &m_feeder, &m_intake);
-  // return new AutoLeftCommandGroup(&m_follower, &m_drive, &m_shooter, &m_feeder, &m_intake);
+  // return new FordAuto(&m_follower, &m_drive, &m_shooter, &m_feeder, &m_intake);
+  return new AutoLeftCommandGroup(&m_follower, &m_drive, &m_shooter, &m_feeder, &m_intake);
   // return new AutoTestCommandGroup(&m_follower, &m_drive, &m_shooter, &m_feeder, &m_intake); //
 }
 

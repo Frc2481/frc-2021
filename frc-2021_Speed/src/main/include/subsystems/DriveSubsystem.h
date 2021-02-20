@@ -138,6 +138,7 @@ frc::ChassisSpeeds GetRobotVelocity();
   frc::SwerveDriveOdometry<4> m_odometry;
   AHRS m_pChassisIMU;
   bool m_fieldCentricForJoystick = false;
-
+    double metersToInches = 39.3701;
+    double maxSpeed = 0.0;
   	std::ofstream m_File;
 };

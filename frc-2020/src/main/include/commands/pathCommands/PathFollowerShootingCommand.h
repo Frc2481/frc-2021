@@ -32,11 +32,12 @@ class PathFollowerShootingCommand : public frc2::CommandHelper<frc2::CommandBase
   std::ofstream m_File;
   bool m_zero;
   double m_zone;
+  bool m_shoot;
   frc2::Timer m_timer;
   std::string m_name;
   double inputConstant = 2.2;
   frc::ProfiledPIDController<units::radians> m_turningPIDController{
-          3, 0, 0.2,//5//RobotParameters::k_limeLightDriveP, RobotParameters::k_limeLightDriveI, RobotParameters::k_limeLightDriveD,
+          4.5, 0, 0.2,//RobotParameters::k_limeLightDriveP, RobotParameters::k_limeLightDriveI, RobotParameters::k_limeLightDriveD,//
           AutoConstants::kThetaControllerConstraints};
  public:
   PathFollowerShootingCommand(DriveSubsystem* driveTrain,
@@ -44,7 +45,8 @@ class PathFollowerShootingCommand : public frc2::CommandHelper<frc2::CommandBase
                       FeederSubsystem* feeder,
                       double zone,
                       std::vector<SwerveDrivePathGenerator::waypoint_t> &waypoints, const std::string &name,
-                      bool zero = false){
+                      bool zero = false,
+                      bool shoot = true){
   m_pFollower.generatePath(waypoints, name);
   m_pDriveSubsystem = driveTrain;
   m_pShooterSubsystem = shooter;
@@ -52,6 +54,7 @@ class PathFollowerShootingCommand : public frc2::CommandHelper<frc2::CommandBase
   m_zone = zone;
   m_zero = zero;
   m_name = name;
+  m_shoot = shoot;
   AddRequirements(m_pDriveSubsystem);
   AddRequirements(m_pShooterSubsystem);
   AddRequirements(m_pFeederSubsystem);
@@ -63,9 +66,12 @@ class PathFollowerShootingCommand : public frc2::CommandHelper<frc2::CommandBase
     if(m_zero){
       m_pDriveSubsystem->ResetOdometry(m_pFollower.getPointPos(0));
     }
-    m_pShooterSubsystem->startShooter();
-    m_pShooterSubsystem->setCloseShot(false);
-    m_pShooterSubsystem->setShooterSpeed(ShooterConstants::kDefaultShooterShortSpeed);
+    if(m_shoot){
+      m_pShooterSubsystem->startShooter();
+      m_pShooterSubsystem->setCloseShot(false);//false
+      m_pShooterSubsystem->setShooterSpeed(ShooterConstants::kDefaultShooterFarSpeed);
+    }
+
   } 
 
   void Execute() override{
@@ -84,15 +90,18 @@ class PathFollowerShootingCommand : public frc2::CommandHelper<frc2::CommandBase
                              units::radians_per_second_t(yawRate),
                              true,
                              false);
-    if(m_turnInput < m_zone && tv){//m_pShooterSubsystem->isShooterOnTarget() && 
+    if(m_turnInput < m_zone && tv && m_shoot){//m_pShooterSubsystem->isShooterOnTarget() && 
       m_pFeederSubsystem->setFeederSpeed(FeederConstants::kShootingFeederSpeed);
     }
   }
 
   void End(bool interrupted) override{
     m_pDriveSubsystem->stop();
-    m_pShooterSubsystem->stopShooter();
-    m_pFeederSubsystem->setFeederSpeed(0.0);
+    if (m_shoot){
+      m_pShooterSubsystem->stopShooter();
+      m_pFeederSubsystem->setFeederSpeed(0.0);
+    }
+    
     printf("path follower time since Initialize %f\n", m_timer.Get().to<double>());
     m_timer.Stop();
   }

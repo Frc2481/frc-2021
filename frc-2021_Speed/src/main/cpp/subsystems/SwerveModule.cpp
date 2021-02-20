@@ -41,7 +41,7 @@ SwerveModule::SwerveModule(int driveMotorID, int turningMotorID,
       m_driveMotor->Config_kP(0, 0.1);//.07
       m_driveMotor->Config_kI(0, 0);
       m_driveMotor->Config_kD(0, 0);//.035
-      m_driveMotor->Config_kF(0, 1023/(RobotParameters::k_maxSpeed/RobotParameters::k_driveMotorEncoderTicksToMPS));
+      m_driveMotor->Config_kF(0, 1023/(RobotParameters::k_feedForwardMaxSpeed/RobotParameters::k_driveMotorEncoderTicksToMPS));
       m_driveMotor->Config_IntegralZone(0, 0);
       m_driveMotor->SetNeutralMode(ctre::phoenix::motorcontrol::NeutralMode::Brake);//break
   // // Set the distance per pulse for the drive encoder. We can simply use the

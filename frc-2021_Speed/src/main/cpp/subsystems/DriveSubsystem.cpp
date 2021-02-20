@@ -58,6 +58,7 @@ DriveSubsystem::DriveSubsystem()
       m_pChassisIMU{frc::SPI::kMXP}{
     //     std::remove("home/lvuser/ActualPath.csv");
     // m_File.open("home/lvuser/ActualPath.csv");
+      setBrake();
       }
 
 
@@ -117,9 +118,12 @@ frc::SmartDashboard::PutNumber("driveMotorVelpreNormAngle",states[0].angle.Degre
   frc::SmartDashboard::PutNumber("fl", fl.speed.to<double>());
   frc::SmartDashboard::PutNumber("br", br.speed.to<double>());
   frc::SmartDashboard::PutNumber("bl", bl.speed.to<double>());
-  frc::SmartDashboard::PutNumber("RobotVelocityX",GetRobotVelocity().vy.to<double>());
-  frc::SmartDashboard::PutNumber("RobotVelocityY",GetRobotVelocity().vx.to<double>());
-
+  frc::SmartDashboard::PutNumber("RobotVelocityX",GetRobotVelocity().vy.to<double>()*metersToInches);
+  frc::SmartDashboard::PutNumber("RobotVelocityY",GetRobotVelocity().vx.to<double>()*metersToInches);
+  // double x = GetRobotVelocity().vx.to<double>();
+  // double y = GetRobotVelocity().vy.to<double>();
+  // double
+  // if(maxSpeed < )
   
 }
 

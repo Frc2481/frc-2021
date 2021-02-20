@@ -66,11 +66,12 @@ class AutoLeftCommandGroup
     //  double metersToInches = 39.3701;
     std::vector<SwerveDrivePathGenerator::waypoint_t> start;
     start.push_back(SwerveDrivePathGenerator::waypoint_t {RobotParameters::k_robotLength/2.0, 120 + RobotParameters::k_wheelBase/2.0, 90, 0, 0});//start
-    start.push_back(SwerveDrivePathGenerator::waypoint_t {56, 206, 17, 1000, 10000});
-    start.push_back(SwerveDrivePathGenerator::waypoint_t {101.67+2.39-2.868-.877+3, 231.5-6.577-0.877+2.86+20, 17, 0, 0});//pick up ball 4 and 5
+    start.push_back(SwerveDrivePathGenerator::waypoint_t {56, 206, 21.57, 1000, 10000});//17deg
+    start.push_back(SwerveDrivePathGenerator::waypoint_t {103.315+30.76, 246.906-8.805+5.5, 21.57, 0, 0});//pick up ball 4 and 5
 
     std::vector<SwerveDrivePathGenerator::waypoint_t> first;
-    first.push_back(SwerveDrivePathGenerator::waypoint_t {101.67+2.39-2.868+3, 231.5-6.577-0.877+20, 17, 0, 0});//pick up ball 4 and 5
+    // first.push_back(SwerveDrivePathGenerator::waypoint_t {101.67+2.39-2.868+3, 231.5-6.577-0.877+20, 17, 0, 0});//pick up ball 4 and 5
+    first.push_back(SwerveDrivePathGenerator::waypoint_t {103.315+30.76, 246.906-8.805+6, 21.57, 0, 0});//pick up ball 4 and 5
     first.push_back(SwerveDrivePathGenerator::waypoint_t {101.67+2.39-2.868-12, 231.5-6.577-0.877-3.5, 90, RobotParameters::k_maxSpeed*39.38, 0});//pick up ball 4 and 5
     first.push_back(SwerveDrivePathGenerator::waypoint_t {77.2, 231.5-6.577-0.877-7.01+2.86+2.86, 180, 0, 0});//pick up ball 4 and 5
 
