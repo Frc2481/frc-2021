@@ -18,7 +18,6 @@
 
 
 #include "commands/Drive/DriveOpenLoopCommand.h"
-#include "commands/Drive/RotateToAngleCommand.h"
 
 #include "commands/Drive/RotateWithMotionMagic.h"
 
@@ -44,12 +43,12 @@ class GalacticSearchPathABlue
 
      double metersToInches = 39.3701;
     std::vector<SwerveDrivePathGenerator::waypoint_t> path;
-    path.push_back(SwerveDrivePathGenerator::waypoint_t {43.5, 30, 90, 0, 0});//start path
-    path.push_back(SwerveDrivePathGenerator::waypoint_t {180, 30, 90, RobotParameters::k_maxSpeed*metersToInches, 0});//pick up ball 1
-    path.push_back(SwerveDrivePathGenerator::waypoint_t {210, 120, 63.5, RobotParameters::k_maxSpeed*metersToInches, 0});//pick up ball 2
-    path.push_back(SwerveDrivePathGenerator::waypoint_t {270, 90, 63.5, RobotParameters::k_maxSpeed*metersToInches, 0});//pick up ball 3
-    path.push_back(SwerveDrivePathGenerator::waypoint_t {330, 90, 63.5, RobotParameters::k_maxSpeed*metersToInches, 0});//head to end
-    path.push_back(SwerveDrivePathGenerator::waypoint_t {360, 90, 63.5, 0, 0});//final 30in after endzone
+    path.push_back(SwerveDrivePathGenerator::waypoint_t {43.5, 30, 0, 0, 0});//start path
+    path.push_back(SwerveDrivePathGenerator::waypoint_t {180, 30, 0, RobotParameters::k_maxSpeed*metersToInches, 0});//pick up ball 1
+    path.push_back(SwerveDrivePathGenerator::waypoint_t {210, 120, -26.5, RobotParameters::k_maxSpeed*metersToInches, 0});//pick up ball 2
+    path.push_back(SwerveDrivePathGenerator::waypoint_t {270, 90, -26.5, RobotParameters::k_maxSpeed*metersToInches, 0});//pick up ball 3
+    path.push_back(SwerveDrivePathGenerator::waypoint_t {330, 90, -26.5, RobotParameters::k_maxSpeed*metersToInches, 0});//head to end
+    path.push_back(SwerveDrivePathGenerator::waypoint_t {360, 90, -26.5, 0, 0});//final 30in after endzone
 
     std::vector<SwerveDrivePathGenerator::waypoint_t> tempWaypoints;//if meters
     

@@ -33,8 +33,8 @@ class IntakesDefaultCommand
   }
 
   void Initialize() override{
-    m_pIntake->setRightSpeed(IntakeConstants::kRightIntakeSpeed);
-    m_pIntake->setLeftSpeed(IntakeConstants::kLeftIntakeSpeed);
+    m_pIntake->setAIntakeSpeed(IntakeConstants::kAIntakeSpeed);
+    m_pIntake->setBIntakeSpeed(IntakeConstants::kBIntakeSpeed);
   }
 
   void Execute() override{
@@ -44,13 +44,13 @@ class IntakesDefaultCommand
       count = 0;
     }
     if(count > 7){
-      m_pIntake->setRightSpeed(0);
+      m_pIntake->setAIntakeSpeed(0);
     }
   }
 
   void End(bool interrupted) override{
-    m_pIntake->setRightSpeed(0);
-    m_pIntake->setLeftSpeed(0);
+    m_pIntake->setAIntakeSpeed(0);
+    m_pIntake->setBIntakeSpeed(0);
   }
 
   bool IsFinished() override{

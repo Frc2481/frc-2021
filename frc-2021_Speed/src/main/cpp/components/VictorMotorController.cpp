@@ -6,7 +6,6 @@
 /*----------------------------------------------------------------------------*/
 
 #include "components/VictorMotorController.h"
-#include <frc/smartdashboard/SmartDashboard.h>
 
 VictorMotorController::VictorMotorController(int motorID, const std::string &name): CommonMotorController(motorID, name){
     m_pMotor = new VictorSPX(motorID);

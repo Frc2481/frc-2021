@@ -1,6 +1,5 @@
 #include "components/MotorPositionController.h"
 #include "Utils/Sign.h"
-#include <frc/smartdashboard/SmartDashboard.h>
 
 MotorPositionController::MotorPositionController()
 	: m_pDriveMotor(nullptr),
@@ -139,7 +138,6 @@ void MotorPositionController::updateLinear(double refP, double refV, double refA
     else {
         m_pDriveMotor->Set(CommonModes::MotionMagic, refP, DemandType::DemandType_ArbitraryFeedForward, feedforwardControl);
     }
-    // frc::SmartDashboard::PutNumber("Set Refp", refP);
 }
 
 double MotorPositionController::getEncoderZero() const {

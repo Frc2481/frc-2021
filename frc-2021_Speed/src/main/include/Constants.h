@@ -25,40 +25,40 @@
  */
 
 namespace TalonIDs{
-    static constexpr int kFrontRightTurningMotorID = 3;//1
-    static constexpr int kFrontLeftTurningMotorID = 1;//4
-    static constexpr int kRearRightTurningMotorID = 4;//3
-    static constexpr int kRearLeftTurningMotorID = 2;//2   
+    static constexpr int kFrontLeftTurningMotorID = 1;
+    static constexpr int kFrontRightTurningMotorID = 2;
+    static constexpr int kBackLeftTurningMotorID = 3;
+    static constexpr int kBackRightTurningMotorID = 4;   
 }
 
 namespace FalconIDs{
-    static constexpr int kFrontRightDriveMotorID = 7;//5
-    static constexpr int kFrontLeftDriveMotorID = 5;//6
-    static constexpr int kRearRightDriveMotorID = 8;//7
-    static constexpr int kRearLeftDriveMotorID = 6;//8
+    static constexpr int kFrontLeftDriveMotorID = 5;
+    static constexpr int kFrontRightDriveMotorID = 6;
+    static constexpr int kBackLeftDriveMotorID = 7;
+    static constexpr int kBackRightDriveMotorID = 8;
 
 }
 namespace VictorIDs{
-    static constexpr int kFrontIntakeID = 9;
-    static constexpr int kLeftIntakeID = 10;
+    static constexpr int kAIntakeID = 9;
+    static constexpr int kBIntakeID = 10;
 }
 
 namespace DriveConstants {
 
 constexpr bool kFrontLeftTurningEncoderReversed = true;
-constexpr bool kRearLeftTurningEncoderReversed = true;
+constexpr bool kBackLeftTurningEncoderReversed = true;
 constexpr bool kFrontRightTurningEncoderReversed = true;
-constexpr bool kRearRightTurningEncoderReversed = true;
+constexpr bool kBackRightTurningEncoderReversed = true;
 
 constexpr bool kFrontLeftTurningMotorReversed = false;
-constexpr bool kRearLeftTurningMotorReversed = false;
+constexpr bool kBackLeftTurningMotorReversed = false;
 constexpr bool kFrontRightTurningMotorReversed = false;
-constexpr bool kRearRightTurningMotorReversed = false;
+constexpr bool kBackRightTurningMotorReversed = false;
 
 constexpr bool kFrontLeftDriveEncoderReversed = false;//true
-constexpr bool kRearLeftDriveEncoderReversed = false;//true
+constexpr bool kBackLeftDriveEncoderReversed = false;//true
 constexpr bool kFrontRightDriveEncoderReversed = false;//true
-constexpr bool kRearRightDriveEncoderReversed = false;//true
+constexpr bool kBackRightDriveEncoderReversed = false;//true
 
 constexpr bool kGyroReversed = true;
 
@@ -115,17 +115,12 @@ enum class CommonModes{
     MotionProfileArc = 11,
     Disabled = 15
 };
-namespace LimeLightConstants{
-    static constexpr double kLimeLightHeight = 1.09;//ft
-    static constexpr double kLimeLightAngle = 20;//deg
-    static constexpr double kLimeLightHardWarePanAngle = 12;//deg
-    static constexpr double kTargetHeight =  2.03;//m
-}
 namespace IntakeConstants{
     static constexpr double kMaxIntakeAmp = 25.0;
-    static constexpr double kRightIntakeSpeed = 1.0;
-    static constexpr double kRightIntakeReverse = -1.0;
-    static constexpr double kLeftIntakeSpeed = 1.0;
+    static constexpr double kAIntakeSpeed = 1.0;
+    static constexpr double kAIntakeReverse = -1.0;
+    static constexpr double kBIntakeSpeed = 1.0;
+    static constexpr double kBIntakeReverse = -1.0;
 }
 namespace PathConstants{
     static constexpr double kMinLookAhead = 6*.0254;

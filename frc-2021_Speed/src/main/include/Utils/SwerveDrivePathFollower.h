@@ -18,7 +18,6 @@
 #include <frc/geometry/Translation2d.h>
 #include <frc/geometry/Rotation2d.h>
 #include "Utils/PoseDot2D.h"
-#include <frc/smartdashboard/SmartDashboard.h>
 #include <cmath>
 #include <iostream>
 #include <fstream>

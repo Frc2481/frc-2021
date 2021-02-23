@@ -99,7 +99,6 @@ void TalonFXMotorController::ConfigSelectedFeedbackSensor(ctre::phoenix::motorco
     m_pMotor->ConfigSelectedFeedbackSensor(feedbackDevice, pidIdx, timeoutMs);
 }
 int TalonFXMotorController::GetSelectedSensorPosition(int id){
-    // printf("+++++++++++getting pos+++++++++++\n");
     return m_pMotor->GetSelectedSensorPosition(id);
 }
 int TalonFXMotorController::isSensorConnected(){

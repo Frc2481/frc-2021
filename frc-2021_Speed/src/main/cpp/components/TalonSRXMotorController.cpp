@@ -6,7 +6,6 @@
 /*----------------------------------------------------------------------------*/
 
 #include "components/TalonSRXMotorController.h"
-#include <frc/smartdashboard/SmartDashboard.h>
 
 TalonSRXMotorController::TalonSRXMotorController(int motorID, const std::string &name): CommonMotorController(motorID, name){
     m_pMotor = new TalonSRX(motorID);

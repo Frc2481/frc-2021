@@ -70,10 +70,6 @@ class PathFollowerCommand : public frc2::CommandHelper<frc2::CommandBase, PathFo
     // m_File << m_pFollower.getXVel() << ",";
     // m_File << m_pFollower.getYVel() << "\n";
     // frc::SmartDashboard::PutNumber("follow path command yaw", m_pFollower.getPointPos(20).Translation().X().to<double>())
-    // printf("path x vel %f, ", m_pFollower.getXVel());
-    // printf("path y vel %f, ", m_pFollower.getYVel());
-    // printf("actual x vel %f, ", m_pDriveSubsystem->GetRobotVelocity().vx.to<double>());
-    // printf("actual y vel %f\n", m_pDriveSubsystem->GetRobotVelocity().vy.to<double>());
     m_pDriveSubsystem->Drive(units::meters_per_second_t(m_pFollower.getXVel()), 
                              units::meters_per_second_t(m_pFollower.getYVel()), 
                              units::degrees_per_second_t(m_pFollower.getYawRate()),

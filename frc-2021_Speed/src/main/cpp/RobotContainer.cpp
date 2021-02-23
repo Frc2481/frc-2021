@@ -13,25 +13,22 @@
 #include <frc/geometry/Translation2d.h>
 #include <frc/smartdashboard/SmartDashboard.h>
 #include <units/angle.h>
-// #include <units/
-#include "Constants.h"
+#include <frc/DriverStation.h>
 #include <frc2/command/WaitCommand.h>
 
-
+#include "Constants.h"
+//Drive
 #include "commands/Drive/DriveOpenLoopCommand.h"
-#include "commands/Drive/RotateToAngleCommand.h"
 #include "commands/Drive/DriveWithJoystickCommand.h"
 #include "commands/Drive/RotateWithMotionMagic.h"
-
-#include "commands/LimeLight/LimelightUpdatePose.h"
-
-#include "commands/Intake/SetLeftIntakeSpeed.h"
-#include "commands/Intake/SetRightIntakeSpeed.h"
+//Intake
+#include "commands/Intake/SetBIntakeSpeed.h"
+#include "commands/Intake/SetAIntakeSpeed.h"
 #include "commands/Intake/IntakesDefaultCommand.h"
 #include "commands/Intake/ToggleIntakeCommand.h"
 #include "commands/Intake/DropBallsCommand.h"
 #include "commands/Intake/DropIntake.h"
-
+//Autos
 #include "commands/Autos/AutoLeftCommandGroup.h"
 #include "commands/Autos/TestSpeedsAuto.h"//T
 #include "commands/Autos/GalacticSearchPathARed.h"//A default
@@ -42,8 +39,6 @@
 #include "commands/Autos/AutoNavPathB.h"//F
 #include "commands/Autos/AutoNavPathC.h"//G
 
-#include <frc/DriverStation.h>
-
 using namespace DriveConstants;
 
 RobotContainer::RobotContainer(): m_driverController(0),
@@ -51,10 +46,8 @@ RobotContainer::RobotContainer(): m_driverController(0),
                                   m_tDpadAux(&m_auxController, XBOX_DPAD_TOP),
                                   m_bDpadAux(&m_auxController, XBOX_DPAD_BOTTOM){
   ConfigureButtonBindings();
-  frc::SmartDashboard::PutData("motion magic to angle", new RotateWithMotionMagic(&m_drive, 20,1,false));
 
-  m_drive.SetDefaultCommand(DriveWithJoystickCommand(&m_drive, &m_driverController)); 
-  // m_intake.SetDefaultCommand(IntakesDefaultCommand(&m_intake));
+  m_drive.SetDefaultCommand(DriveWithJoystickCommand(&m_drive, &m_driverController));
 }
 
 class InstantDisabledCommand : public frc2::InstantCommand {
@@ -73,7 +66,12 @@ void RobotContainer::ConfigureButtonBindings(){
   frc::SmartDashboard::PutData("Reset Drive Encoders", new InstantDisabledCommand([this](){
     m_drive.resetDriveEncoders();
   }));
-  
+  frc::SmartDashboard::PutData("Set Coast", new InstantDisabledCommand([this](){
+    m_drive.setCoast();
+  }));
+  frc::SmartDashboard::PutData("Set Brake", new InstantDisabledCommand([this](){
+    m_drive.setBrake();
+  }));
   frc::SmartDashboard::PutData("Get Current of 9", new InstantDisabledCommand([this](){
     frc::SmartDashboard::PutNumber("Current 9", m_PDP.GetCurrent(9));
   }));
@@ -83,11 +81,6 @@ void RobotContainer::ConfigureButtonBindings(){
 
   frc::SmartDashboard::PutData("Reset Odometry", new InstantDisabledCommand([this](){
     m_drive.ResetOdometry(frc::Pose2d());
-  }));
-  frc::SmartDashboard::PutData("Reset Odometry -90", new InstantDisabledCommand([this](){
-    m_drive.ResetOdometry(frc::Pose2d(m_drive.GetPose().Translation().X(), 
-                                                                m_drive.GetPose().Translation().Y(),
-                                                                frc::Rotation2d(units::degree_t(-90))));
   }));
   //driver
     m_startDriver.WhenPressed(new frc2::InstantCommand([this]{
@@ -137,8 +130,8 @@ frc2::Command* RobotContainer::GetAutonomousCommand() {
 }
 
 frc2::InstantCommand* RobotContainer::GetBrakeCommand(){
-  return new frc2::InstantCommand([this]{m_drive.setBrake(); },{&m_drive});//TurnLimeLightOff();
+  return new frc2::InstantCommand([this]{m_drive.setBrake(); },{&m_drive});
 }
-  frc2::InstantCommand* RobotContainer::GetCoastCommand(){
-    return new frc2::InstantCommand([this]{m_drive.setCoast();},{&m_drive});
-  }
+frc2::InstantCommand* RobotContainer::GetCoastCommand(){
+  return new frc2::InstantCommand([this]{m_drive.setCoast();},{&m_drive});
+}

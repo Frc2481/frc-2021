@@ -6,7 +6,6 @@
 /*----------------------------------------------------------------------------*/
 
 #include "components/SparkMaxMotorController.h"
-#include <frc/smartdashboard/SmartDashboard.h>
 
 SparkMaxMotorController::SparkMaxMotorController(int motorID, const std::string &name, rev::CANSparkMax::MotorType type): CommonMotorController(motorID, name){
     m_pMotor = new rev::CANSparkMax(motorID, type);
@@ -35,8 +34,6 @@ void  SparkMaxMotorController::EnableVoltageCompensation(bool enable) {
     m_pMotor->EnableVoltageCompensation(enable);
 }
 void  SparkMaxMotorController::SetInverted(bool isInverted) {
-    // m_pMotor->
-    // frc::SmartDashboard::PutBoolean("motor inverted", isInverted);
     m_pMotor->SetInverted(isInverted);
 }
 void SparkMaxMotorController::Set(double speed){
@@ -45,13 +42,10 @@ void SparkMaxMotorController::Set(double speed){
 void SparkMaxMotorController::Set(CommonModes mode, double value){
     if(CommonModesToControlType(mode, m_pCurrentMode)){
         Set(value);
-        frc::SmartDashboard::PutBoolean("PercentMode", true);
     }else{
         m_setpoint = value;
-        frc::SmartDashboard::PutBoolean("PercentMode", false);
         m_pMotor->GetPIDController().SetReference(value, m_pCurrentMode);
     }
-    frc::SmartDashboard::PutNumber("SparkMaxVel", value);
 }
 void SparkMaxMotorController:: Set(CommonModes mode, double demand0, DemandType demand1Type, double demand1){
     if(CommonModesToControlType(mode, m_pCurrentMode)){

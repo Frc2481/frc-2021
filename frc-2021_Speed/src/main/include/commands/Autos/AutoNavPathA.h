@@ -18,7 +18,6 @@
 
 
 #include "commands/Drive/DriveOpenLoopCommand.h"
-#include "commands/Drive/RotateToAngleCommand.h"
 
 #include "commands/Drive/RotateWithMotionMagic.h"
 
@@ -37,24 +36,24 @@ class AutoNavPathA
                       DriveSubsystem* m_drive){
 
     std::vector<SwerveDrivePathGenerator::waypoint_t> path;
-    path.push_back(SwerveDrivePathGenerator::waypoint_t {60 + RobotParameters::k_wheelBase*metersToInches/2, 80, 90, 0, 0});//start path
-    path.push_back(SwerveDrivePathGenerator::waypoint_t {150, 60 + radCurve, 90, RobotParameters::k_maxSpeed*metersToInches, 0});//cone 1, point 1
-    path.push_back(SwerveDrivePathGenerator::waypoint_t {150 + radCurve, 60, 90, RobotParameters::k_maxSpeed*metersToInches, radCurve});//cone 1, point 2
-    path.push_back(SwerveDrivePathGenerator::waypoint_t {150, 60 - radCurve, 90, RobotParameters::k_maxSpeed*metersToInches, radCurve});//cone 1, point 3
-    path.push_back(SwerveDrivePathGenerator::waypoint_t {150 - radCurve, 60, 90, RobotParameters::k_maxSpeed*metersToInches, radCurve});//cone 1, point 4
-    path.push_back(SwerveDrivePathGenerator::waypoint_t {150, 60 + radCurve, 90, RobotParameters::k_maxSpeed*metersToInches, radCurve});//cone 1, point 5/1
-    path.push_back(SwerveDrivePathGenerator::waypoint_t {240, 120 + radCurve, 90, RobotParameters::k_maxSpeed*metersToInches, 0});//cone 2, point 1
-    path.push_back(SwerveDrivePathGenerator::waypoint_t {240 + radCurve, 120, 90, RobotParameters::k_maxSpeed*metersToInches, radCurve});//cone 2, point 2
-    path.push_back(SwerveDrivePathGenerator::waypoint_t {240, 120 - radCurve, 90, RobotParameters::k_maxSpeed*metersToInches, radCurve});//cone 2, point 3
-    path.push_back(SwerveDrivePathGenerator::waypoint_t {240 - radCurve, 120, 90, RobotParameters::k_maxSpeed*metersToInches, radCurve});//cone 2, point 4
-    path.push_back(SwerveDrivePathGenerator::waypoint_t {240, 120 + radCurve, 90, RobotParameters::k_maxSpeed*metersToInches, radCurve});//cone 2, point 5/1
-    path.push_back(SwerveDrivePathGenerator::waypoint_t {300, 60 + radCurve, 90, RobotParameters::k_maxSpeed*metersToInches, 0});//cone 3, point 1
-    path.push_back(SwerveDrivePathGenerator::waypoint_t {300 + radCurve, 60, 90, RobotParameters::k_maxSpeed*metersToInches, radCurve});//cone 3, point 2
-    path.push_back(SwerveDrivePathGenerator::waypoint_t {300, 60 - radCurve, 90, RobotParameters::k_maxSpeed*metersToInches, radCurve});//cone 3, point 3
-    path.push_back(SwerveDrivePathGenerator::waypoint_t {300 - radCurve, 60, 90, RobotParameters::k_maxSpeed*metersToInches, radCurve});//cone 3, point 4
-    path.push_back(SwerveDrivePathGenerator::waypoint_t {300, 60 + radCurve, 90, RobotParameters::k_maxSpeed*metersToInches, radCurve});//cone 3, point 5/1
-    path.push_back(SwerveDrivePathGenerator::waypoint_t {60, 60 + radCurve, 90, RobotParameters::k_maxSpeed*metersToInches, 0});//head to end
-    path.push_back(SwerveDrivePathGenerator::waypoint_t {0, 60 + radCurve, 90, 0, 0});
+    path.push_back(SwerveDrivePathGenerator::waypoint_t {60 + RobotParameters::k_wheelBase*metersToInches/2, 80, 0, 0, 0});//start path
+    path.push_back(SwerveDrivePathGenerator::waypoint_t {150, 60 + radCurve, 0, RobotParameters::k_maxSpeed*metersToInches, 0});//cone 1, point 1
+    path.push_back(SwerveDrivePathGenerator::waypoint_t {150 + radCurve, 60, 0, RobotParameters::k_maxSpeed*metersToInches, radCurve});//cone 1, point 2
+    path.push_back(SwerveDrivePathGenerator::waypoint_t {150, 60 - radCurve, 0, RobotParameters::k_maxSpeed*metersToInches, radCurve});//cone 1, point 3
+    path.push_back(SwerveDrivePathGenerator::waypoint_t {150 - radCurve, 60, 0, RobotParameters::k_maxSpeed*metersToInches, radCurve});//cone 1, point 4
+    path.push_back(SwerveDrivePathGenerator::waypoint_t {150, 60 + radCurve, 0, RobotParameters::k_maxSpeed*metersToInches, radCurve});//cone 1, point 5/1
+    path.push_back(SwerveDrivePathGenerator::waypoint_t {240, 120 + radCurve, 0, RobotParameters::k_maxSpeed*metersToInches, 0});//cone 2, point 1
+    path.push_back(SwerveDrivePathGenerator::waypoint_t {240 + radCurve, 120, 0, RobotParameters::k_maxSpeed*metersToInches, radCurve});//cone 2, point 2
+    path.push_back(SwerveDrivePathGenerator::waypoint_t {240, 120 - radCurve, 0, RobotParameters::k_maxSpeed*metersToInches, radCurve});//cone 2, point 3
+    path.push_back(SwerveDrivePathGenerator::waypoint_t {240 - radCurve, 120, 0, RobotParameters::k_maxSpeed*metersToInches, radCurve});//cone 2, point 4
+    path.push_back(SwerveDrivePathGenerator::waypoint_t {240, 120 + radCurve, 0, RobotParameters::k_maxSpeed*metersToInches, radCurve});//cone 2, point 5/1
+    path.push_back(SwerveDrivePathGenerator::waypoint_t {300, 60 + radCurve, 0, RobotParameters::k_maxSpeed*metersToInches, 0});//cone 3, point 1
+    path.push_back(SwerveDrivePathGenerator::waypoint_t {300 + radCurve, 60, 0, RobotParameters::k_maxSpeed*metersToInches, radCurve});//cone 3, point 2
+    path.push_back(SwerveDrivePathGenerator::waypoint_t {300, 60 - radCurve, 0, RobotParameters::k_maxSpeed*metersToInches, radCurve});//cone 3, point 3
+    path.push_back(SwerveDrivePathGenerator::waypoint_t {300 - radCurve, 60, 0, RobotParameters::k_maxSpeed*metersToInches, radCurve});//cone 3, point 4
+    path.push_back(SwerveDrivePathGenerator::waypoint_t {300, 60 + radCurve, 0, RobotParameters::k_maxSpeed*metersToInches, radCurve});//cone 3, point 5/1
+    path.push_back(SwerveDrivePathGenerator::waypoint_t {60, 60 + radCurve, 0, RobotParameters::k_maxSpeed*metersToInches, 0});//head to end
+    path.push_back(SwerveDrivePathGenerator::waypoint_t {0, 60 + radCurve, 0, 0, 0});
 
     std::vector<SwerveDrivePathGenerator::waypoint_t> tempWaypoints;//if meters
     

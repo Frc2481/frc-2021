@@ -26,17 +26,17 @@ class DropBallsCommand
   }
 
   void Initialize() override{
-    m_pIntake->setRightSpeed(IntakeConstants::kRightIntakeReverse);
-    m_pIntake->setLeftSpeed(IntakeConstants::kLeftIntakeSpeed);
+    m_pIntake->setAIntakeSpeed(IntakeConstants::kAIntakeReverse);
+    m_pIntake->setBIntakeSpeed(IntakeConstants::kBIntakeReverse);
   }
 
   void Execute() override{
-    m_pIntake->getRightSpeed();
+    m_pIntake->getAIntakeSpeed();
   }
 
   void End(bool interrupted) override{
-    m_pIntake->setRightSpeed(0);
-    m_pIntake->setLeftSpeed(0);
+    m_pIntake->setAIntakeSpeed(0);
+    m_pIntake->setBIntakeSpeed(0);
   }
 
   bool IsFinished() override{

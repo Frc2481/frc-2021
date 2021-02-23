@@ -26,14 +26,10 @@ namespace RobotParameters {
     static constexpr double k_minRobotVelocity = .07;//3*.0254;
     static constexpr double k_minRobotYawRate = 10;//3*.0254;
     static constexpr double k_driveWheelSlotError = 0.002;
-    // static constexpr double k_robotWidth = 13.5;
-    // static constexpr double k_robotLength = 13.5;
     static constexpr double k_maxYawRate = k_maxSpeed / k_wheelLeverArm *180/MATH_CONSTANTS_PI;
     static constexpr double k_maxYawAccel = k_maxAccel / k_wheelLeverArm*180/MATH_CONSTANTS_PI;
     static constexpr double k_maxYawDeccel = k_maxDeccel / k_wheelLeverArm*180/MATH_CONSTANTS_PI;
     static constexpr double k_minYawRate = k_minRobotVelocity / k_wheelLeverArm *180 / MATH_CONSTANTS_PI;
-    // static constexpr double k_driveMotorEncoderMPSToRPM  = (RobotParameters::k_driveMotorGearRatio/(RobotParameters::k_wheelRad*3.14159265*2))*60;
-
 
     //pathfollowing 
     static constexpr double  k_maxCentripAccel = 10.0;//10

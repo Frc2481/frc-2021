@@ -18,18 +18,17 @@ public:
    * Will be called periodically whenever the CommandScheduler runs.
    */
    void Periodic() override;
-   void setLeftSpeed(double speed);
-   void setRightSpeed(double speed);
-   double getLeftSpeed();
-   double getRightSpeed();
-   void setRightCurrent(double amp);
+   void setBIntakeSpeed(double speed);
+   void setAIntakeSpeed(double speed);
+   double getBIntakeSpeed();
+   double getAIntakeSpeed();
    
    double getServoAngle();
    void setServoAngle(double angle);
 private: 
-    double leftSpeed;
-    double rightSpeed;
-    VictorMotorController* m_rightMotor;
-    VictorMotorController* m_leftMotor;
+    double bIntakeSpeed;
+    double aIntakeSpeed;
+    VictorMotorController* m_aIntakeMotor;
+    VictorMotorController* m_bIntakeMotor;
     frc::Servo* m_servo;
     };

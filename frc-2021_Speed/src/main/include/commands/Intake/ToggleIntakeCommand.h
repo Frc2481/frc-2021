@@ -27,13 +27,13 @@ class ToggleIntakeCommand
   }
 
   void Initialize() override{
-    if(m_pIntake->getRightSpeed() != 0){
-      m_pIntake->setRightSpeed(0);
-      m_pIntake->setLeftSpeed(0);
+    if(m_pIntake->getAIntakeSpeed() != 0){
+      m_pIntake->setAIntakeSpeed(0);
+      m_pIntake->setBIntakeSpeed(0);
     }
     else{
-      m_pIntake->setRightSpeed(IntakeConstants::kRightIntakeSpeed);
-      m_pIntake->setLeftSpeed(IntakeConstants::kLeftIntakeSpeed);
+      m_pIntake->setAIntakeSpeed(IntakeConstants::kAIntakeSpeed);
+      m_pIntake->setBIntakeSpeed(IntakeConstants::kBIntakeSpeed);
     }
   }
 };

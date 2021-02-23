@@ -18,7 +18,6 @@
 
 
 #include "commands/Drive/DriveOpenLoopCommand.h"
-#include "commands/Drive/RotateToAngleCommand.h"
 
 #include "commands/Drive/RotateWithMotionMagic.h"
 
@@ -37,8 +36,8 @@ class TestSpeedsAuto
                       DriveSubsystem* m_drive){
 
      double metersToInches = 39.3701;
-     double distToAccel = (std::pow(RobotParameters::k_maxSpeed,2)/(2*RobotParameters::k_maxAccel)) * metersToInches;
-     double distToDeccel = fabs((std::pow(RobotParameters::k_maxSpeed,2)/(2*RobotParameters::k_maxDeccel)) * metersToInches);
+    //  double distToAccel = (std::pow(RobotParameters::k_maxSpeed,2)/(2*RobotParameters::k_maxAccel)) * metersToInches;
+    //  double distToDeccel = fabs((std::pow(RobotParameters::k_maxSpeed,2)/(2*RobotParameters::k_maxDeccel)) * metersToInches);
     std::vector<SwerveDrivePathGenerator::waypoint_t> start;
     start.push_back(SwerveDrivePathGenerator::waypoint_t {0, 0, 90, 0, 0});//start
     start.push_back(SwerveDrivePathGenerator::waypoint_t {100, 0, 90, RobotParameters::k_maxSpeed * metersToInches, 0});
@@ -46,9 +45,6 @@ class TestSpeedsAuto
     start.push_back(SwerveDrivePathGenerator::waypoint_t {500, 0, 90, 0, 0});//pick up ball 4 and 5
 
     std::vector<SwerveDrivePathGenerator::waypoint_t> tempWaypoints;//if meters
-    // frc::SmartDashboard::PutNumber("Distance To Accel", distToAccel);
-    // frc::SmartDashboard::PutNumber("Distance To Deccel", distToDeccel);
-    // frc::SmartDashboard::PutNumber("Distance A+D", distToAccel+distToDeccel+50);
     AddCommands(
       PathFollowerCommand(m_drive, start, "start path" ,true)
     );

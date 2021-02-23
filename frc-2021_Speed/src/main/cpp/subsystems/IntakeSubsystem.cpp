@@ -5,35 +5,32 @@
 #include "RobotParameters.h"
 #include "Constants.h"
     IntakeSubsystem::IntakeSubsystem() :
-    leftSpeed(0.0),
-    rightSpeed(0.0)
+    bIntakeSpeed(0.0),
+    aIntakeSpeed(0.0)
     {
         m_servo = new frc::Servo(0);
-        m_rightMotor = new VictorMotorController(VictorIDs::kFrontIntakeID, "Front Intake Motor");
-        m_rightMotor->ConfigFactoryDefault();
-        m_leftMotor = new VictorMotorController(VictorIDs::kLeftIntakeID,"Left Intake Motor");
+        m_aIntakeMotor = new VictorMotorController(VictorIDs::kAIntakeID, "Front Intake Motor");
+        m_aIntakeMotor->ConfigFactoryDefault();
+        m_bIntakeMotor = new VictorMotorController(VictorIDs::kBIntakeID,"Left Intake Motor");
+        m_bIntakeMotor->ConfigFactoryDefault();
     }
 
     void IntakeSubsystem::Periodic(){
     }
-    void IntakeSubsystem::setLeftSpeed(double speed){
-        leftSpeed = speed;
-        m_leftMotor->Set(speed);
+    void IntakeSubsystem::setBIntakeSpeed(double speed){
+        bIntakeSpeed = speed;
+        m_bIntakeMotor->Set(speed);
     }
-    void IntakeSubsystem::setRightSpeed(double speed){
-        rightSpeed = speed;
-        m_rightMotor->Set(speed);
+    void IntakeSubsystem::setAIntakeSpeed(double speed){
+        aIntakeSpeed = speed;
+        m_aIntakeMotor->Set(speed);
     }
-    double IntakeSubsystem::getLeftSpeed(){
-        return leftSpeed;
+    double IntakeSubsystem::getBIntakeSpeed(){
+        return bIntakeSpeed;
     }
-    double IntakeSubsystem::getRightSpeed(){
-        return rightSpeed;
+    double IntakeSubsystem::getAIntakeSpeed(){
+        return aIntakeSpeed;
     }
-    void IntakeSubsystem::setRightCurrent(double amp){
-        m_rightMotor->Set(CommonModes::Current, amp);
-    }
-
     double IntakeSubsystem::getServoAngle(){
         return m_servo->GetAngle();
     }

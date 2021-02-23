@@ -126,9 +126,9 @@ frc::ChassisSpeeds GetRobotVelocity();
   // Components (e.g. motor controllers and sensors) should generally be
   // declared private and exposed only through public methods.
   SwerveModule m_frontLeft;
-  SwerveModule m_rearLeft;
+  SwerveModule m_backLeft;
   SwerveModule m_frontRight;
-  SwerveModule m_rearRight;
+  SwerveModule m_backRight;
     
   // The gyro sensor
   // frc::ADXRS450_Gyro m_gyro;

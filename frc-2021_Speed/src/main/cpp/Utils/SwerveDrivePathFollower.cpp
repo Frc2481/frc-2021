@@ -7,7 +7,7 @@
 
 #include "Utils/SwerveDrivePathFollower.h"
 #include "Utils/Interpolate.h"
-
+#include <frc/smartdashboard/SmartDashboard.h>
 SwerveDrivePathFollower::SwerveDrivePathFollower():
 					m_lastPointReached(false),
 		m_distToEnd(std::numeric_limits<double>::infinity()),
@@ -30,7 +30,7 @@ void SwerveDrivePathFollower::start(){
 
 // This method will be called once per scheduler run
 void SwerveDrivePathFollower::Update(frc::Pose2d pose){
-    double robotAngle = pose.Rotation().Degrees().to<double>(); //m_pDrivetrain->GetHeading();
+    double robotAngle = pose.Rotation().Degrees().to<double>(); 
 		
 		// find closest point on path
 		if(m_path.empty()) {
