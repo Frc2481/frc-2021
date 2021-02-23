@@ -99,17 +99,17 @@ class DriveSubsystem : public frc2::SubsystemBase {
 
   void toggleFieldCentricForJoystick();
   bool getFiedCentricForJoystick();
-void setCoast();
-void setBrake();
-frc::SwerveModuleState getFrontRightMotor();
-frc::SwerveModuleState getFrontLeftMotor();
-frc::SwerveModuleState getBackRightMotor();
-frc::SwerveModuleState getBackLeftMotor();
-void tuneDrivePID(double p, double i, double d, double f);
-void tuneSteerPID(double p, double i, double d);
-void stop();
-void resetDriveEncoders();
-frc::ChassisSpeeds GetRobotVelocity();
+  void setCoast();
+  void setBrake();
+  frc::SwerveModuleState getFrontRightMotor();
+  frc::SwerveModuleState getFrontLeftMotor();
+  frc::SwerveModuleState getBackRightMotor();
+  frc::SwerveModuleState getBackLeftMotor();
+  void tuneDrivePID(double p, double i, double d, double f);
+  void tuneSteerPID(double p, double i, double d);
+  void stop();
+  void resetDriveEncoders();
+  frc::ChassisSpeeds GetRobotVelocity();
 
   units::meter_t kTrackWidth =
       units::meter_t(RobotParameters::k_wheelTrack);  // Distance between centers of right and left wheels on robot 
@@ -138,7 +138,7 @@ frc::ChassisSpeeds GetRobotVelocity();
   frc::SwerveDriveOdometry<4> m_odometry;
   AHRS m_pChassisIMU;
   bool m_fieldCentricForJoystick = false;
-    double metersToInches = 39.3701;
-    double maxSpeed = 0.0;
-  	std::ofstream m_File;
+  double metersToInches = 39.3701;
+  double cycle = 0;
+  std::ofstream m_File;
 };

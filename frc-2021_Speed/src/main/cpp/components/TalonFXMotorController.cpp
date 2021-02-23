@@ -47,8 +47,9 @@ void  TalonFXMotorController::Config_IntegralZone(int slotIdx, int izone, int ti
 void  TalonFXMotorController::ConfigMaxIntegralAccumulator(int slotIdx, double iaccum, int timeoutMs) {
     m_pMotor->ConfigMaxIntegralAccumulator (slotIdx, iaccum, timeoutMs);
 }
-void  TalonFXMotorController::SetNeutralMode(NeutralMode neutralMode) {
-    m_pMotor->SetNeutralMode(neutralMode);
+void  TalonFXMotorController::SetNeutralMode(CommonDrive neutralMode) {
+    
+    m_pMotor->SetNeutralMode(CommonDriveToControlType(neutralMode));
 }
 void  TalonFXMotorController::EnableVoltageCompensation(bool enable) {
     m_pMotor->EnableVoltageCompensation(enable);
@@ -146,5 +147,15 @@ ControlMode TalonFXMotorController::FalconModeToCommonMode(CommonModes mode){
     case CommonModes::MotionProfileArc: return ControlMode::MotionProfileArc;
     case CommonModes::Disabled:         return ControlMode::Disabled;
     default: return ControlMode::PercentOutput;
+    }
+}
+
+NeutralMode TalonFXMotorController::CommonDriveToControlType(CommonDrive mode){
+    switch(mode)
+    {
+    case CommonDrive::Brake:         return NeutralMode::Brake;
+    case CommonDrive::Coast:         return NeutralMode::Coast;
+    case CommonDrive::EEPROMSetting: return NeutralMode::EEPROMSetting;
+    default: return NeutralMode::Brake;
     }
 }

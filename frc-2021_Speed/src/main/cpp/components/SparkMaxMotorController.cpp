@@ -7,6 +7,7 @@
 
 #include "components/SparkMaxMotorController.h"
 
+
 SparkMaxMotorController::SparkMaxMotorController(int motorID, const std::string &name, rev::CANSparkMax::MotorType type): CommonMotorController(motorID, name){
     m_pMotor = new rev::CANSparkMax(motorID, type);
     m_pCurrentMode = (rev::ControlType)(-1);
@@ -78,9 +79,10 @@ double SparkMaxMotorController::GetClosedLoopError(){
     }
     return m_setpoint - temp;
 }
-void SparkMaxMotorController::SetNeutralMode(rev::CANSparkMax::IdleMode mode){
-    m_pMotor->SetIdleMode(mode);
-    
+void SparkMaxMotorController::SetNeutralMode(CommonDrive mode){
+    if(CommonDriveToControlType(mode, m_pCurrentDriveMode)){
+        m_pMotor->SetIdleMode(m_pCurrentDriveMode);
+    }
 }
 double SparkMaxMotorController::GetPos(){
     return m_pMotor->GetEncoder().GetPosition();
@@ -88,6 +90,15 @@ double SparkMaxMotorController::GetPos(){
 // void SparkMaxMotorController::ConfigFactoryDefault(){//TODO finish
 //     m_pMotor->RestoreFactoryDefaults();
 // }
+
+bool SparkMaxMotorController::CommonDriveToControlType(CommonDrive mode, rev::CANSparkMax::IdleMode& retMode){
+    switch(mode){
+        case CommonDrive::Brake: retMode = rev::CANSparkMax::IdleMode::kBrake; break;
+        case CommonDrive::Coast: retMode = rev::CANSparkMax::IdleMode::kCoast; break;
+        default: retMode = (rev::CANSparkMax::IdleMode)(-1); return true;
+    }
+    return false;
+}
 bool SparkMaxMotorController::CommonModesToControlType(CommonModes mode, rev::ControlType& retMode){
     switch(mode)
     {

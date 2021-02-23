@@ -16,6 +16,7 @@
 #include <iostream>
 #include <fstream>
 
+
 using namespace DriveConstants;
 
 DriveSubsystem::DriveSubsystem()
@@ -64,23 +65,32 @@ void DriveSubsystem::Periodic() {
   m_odometry.Update(frc::Rotation2d(units::degree_t(GetHeading())),
                     m_frontLeft.GetState(), m_backLeft.GetState(),
                     m_frontRight.GetState(), m_backRight.GetState());
-  frc::SmartDashboard::PutNumber("robot speed", sqrt((GetRobotVelocity().vx *GetRobotVelocity().vx +GetRobotVelocity().vy*GetRobotVelocity().vy).to<double>()));
-  frc::SmartDashboard::PutNumber("fr state angle", m_frontRight.GetState().angle.Degrees().to<double>());
-  frc::SmartDashboard::PutNumber("fr state speed", m_frontRight.GetState().speed.to<double>());
-  frc::SmartDashboard::PutNumber("fl state angle", m_frontLeft.GetState().angle.Degrees().to<double>());
-  frc::SmartDashboard::PutNumber("fl state speed", m_frontLeft.GetState().speed.to<double>());
-  frc::SmartDashboard::PutNumber("br state angle", m_backRight.GetState().angle.Degrees().to<double>());
-  frc::SmartDashboard::PutNumber("br state speed", m_backRight.GetState().speed.to<double>());
-  frc::SmartDashboard::PutNumber("bl state angle", m_backLeft.GetState().angle.Degrees().to<double>());
-  frc::SmartDashboard::PutNumber("bl state speed", m_backLeft.GetState().speed.to<double>());
-  frc::SmartDashboard::PutNumber("fr encoder ticks", fabs(m_frontRight.getDriveEncoder()));
-  frc::SmartDashboard::PutNumber("fl encoder ticks", fabs(m_frontLeft.getDriveEncoder()));
-  frc::SmartDashboard::PutNumber("br encoder ticks", fabs(m_backRight.getDriveEncoder()));
-  frc::SmartDashboard::PutNumber("bl encoder ticks", fabs(m_backLeft.getDriveEncoder()));
-
-  frc::SmartDashboard::PutNumber("Odometry X", GetPose().Translation().X().to<double>()*39.3701);//
-  frc::SmartDashboard::PutNumber("Odometry Y", GetPose().Translation().Y().to<double>()*39.3701);//*39.3701
-  frc::SmartDashboard::PutNumber("Odometry Yaw", GetPose().Rotation().Degrees().to<double>());    
+  cycle++;
+  if(cycle == 0){
+    frc::SmartDashboard::PutNumber("robot speed", sqrt((GetRobotVelocity().vx *GetRobotVelocity().vx +GetRobotVelocity().vy*GetRobotVelocity().vy).to<double>()));
+    frc::SmartDashboard::PutNumber("fr state angle", m_frontRight.GetState().angle.Degrees().to<double>());
+    frc::SmartDashboard::PutNumber("fr state speed", m_frontRight.GetState().speed.to<double>());
+    frc::SmartDashboard::PutNumber("fl state angle", m_frontLeft.GetState().angle.Degrees().to<double>());
+  }else if(cycle == 1){
+    frc::SmartDashboard::PutNumber("fl state speed", m_frontLeft.GetState().speed.to<double>());
+    frc::SmartDashboard::PutNumber("br state angle", m_backRight.GetState().angle.Degrees().to<double>());
+    frc::SmartDashboard::PutNumber("br state speed", m_backRight.GetState().speed.to<double>());
+    frc::SmartDashboard::PutNumber("bl state angle", m_backLeft.GetState().angle.Degrees().to<double>());
+  }else if(cycle == 2){
+    frc::SmartDashboard::PutNumber("bl state speed", m_backLeft.GetState().speed.to<double>());
+    frc::SmartDashboard::PutNumber("fr encoder ticks", fabs(m_frontRight.getDriveEncoder()));
+    frc::SmartDashboard::PutNumber("fl encoder ticks", fabs(m_frontLeft.getDriveEncoder()));
+    frc::SmartDashboard::PutNumber("br encoder ticks", fabs(m_backRight.getDriveEncoder()));
+  }else{
+    frc::SmartDashboard::PutNumber("bl encoder ticks", fabs(m_backLeft.getDriveEncoder()));
+    frc::SmartDashboard::PutNumber("Odometry X", GetPose().Translation().X().to<double>()*metersToInches);
+    frc::SmartDashboard::PutNumber("Odometry Y", GetPose().Translation().Y().to<double>()*metersToInches);
+    frc::SmartDashboard::PutNumber("Odometry Yaw", GetPose().Rotation().Degrees().to<double>());
+    cycle = 0;
+  }
+  
+  
+      
 }
 
 void DriveSubsystem::Drive(units::meters_per_second_t xSpeed,
@@ -92,9 +102,7 @@ void DriveSubsystem::Drive(units::meters_per_second_t xSpeed,
   double base = .1;
   if(fabs(rot.to<double>()) > base){
     rot = rot * 2.2;
-  }
-
-  frc::SmartDashboard::PutNumber("passed in value",ySpeed.to<double>());                        
+  }                        
   auto states = kDriveKinematics.ToSwerveModuleStates(
       fieldRelative ? frc::ChassisSpeeds::FromFieldRelativeSpeeds(
                           xSpeed, ySpeed, rot,
@@ -152,11 +160,7 @@ void DriveSubsystem::DriveArc(double arcLength){
   m_backLeft.DriveArc(arcLength, bl.angle.Degrees().to<double>());
 }
 void DriveSubsystem::toggleFieldCentricForJoystick(){
-  if(m_fieldCentricForJoystick){
-    m_fieldCentricForJoystick =  false;
-  }else{
-    m_fieldCentricForJoystick = true;
-  }
+  m_fieldCentricForJoystick = !m_fieldCentricForJoystick;
   frc::SmartDashboard::PutBoolean("fieldCentric", m_fieldCentricForJoystick);
 }
 bool DriveSubsystem::getFiedCentricForJoystick(){

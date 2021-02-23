@@ -87,10 +87,8 @@ class RobotContainer {
   void ConfigureButtonBindings();
   void TrajectoryToCSV(frc::Trajectory trajectory);
 
-//tuning drive
   int cycle = 0;
-  double setPoint = 0;
-  double counting = 0;
+  
   std::vector<SwerveDrivePathGenerator::finalPathPoint_t> m_path;
 	
 

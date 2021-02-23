@@ -42,7 +42,7 @@ SwerveModule::SwerveModule(int driveMotorID, int turningMotorID,
       m_driveMotor->Config_kD(0, 0);//.035
       m_driveMotor->Config_kF(0, 1023/(RobotParameters::k_feedForwardMaxSpeed/RobotParameters::k_driveMotorEncoderTicksToMPS));
       m_driveMotor->Config_IntegralZone(0, 0);
-      m_driveMotor->SetNeutralMode(ctre::phoenix::motorcontrol::NeutralMode::Brake);//break
+      m_driveMotor->SetNeutralMode(CommonDrive::Brake);//break
 
   // Limit the PID Controller's input range between -pi and pi and set the input
   // to be continuous.
@@ -116,11 +116,11 @@ void SwerveModule::updateDrivePID(double p, double i, double d, double f){
   m_driveMotor->Config_kF(0,f);
 }
 void SwerveModule::setCoast(){
-  m_driveMotor->SetNeutralMode(ctre::phoenix::motorcontrol::NeutralMode::Coast);
+  m_driveMotor->SetNeutralMode(CommonDrive::Coast);
 }
 
 void SwerveModule::setBrake(){
-  m_driveMotor->SetNeutralMode(ctre::phoenix::motorcontrol::NeutralMode::Brake);
+  m_driveMotor->SetNeutralMode(CommonDrive::Brake);
 }
 
 void SwerveModule::DriveArc(double arcLength, double wheelAngle){

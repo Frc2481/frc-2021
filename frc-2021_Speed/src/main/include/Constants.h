@@ -115,6 +115,12 @@ enum class CommonModes{
     MotionProfileArc = 11,
     Disabled = 15
 };
+
+enum class CommonDrive{
+    Brake = 0,
+    Coast = 1,
+    EEPROMSetting = 2
+};
 namespace IntakeConstants{
     static constexpr double kMaxIntakeAmp = 25.0;
     static constexpr double kAIntakeSpeed = 1.0;

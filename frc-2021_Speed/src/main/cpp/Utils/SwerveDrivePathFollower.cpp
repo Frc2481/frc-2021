@@ -15,7 +15,6 @@ SwerveDrivePathFollower::SwerveDrivePathFollower():
 		m_time(0){
 		m_xVect.push_back(0);
 	m_xVect.push_back(RobotParameters::k_maxSpeed);
-
 	m_yVect.push_back(PathConstants::kMinLookAhead);
 	m_yVect.push_back(PathConstants::kMaxLookAhead);
 		}
@@ -30,129 +29,112 @@ void SwerveDrivePathFollower::start(){
 
 // This method will be called once per scheduler run
 void SwerveDrivePathFollower::Update(frc::Pose2d pose){
-    double robotAngle = pose.Rotation().Degrees().to<double>(); 
-		
-		// find closest point on path
-		if(m_path.empty()) {
-			printf("empty-----------\n");
-			m_lastPointReached = true;
-			m_distToEnd = 0;
-			return;
-		}
+	double robotAngle = pose.Rotation().Degrees().to<double>(); 
+	
+	// find closest point on path
+	if(m_path.empty()) {
+		printf("empty-----------\n");
+		m_lastPointReached = true;
+		m_distToEnd = 0;
+		return;
+	}
 
-		frc::Translation2d vectClosestPointToRobot;
-		double distToClosestPoint = std::numeric_limits<double>::infinity();
-		int driftingAway = 0;
-		int skipped = 0;
-		double diffAngle = 0;
-		m_distToEnd = (pose.Translation() - frc::Translation2d(units::meter_t(m_path[m_path.size()-1].xPos),units::meter_t(m_path[m_path.size()-1].yPos))).Norm().to<double>();
-		// printf("size of path: %d\n", (int)m_path.size());
-		for(int j = m_pathIndex; j < (int)m_path.size(); j++){
-			// printf("point looking at: %d\n", j);
-			
-			frc::Translation2d vectPointToRobot = pose.Translation() - frc::Translation2d(units::meter_t(m_path[j].xPos),units::meter_t(m_path[j].yPos));
-			double distToPoint = vectPointToRobot.Norm().to<double>();
-			double dirToPointRad = atan2(vectPointToRobot.Y().to<double>(), vectPointToRobot.X().to<double>());
-			dirToPointRad = normalizeToRange::NormalizeToRange(dirToPointRad,-MATH_CONSTANTS_PI, MATH_CONSTANTS_PI,false);
-			double pointDirRad = m_path[j].heading*MATH_CONSTANTS_PI/180;
-			// printf("dirToPointRad: %f, pointDirRad: %f\n", dirToPointRad, pointDirRad);
-			frc::SmartDashboard::PutNumber("angleToPoint", fabs(dirToPointRad - pointDirRad)*180/MATH_CONSTANTS_PI);
-			//find closest point that is a specific time ahead so you dont grab points to far ahead in the path
-			diffAngle = fabs(normalizeToRange::RangedDifference(dirToPointRad - pointDirRad, -MATH_CONSTANTS_PI, MATH_CONSTANTS_PI));
-			diffAngle = 0;//TODO check if neeeded
-			if(distToPoint < distToClosestPoint){
-				if(MATH_CONSTANTS_PI/2 > diffAngle && fabs(m_path[j].vel) > RobotParameters::k_minRobotVelocity){
-					m_pathIndex = j;
-					distToClosestPoint = distToPoint;
-					driftingAway = 0;
-				}else{
-					skipped++;
-				}
+	frc::Translation2d vectClosestPointToRobot;
+	double distToClosestPoint = std::numeric_limits<double>::infinity();
+	int driftingAway = 0;
+	int skipped = 0;
+	double diffAngle = 0;
+	m_distToEnd = (pose.Translation() - frc::Translation2d(units::meter_t(m_path[m_path.size()-1].xPos),units::meter_t(m_path[m_path.size()-1].yPos))).Norm().to<double>();
+	for(int j = m_pathIndex; j < (int)m_path.size(); j++){
+
+		frc::Translation2d vectPointToRobot = pose.Translation() - frc::Translation2d(units::meter_t(m_path[j].xPos),units::meter_t(m_path[j].yPos));
+		double distToPoint = vectPointToRobot.Norm().to<double>();
+		double dirToPointRad = atan2(vectPointToRobot.Y().to<double>(), vectPointToRobot.X().to<double>());
+		dirToPointRad = normalizeToRange::NormalizeToRange(dirToPointRad,-MATH_CONSTANTS_PI, MATH_CONSTANTS_PI,false);
+		double pointDirRad = m_path[j].heading*MATH_CONSTANTS_PI/180;
+
+		//find closest point that is a specific time ahead so you dont grab points to far ahead in the path
+		diffAngle = fabs(normalizeToRange::RangedDifference(dirToPointRad - pointDirRad, -MATH_CONSTANTS_PI, MATH_CONSTANTS_PI));
+		diffAngle = 0;//TODO check if neeeded
+		if(distToPoint < distToClosestPoint){
+			if(MATH_CONSTANTS_PI/2 > diffAngle && fabs(m_path[j].vel) > RobotParameters::k_minRobotVelocity){
+				m_pathIndex = j;
+				distToClosestPoint = distToPoint;
+				driftingAway = 0;
 			}else{
-				driftingAway++;
-				if(driftingAway >= m_maxDrifting){
-					break;
-				}
+				skipped++;
 			}
-			// printf("diffAnge: %f, distToPoint: %f, distToClosestPoint %f, m_path vel: %f, driftingAway: %d\n",diffAngle, distToPoint,distToClosestPoint,m_path[j].vel, driftingAway);
-		}
-		frc::SmartDashboard::PutNumber("skipped", skipped);
-		frc::SmartDashboard::PutNumber("vel", m_path[m_pathIndex].vel);
-		// check if last point reached
-		if(m_pathIndex == (int)m_path.size()-1 || distToClosestPoint == std::numeric_limits<double>::infinity() ) {
-			// printf("ended 120");
-			frc::SmartDashboard::PutBoolean("path should stop", true);
-			m_lastPointReached  = true;
-		}
-		frc::SmartDashboard::PutNumber("points left in the path", m_path.size() - m_pathIndex);
-		m_lookAhead = interpolate::interp(m_xVect, m_yVect, fabs(m_path[m_pathIndex].vel), false);
-		// printf("------------------lookAhead distance: %f------------------\n", m_lookAhead);
-		// frc::SmartDashboard::PutNumber("distToClosestPoint", distToClosestPoint);
-		for(int j = m_pathIndex; j < (int)m_path.size(); j++){
-			frc::Translation2d vectPointToRobot = frc::Translation2d(units::meter_t(m_path[j].xPos),units::meter_t(m_path[j].yPos))-  frc::Translation2d(units::meter_t(m_path[m_pathIndex].xPos),units::meter_t(m_path[m_pathIndex].yPos));//pose.Translation() - frc::Translation2d(units::meter_t(m_path[j].xPos),units::meter_t(m_path[j].yPos));  Robot centric
-			double distToPoint = vectPointToRobot.Norm().to<double>();
-			if(distToPoint < m_lookAhead){
-				// frc::SmartDashboard::PutNumber("lookaheadPointFinding", distToPoint);
-				m_lookAheadIndex = j;
-			}else{
-				
+		}else{
+			driftingAway++;
+			if(driftingAway >= m_maxDrifting){
 				break;
 			}
 		}
-// frc::SmartDashboard::PutNumber("look ahead point", (pose.Translation() - frc::Translation2d(units::meter_t(m_path[m_lookAheadIndex].xPos),units::meter_t(m_path[m_lookAheadIndex].yPos))).Norm().to<double>());
-		
-		
-		frc::SmartDashboard::PutNumber("pathSpeed", m_path[m_pathIndex].vel);
-		m_time += 1.0/RobotParameters::k_updateRate;
+	}
+	// check if last point reached
+	if(m_pathIndex == (int)m_path.size()-1 || distToClosestPoint == std::numeric_limits<double>::infinity() ) {
+		// printf("ended 120");
+		frc::SmartDashboard::PutBoolean("path should stop", true);
+		m_lastPointReached  = true;
+	}
+	// frc::SmartDashboard::PutNumber("points left in the path", m_path.size() - m_pathIndex);
+	m_lookAhead = interpolate::interp(m_xVect, m_yVect, fabs(m_path[m_pathIndex].vel), false);
+	// printf("------------------lookAhead distance: %f------------------\n", m_lookAhead);
+	// frc::SmartDashboard::PutNumber("distToClosestPoint", distToClosestPoint);
+	for(int j = m_pathIndex; j < (int)m_path.size(); j++){
+		frc::Translation2d vectPointToRobot = frc::Translation2d(units::meter_t(m_path[j].xPos),units::meter_t(m_path[j].yPos))-  frc::Translation2d(units::meter_t(m_path[m_pathIndex].xPos),units::meter_t(m_path[m_pathIndex].yPos));//pose.Translation() - frc::Translation2d(units::meter_t(m_path[j].xPos),units::meter_t(m_path[j].yPos));  Robot centric
+		double distToPoint = vectPointToRobot.Norm().to<double>();
+		if(distToPoint < m_lookAhead){
+			// frc::SmartDashboard::PutNumber("lookaheadPointFinding", distToPoint);
+			m_lookAheadIndex = j;
+		}else{
+			
+			break;
+		}
+	}
 
-		double robotYawRate = m_path[m_pathIndex].yawRate;
-		// double robotXVel = m_path[m_pathIndex].xVel;
-		// double robotYVel = m_path[m_pathIndex].yVel;
-		double robotVel = m_path[m_pathIndex].vel;
-		double poseX = m_path[m_lookAheadIndex].xPos;
-		double poseY = m_path[m_lookAheadIndex].yPos;
-		double followerYaw = m_path[m_pathIndex].yaw;
-		double followerYawRate = m_path[m_pathIndex].yawRate;
-		double closestX = m_path[m_pathIndex].xPos;
-		double closestY = m_path[m_pathIndex].yPos;
-		//calculating new vector
-		double distX = poseX - pose.Translation().X().to<double>();
-		double distY = poseY - pose.Translation().Y().to<double>();
-		double vectorAngle = atan2(distY, distX);
-		// update drive
-		// followerYaw = 0; //temp
-		//field centric driving
-		m_yawRate = m_turningPIDController.Calculate(robotAngle,followerYaw)+followerYawRate;//add
-        m_xVel = cos(vectorAngle)*robotVel;
-		m_yVel = sin(vectorAngle)*robotVel;
+	m_time += 1.0/RobotParameters::k_updateRate;
 
-
-		// printf("path x vel update method %f\n", m_xVel);
-		frc::SmartDashboard::PutNumber("x follower pos", poseX);
-		frc::SmartDashboard::PutNumber("y follower pos", poseY);	
-
-				double actualYaw = pose.Rotation().Degrees().to<double>();
-		m_File << m_path[m_pathIndex].time << ",";
-		m_File << closestX << ",";
-		m_File << closestY << ",";
-		m_File << robotVel << ",";
-		m_File << followerYaw << ",";
-		m_File << robotYawRate << ",";//6
-
-
-		m_File << pose.Translation().X().to<double>() << ",";
-		m_File << pose.Translation().Y().to<double>() << ",";
-		m_File << actualYaw << ",";
-		m_File << skipped << ",";//4
+	double robotYawRate = m_path[m_pathIndex].yawRate;
+	double robotVel = m_path[m_pathIndex].vel;
+	double poseX = m_path[m_lookAheadIndex].xPos;
+	double poseY = m_path[m_lookAheadIndex].yPos;
+	double followerYaw = m_path[m_pathIndex].yaw;
+	double followerYawRate = m_path[m_pathIndex].yawRate;
+	double closestX = m_path[m_pathIndex].xPos;
+	double closestY = m_path[m_pathIndex].yPos;
+	//calculating new vector
+	double distX = poseX - pose.Translation().X().to<double>();
+	double distY = poseY - pose.Translation().Y().to<double>();
+	double vectorAngle = atan2(distY, distX);
+	//field centric driving
+	m_yawRate = m_turningPIDController.Calculate(robotAngle,followerYaw)+followerYawRate;//add
+	m_xVel = cos(vectorAngle)*robotVel;
+	m_yVel = sin(vectorAngle)*robotVel;
 
 
-		//look ahead info
-		m_File << m_path[m_lookAheadIndex].xPos << ",";
-		m_File << m_path[m_lookAheadIndex].yPos << ",";
-		m_File << vectorAngle*180/MATH_CONSTANTS_PI << ",";
-		m_File << cos(vectorAngle)*robotVel << ",";
-		m_File << sin(vectorAngle)*robotVel << ",";//5	
-		m_File << m_lookAhead <<"\n";
+	double actualYaw = pose.Rotation().Degrees().to<double>();
+	m_File << m_path[m_pathIndex].time << ",";
+	m_File << closestX << ",";
+	m_File << closestY << ",";
+	m_File << robotVel << ",";
+	m_File << followerYaw << ",";
+	m_File << robotYawRate << ",";//6
+
+
+	m_File << pose.Translation().X().to<double>() << ",";
+	m_File << pose.Translation().Y().to<double>() << ",";
+	m_File << actualYaw << ",";
+	m_File << skipped << ",";//4
+
+
+	//look ahead info
+	m_File << m_path[m_lookAheadIndex].xPos << ",";
+	m_File << m_path[m_lookAheadIndex].yPos << ",";
+	m_File << vectorAngle*180/MATH_CONSTANTS_PI << ",";
+	m_File << cos(vectorAngle)*robotVel << ",";
+	m_File << sin(vectorAngle)*robotVel << ",";//5	
+	m_File << m_lookAhead <<"\n";
 }
 
 
@@ -166,8 +148,6 @@ bool SwerveDrivePathFollower::isPathFinished(){
 	frc::SmartDashboard::PutBoolean("distance", (m_distToEnd < m_targetZone));
 	frc::SmartDashboard::PutNumber("distance to end", m_distToEnd);
 	frc::SmartDashboard::PutBoolean("last point reached", m_lastPointReached);
-	// printf("util path finished %b\n", m_pathFinished);
-	// printf("distance to end%f, last point reached%d\n", m_distToEnd, (int)m_lastPointReached);
     return (m_distToEnd < m_targetZone) || m_lastPointReached;
 }
 
@@ -216,6 +196,9 @@ double SwerveDrivePathFollower::getYawRate(){
 }
 frc::Pose2d SwerveDrivePathFollower::getPointPos(int index){
 	return frc::Pose2d(units::meter_t(m_path[index].xPos),units::meter_t(m_path[index].yPos), frc::Rotation2d(units::degree_t(m_path[index].yaw)));
+}
+frc::Pose2d SwerveDrivePathFollower::getFollowerPos(){
+	return frc::Pose2d(units::meter_t(m_path[m_pathIndex].xPos),units::meter_t(m_path[m_pathIndex].yPos), frc::Rotation2d(units::degree_t(m_path[m_pathIndex].yaw)));
 }
 void SwerveDrivePathFollower::stop(bool interrupted){
     m_File.close();

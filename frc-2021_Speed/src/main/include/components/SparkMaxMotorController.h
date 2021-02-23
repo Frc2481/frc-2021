@@ -5,6 +5,7 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 #include "components/CommonMotorController.h"
+#include <rev/CANSparkMax.h>
 
 #pragma once
 
@@ -13,6 +14,7 @@ class SparkMaxMotorController : public CommonMotorController{
   rev::CANSparkMax* m_pMotor;
   double m_setpoint = 0.0;
   rev::ControlType m_pCurrentMode;
+  rev::CANSparkMax::IdleMode m_pCurrentDriveMode;
  public:
   SparkMaxMotorController(int motorID, const std::string &name, rev::CANSparkMax::MotorType type);
   void  Config_kF(int slotIdx, double value, int timeoutMs = 0);
@@ -33,7 +35,8 @@ class SparkMaxMotorController : public CommonMotorController{
   void SetVelocityConversionFactor(double factor);
   double GetClosedLoopError();
   bool CommonModesToControlType(CommonModes mode, rev::ControlType &retMode);
-  void SetNeutralMode(rev::CANSparkMax::IdleMode mode);
+  bool CommonDriveToControlType(CommonDrive mode, rev::CANSparkMax::IdleMode &retMode);
+  void SetNeutralMode(CommonDrive mode);
   double GetPos();
   
 };

@@ -41,8 +41,6 @@ class RotateWithMotionMagic
     m_targetZone = targetZone;
     m_limeLight = limeLight;
     AddRequirements(m_pSwerveDrive);
-    frc::SmartDashboard::PutNumber("scale motion error", 1);
-    
   }
 
   void Initialize() override{
@@ -61,7 +59,7 @@ class RotateWithMotionMagic
       m_turnInput = m_pSwerveDrive->GetPose().Rotation().Degrees().to<double>();
     }
     
-    double diff = normalizeToRange::RangedDifference(m_targetAngle-m_turnInput, -180,180)*.7;//frc::SmartDashboard::GetNumber("scale motion error", 1)
+    double diff = normalizeToRange::RangedDifference(m_targetAngle-m_turnInput, -180,180)*.7;
     m_pSwerveDrive->DriveArc(RobotParameters::k_wheelLeverArm * diff * MATH_CONSTANTS_PI/180);
     if(fabs(diff) < m_targetZone){
       m_count++;

@@ -25,7 +25,7 @@
 #include "components/CommonMotorController.h"
 #include "components/TalonSRXMotorController.h"
 #include "components/TalonFXMotorController.h"
-#include "components/SparkMaxMotorController.h"
+// #include "components/SparkMaxMotorController.h"
 
 class SwerveModule {
   using radians_per_second_squared_t =

@@ -42,7 +42,7 @@ MotorVelocityController::MotorVelocityController(
 	m_pDriveMotor->Config_kF(0, 0, 10);
     m_pDriveMotor->Config_IntegralZone(0, iZone, 10);
     m_pDriveMotor->ConfigMaxIntegralAccumulator (0, iErrorLim, 10);
-    m_pDriveMotor->SetNeutralMode(NeutralMode::Brake);
+    m_pDriveMotor->SetNeutralMode(CommonDrive::Brake);
     m_pDriveMotor->EnableVoltageCompensation(true);
     m_pDriveMotor->ConfigVoltageCompSaturation(12, 10);
     m_pDriveMotor->ConfigNeutralDeadband(0.04, 10);

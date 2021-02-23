@@ -29,7 +29,6 @@
 #include "commands/Intake/DropBallsCommand.h"
 #include "commands/Intake/DropIntake.h"
 //Autos
-#include "commands/Autos/AutoLeftCommandGroup.h"
 #include "commands/Autos/TestSpeedsAuto.h"//T
 #include "commands/Autos/GalacticSearchPathARed.h"//A default
 #include "commands/Autos/GalacticSearchPathBRed.h"//B
@@ -126,7 +125,6 @@ frc2::Command* RobotContainer::GetAutonomousCommand() {
   }else{
     return new GalacticSearchPathARed(&m_follower, &m_drive, &m_intake, &m_PDP);
   }
-  
 }
 
 frc2::InstantCommand* RobotContainer::GetBrakeCommand(){

@@ -35,8 +35,8 @@ class SwerveDrivePathFollower {
   /**
    * Will be called periodically whenever the CommandScheduler runs.
    */
-  void generatePath(std::vector<SwerveDrivePathGenerator::waypoint_t> &waypoints, const std::string &name);
   void Update(frc::Pose2d pose);
+  void generatePath(std::vector<SwerveDrivePathGenerator::waypoint_t> &waypoints, const std::string &name);
   double getXVel();
   double getYVel();
   double getYawRate();
@@ -45,8 +45,7 @@ class SwerveDrivePathFollower {
   int lookAheadIndex();
   bool isPathFinished();
   frc::Pose2d getPointPos(int index);
-  // bool targetPosFound();
-  // void setTargetPos();
+  frc::Pose2d getFollowerPos();
   void stop(bool interrupted);
 
  private:
@@ -57,11 +56,11 @@ class SwerveDrivePathFollower {
   
 
   bool m_pathFinished = false;
-    bool m_lastPointReached;
-    double m_distToEnd;
-    double m_targetZone;
+  bool m_lastPointReached;
+  double m_distToEnd;
+  double m_targetZone;
 
-    int m_lookAheadIndex = 0;
+  int m_lookAheadIndex = 0;
   int m_pathIndex = 0;
 
 

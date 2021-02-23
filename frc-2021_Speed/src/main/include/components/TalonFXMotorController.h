@@ -22,7 +22,7 @@ class TalonFXMotorController : public CommonMotorController {
   void  Config_kD(int slotIdx, double value, int timeoutMs = 0);
   void  Config_IntegralZone(int slotIdx, int izone, int timeoutMs = 0);
   void  ConfigMaxIntegralAccumulator(int slotIdx, double iaccum, int timeoutMs = 0);
-  void  SetNeutralMode(NeutralMode neutralMode);
+  void  SetNeutralMode(CommonDrive neutralMode);
   void  EnableVoltageCompensation(bool enable);
   void  ConfigVoltageCompSaturation(double voltage, int timeoutMs = 0);
   void  ConfigNeutralDeadband(double percentDeadband, int timeoutMs = 0);
@@ -45,9 +45,9 @@ class TalonFXMotorController : public CommonMotorController {
   void SetVelocityConversionFactor(double factor);
   double GetClosedLoopError();
   ControlMode FalconModeToCommonMode(CommonModes mode);
+  NeutralMode CommonDriveToControlType(CommonDrive mode);
   TalonFX* GetBase();
   void Follow(TalonFX* motor);
-  // void SetNeutralMode(ctre::phoenix::motorcontrol::NeutralMode mode);
 private:
   TalonFX* m_pMotor;
   double m_factor = 1;

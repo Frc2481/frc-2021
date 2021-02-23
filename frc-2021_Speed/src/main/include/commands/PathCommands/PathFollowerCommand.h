@@ -9,16 +9,16 @@
 
 #include <frc2/command/CommandBase.h>
 #include <frc2/command/CommandHelper.h>
-#include "Utils/SwerveDrivePathFollower.h"
 #include <vector>
-#include "subsystems/DriveSubsystem.h"
 #include <units/velocity.h>
 #include <units/angle.h>
 #include <frc/smartdashboard/SmartDashboard.h>
 #include <iostream>
 #include <fstream>
 #include <frc2/Timer.h>
-// #include "Utils/SwerveDrivePathGenerator.h"
+
+#include "subsystems/DriveSubsystem.h"
+#include "Utils/SwerveDrivePathFollower.h"
 
 class PathFollowerCommand : public frc2::CommandHelper<frc2::CommandBase, PathFollowerCommand> {
  private:
@@ -42,34 +42,21 @@ class PathFollowerCommand : public frc2::CommandHelper<frc2::CommandBase, PathFo
 
   void Initialize() override{
     m_timer.Start();
-    // std::remove("home/lvuser/vel.csv");
-    // m_File.open("home/lvuser/vel.csv");
-    // m_File << " actual x vel, actual y vel, x vel, y vel\n";
     m_pFollower.start();
     if(m_zero){
       m_pDriveSubsystem->ResetOdometry(m_pFollower.getPointPos(0));
     }
-    // printf("initialize\n");
-    // m_pDrivetrain->ZeroHeading();//starting at first point in the path
-    
-
   } 
 
   void Execute() override{
     
     m_pFollower.Update(m_pDriveSubsystem->GetPose());
-    frc::SmartDashboard::PutNumber("follow path command x", m_pFollower.getPointPos(20).Translation().X().to<double>());
-    frc::SmartDashboard::PutNumber("follow path command y", m_pFollower.getPointPos(20).Translation().Y().to<double>());
+    frc::SmartDashboard::PutNumber("follow path command x", m_pFollower.getFollowerPos().Translation().X().to<double>());
+    frc::SmartDashboard::PutNumber("follow path command y", m_pFollower.getFollowerPos().Translation().Y().to<double>());
     frc::SmartDashboard::PutNumber("actual x vel", m_pDriveSubsystem->GetRobotVelocity().vx.to<double>());
     frc::SmartDashboard::PutNumber("actual y vel", m_pDriveSubsystem->GetRobotVelocity().vy.to<double>());
     frc::SmartDashboard::PutNumber("x path vel", m_pFollower.getXVel()*metersToInches);
     frc::SmartDashboard::PutNumber("y path vel", m_pFollower.getYVel()*metersToInches);
-    // frc::SmartDashboard::PutNumber("total diff", m_pFollower.getYVel() - m_pDriveSubsystem->GetRobotVelocity().vy.to<double>());
-    // m_File << m_pDriveSubsystem->GetRobotVelocity().vx.to<double>() << ",";
-    // m_File << m_pDriveSubsystem->GetRobotVelocity().vy.to<double>() << ",";
-    // m_File << m_pFollower.getXVel() << ",";
-    // m_File << m_pFollower.getYVel() << "\n";
-    // frc::SmartDashboard::PutNumber("follow path command yaw", m_pFollower.getPointPos(20).Translation().X().to<double>())
     m_pDriveSubsystem->Drive(units::meters_per_second_t(m_pFollower.getXVel()), 
                              units::meters_per_second_t(m_pFollower.getYVel()), 
                              units::degrees_per_second_t(m_pFollower.getYawRate()),
@@ -79,14 +66,11 @@ class PathFollowerCommand : public frc2::CommandHelper<frc2::CommandBase, PathFo
 
   void End(bool interrupted) override{
     m_pDriveSubsystem->stop();
-    // m_File.close();
-    // printf("ended\n");
     printf("path follower time since Initialize %f\n", m_timer.Get().to<double>());
     m_timer.Stop();
   }
 
   bool IsFinished() override{
-    // return false;
     return m_pFollower.isPathFinished();
   }
 };
