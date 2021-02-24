@@ -8,9 +8,8 @@
 #pragma once
 
 #include <ctre/Phoenix.h>
-// #include <rev/CANSparkMax.h>
 #include <frc/Encoder.h>
-#include <frc/Spark.h>
+// #include <frc/Spark.h>
 #include <frc/controller/PIDController.h>
 #include <frc/controller/ProfiledPIDController.h>
 #include <frc/geometry/Rotation2d.h>
@@ -25,7 +24,6 @@
 #include "components/CommonMotorController.h"
 #include "components/TalonSRXMotorController.h"
 #include "components/TalonFXMotorController.h"
-// #include "components/SparkMaxMotorController.h"
 
 class SwerveModule {
   using radians_per_second_squared_t =

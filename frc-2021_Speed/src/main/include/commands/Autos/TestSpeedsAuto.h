@@ -22,8 +22,10 @@
 #include "commands/Drive/RotateWithMotionMagic.h"
 
 #include "Utils/SwerveDrivePathFollower.h"
-
+#include "commands/Intake/IntakesDefaultCommand.h"
 #include "subsystems/DriveSubsystem.h"
+#include "subsystems/IntakeSubsystem.h"
+#include <frc/PowerDistributionPanel.h>
 #include <frc/SmartDashboard/SmartDashboard.h>
 
 class TestSpeedsAuto
@@ -33,20 +35,26 @@ class TestSpeedsAuto
   
  public:
   TestSpeedsAuto(SwerveDrivePathFollower* m_follower,
-                      DriveSubsystem* m_drive){
+                      DriveSubsystem* m_drive,
+                      IntakeSubsystem* m_intake,
+                      frc::PowerDistributionPanel* m_PDP){
 
      double metersToInches = 39.3701;
     //  double distToAccel = (std::pow(RobotParameters::k_maxSpeed,2)/(2*RobotParameters::k_maxAccel)) * metersToInches;
     //  double distToDeccel = fabs((std::pow(RobotParameters::k_maxSpeed,2)/(2*RobotParameters::k_maxDeccel)) * metersToInches);
-    std::vector<SwerveDrivePathGenerator::waypoint_t> start;
-    start.push_back(SwerveDrivePathGenerator::waypoint_t {0, 0, 90, 0, 0});//start
-    start.push_back(SwerveDrivePathGenerator::waypoint_t {100, 0, 90, RobotParameters::k_maxSpeed * metersToInches, 0});
-    start.push_back(SwerveDrivePathGenerator::waypoint_t {330, 0, 90, RobotParameters::k_maxSpeed * metersToInches, 0});
-    start.push_back(SwerveDrivePathGenerator::waypoint_t {500, 0, 90, 0, 0});//pick up ball 4 and 5
+    std::vector<SwerveDrivePathGenerator::waypoint_t> start;   //-90
+    start.push_back(SwerveDrivePathGenerator::waypoint_t {0, 0, 0, 0, 0});//start
+    start.push_back(SwerveDrivePathGenerator::waypoint_t {100, 0, 0, RobotParameters::k_maxSpeed * metersToInches, 0});
+    start.push_back(SwerveDrivePathGenerator::waypoint_t {330, 0, 0, RobotParameters::k_maxSpeed * metersToInches, 0});
+    start.push_back(SwerveDrivePathGenerator::waypoint_t {500, 0, 0, 0, 0});//pick up ball 4 and 5
 
     std::vector<SwerveDrivePathGenerator::waypoint_t> tempWaypoints;//if meters
     AddCommands(
-      PathFollowerCommand(m_drive, start, "start path" ,true)
+      frc2::ParallelCommandGroup{
+        IntakesDefaultCommand(m_intake, m_PDP),
+        PathFollowerCommand(m_drive, start, "start path" ,true)
+      }
+      
     );
   }
 };

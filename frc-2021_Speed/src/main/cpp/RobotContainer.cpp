@@ -118,7 +118,7 @@ frc2::Command* RobotContainer::GetAutonomousCommand() {
       case 'G':
         return new AutoNavPathC(&m_follower, &m_drive);
       case 'T':
-        return new TestSpeedsAuto(&m_follower, &m_drive);
+        return new TestSpeedsAuto(&m_follower, &m_drive, &m_intake, &m_PDP);
       default:
         return new GalacticSearchPathARed(&m_follower, &m_drive, &m_intake, &m_PDP);
     }

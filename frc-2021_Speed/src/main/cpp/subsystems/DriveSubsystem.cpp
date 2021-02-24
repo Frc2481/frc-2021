@@ -9,7 +9,7 @@
 
 #include <frc/geometry/Rotation2d.h>
 #include <units/angle.h>
-
+#include <units/velocity.h>
 #include "Constants.h"
 #include <frc/smartdashboard/SmartDashboard.h>
 #include "Utils/NormalizeToRange.h"
@@ -118,8 +118,7 @@ void DriveSubsystem::Drive(units::meters_per_second_t xSpeed,
 
 void DriveSubsystem::SetModuleStates(
     wpi::array<frc::SwerveModuleState, 4> desiredStates, bool percentMode) {
-  kDriveKinematics.NormalizeWheelSpeeds(&desiredStates,
-                                        AutoConstants::kMaxSpeed);
+  kDriveKinematics.NormalizeWheelSpeeds(&desiredStates, units::meters_per_second_t(RobotParameters::k_maxSpeed));
   m_frontLeft.SetDesiredState(desiredStates[0], percentMode);
   m_backLeft.SetDesiredState(desiredStates[1],percentMode);
   m_frontRight.SetDesiredState(desiredStates[2], percentMode);
