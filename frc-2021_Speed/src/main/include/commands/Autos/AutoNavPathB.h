@@ -36,7 +36,7 @@ class AutoNavPathB
   AutoNavPathB(DriveSubsystem* m_drive){
 
     std::vector<SwerveDrivePathGenerator::waypoint_t> path;
-    path.push_back(SwerveDrivePathGenerator::waypoint_t {60 + RobotParameters::k_wheelBase*metersToInches/2, 40, 0, 0, 0});//start
+    path.push_back(SwerveDrivePathGenerator::waypoint_t {30 + RobotParameters::k_wheelBase*metersToInches/2, 40, 0, 0, 0});//start
     path.push_back(SwerveDrivePathGenerator::waypoint_t {120 - curveBig, 60 + curveBig, 0, RobotParameters::k_maxSpeed*metersToInches, 0});//over cone 1
     path.push_back(SwerveDrivePathGenerator::waypoint_t {240 + curveBig, 60 + curveBig, 0, RobotParameters::k_maxSpeed*metersToInches, 0});//over cone 5
     path.push_back(SwerveDrivePathGenerator::waypoint_t {270, 60, 0, RobotParameters::k_maxSpeed*metersToInches, 0});//between cones 5 and 6

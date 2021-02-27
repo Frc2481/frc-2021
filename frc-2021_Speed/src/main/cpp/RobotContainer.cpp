@@ -47,6 +47,29 @@ RobotContainer::RobotContainer(): m_driverController(0),
   ConfigureButtonBindings();
 
   m_drive.SetDefaultCommand(DriveWithJoystickCommand(&m_drive, &m_driverController));
+
+
+  double metersToInches = 39.3701;
+  double curveSmall = 17;//half of robot(12) + half of cone(2.5) + buffer(2.5)
+  double curveBig = 25;//25
+  std::vector<SwerveDrivePathGenerator::waypoint_t> path;//RobotParameters::k_maxSpeed*metersToInches           
+  path.push_back(SwerveDrivePathGenerator::waypoint_t {30+RobotParameters::k_wheelBase*metersToInches/2, 80, 0, 0, 0});//start path
+  path.push_back(SwerveDrivePathGenerator::waypoint_t {150 + curveSmall, 60 + curveSmall, 0, RobotParameters::k_maxSpeed*metersToInches, 0});//cone 1, point 1
+  path.push_back(SwerveDrivePathGenerator::waypoint_t {150 + curveBig, 60 - curveBig, 0, RobotParameters::k_maxSpeed*metersToInches, 0});//cone 1, point 2
+  path.push_back(SwerveDrivePathGenerator::waypoint_t {150 - curveBig, 60 - curveBig, 0, RobotParameters::k_maxSpeed*metersToInches, 0});//cone 1, point 3
+  path.push_back(SwerveDrivePathGenerator::waypoint_t {150 - curveBig, 60 + curveBig, 0, RobotParameters::k_maxSpeed*metersToInches, 0});//cone 1, point 4
+  path.push_back(SwerveDrivePathGenerator::waypoint_t {240 + curveBig, 120 - curveBig, 0, RobotParameters::k_maxSpeed*metersToInches, 0});//cone 2, point 1
+  path.push_back(SwerveDrivePathGenerator::waypoint_t {240 + curveBig, 120 + curveBig, 0, RobotParameters::k_maxSpeed*metersToInches, 0});//cone 2, point 2
+  path.push_back(SwerveDrivePathGenerator::waypoint_t {240 - curveBig, 120 + curveBig, 0, RobotParameters::k_maxSpeed*metersToInches, 0});//cone 2, point 3
+  path.push_back(SwerveDrivePathGenerator::waypoint_t {240 - curveBig, 120 - curveBig, 0, RobotParameters::k_maxSpeed*metersToInches, 0});//cone 2, point 4
+  path.push_back(SwerveDrivePathGenerator::waypoint_t {300 - curveBig, 60 - curveBig, 0, RobotParameters::k_maxSpeed*metersToInches, 0});//cone 3, point 1
+  path.push_back(SwerveDrivePathGenerator::waypoint_t {300 + curveBig, 60 - curveBig, 0, RobotParameters::k_maxSpeed*metersToInches, 0});//cone 3, point 2
+  path.push_back(SwerveDrivePathGenerator::waypoint_t {300 + curveBig, 60 + curveBig, 0, RobotParameters::k_maxSpeed*metersToInches, 0});//cone 3, point 3
+  path.push_back(SwerveDrivePathGenerator::waypoint_t {300 - curveSmall, 60 + curveSmall, 0, RobotParameters::k_maxSpeed*metersToInches, 0});//cone 3, point 4
+  path.push_back(SwerveDrivePathGenerator::waypoint_t {60, 60 + curveSmall, 0, RobotParameters::k_maxSpeed*metersToInches, 0});//head to end
+  path.push_back(SwerveDrivePathGenerator::waypoint_t {0, 60 + curveSmall, 0, 0, 0});
+  m_follower.generatePath(path,"test");
+  
 }
 
 class InstantDisabledCommand : public frc2::InstantCommand {
@@ -109,7 +132,7 @@ frc2::Command* RobotContainer::GetAutonomousCommand() {
       case 'D':
         return new GalacticSearchPathBBlue(&m_drive, &m_intake);
       case 'E':
-        return new AutoNavPathA(&m_drive);
+        return new AutoNavPathA(&m_drive, &m_follower);
       case 'F':
         return new AutoNavPathB(&m_drive);
       case 'G':

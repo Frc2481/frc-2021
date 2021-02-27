@@ -30,6 +30,7 @@
 #include "subsystems/IntakeSubsystem.h"
 #include "subsystems/DriveSubsystem.h"
 
+#include "Utils/SwerveDrivePathFollower.h"
 
 class RobotContainer {
  public:
