@@ -26,7 +26,9 @@ namespace TalonIDs{
     static constexpr int kFrontLeftTurningMotorID = 1;
     static constexpr int kFrontRightTurningMotorID = 2;
     static constexpr int kBackLeftTurningMotorID = 3;
-    static constexpr int kBackRightTurningMotorID = 4;   
+    static constexpr int kBackRightTurningMotorID = 4;
+    static constexpr int kAIntakeID = 9;
+    static constexpr int kBIntakeID = 10;   
 }
 
 namespace FalconIDs{
@@ -35,10 +37,6 @@ namespace FalconIDs{
     static constexpr int kBackLeftDriveMotorID = 7;
     static constexpr int kBackRightDriveMotorID = 8;
 
-}
-namespace VictorIDs{
-    static constexpr int kAIntakeID = 9;
-    static constexpr int kBIntakeID = 10;
 }
 
 namespace DriveConstants {
@@ -89,11 +87,14 @@ enum class CommonDrive{
     EEPROMSetting = 2
 };
 namespace IntakeConstants{
-    static constexpr double kMaxIntakeAmp = 27.0;
+    static constexpr double kMaxIntakeAmp = 29.0;
     static constexpr double kAIntakeSpeed = 1.0;
-    static constexpr double kAIntakeReverse = -1.0;
+    static constexpr double kAIntakeReverse = -0.6;
     static constexpr double kBIntakeSpeed = 1.0;
     static constexpr double kBIntakeReverse = -0.5;
+
+    static constexpr double kAIntakeCurrent = 25.0;
+    static constexpr double kBIntakeCurrent = 25.0;
 }
 namespace PathConstants{
     static constexpr double kMinLookAhead = 6*.0254;

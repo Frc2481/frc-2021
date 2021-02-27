@@ -7,7 +7,7 @@
 #include <frc/DigitalInput.h>
 #include <ctre/Phoenix.h>
 
-#include "components/VictorMotorController.h"
+#include "components/TalonSRXMotorController.h"
 // #include <frc/DigitalInput.h>
 #include <frc/Servo.h>
 class IntakeSubsystem : public frc2::SubsystemBase {
@@ -20,15 +20,17 @@ public:
    void Periodic() override;
    void setBIntakeSpeed(double speed);
    void setAIntakeSpeed(double speed);
+   void setAIntakeCurrent(double current);
+   void setBIntakeCurrent(double current);
+   double getIntakeACurrent();
+
    double getBIntakeSpeed();
    double getAIntakeSpeed();
    
    double getServoAngle();
    void setServoAngle(double angle);
 private: 
-    double bIntakeSpeed;
-    double aIntakeSpeed;
-    VictorMotorController* m_aIntakeMotor;
-    VictorMotorController* m_bIntakeMotor;
+    TalonSRXMotorController* m_aIntakeMotor;
+    TalonSRXMotorController* m_bIntakeMotor;
     frc::Servo* m_servo;
     };

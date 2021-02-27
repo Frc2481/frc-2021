@@ -25,21 +25,18 @@
 
 #include "subsystems/DriveSubsystem.h"
 #include "subsystems/IntakeSubsystem.h"
-#include <frc/PowerDistributionPanel.h>
 
 #include "commands/Intake/IntakesDefaultCommand.h"
 #include "commands/Intake/DropIntake.h"
-
+#include "commands/Drive/EngageBakeCommand.h"
 class GalacticSearchPathABlue
     : public frc2::CommandHelper<frc2::SequentialCommandGroup,
                                  GalacticSearchPathABlue> {
  private:
   
  public:
-  GalacticSearchPathABlue(SwerveDrivePathFollower* m_follower,
-                      DriveSubsystem* m_drive,
-                      IntakeSubsystem* m_intake,
-                      frc::PowerDistributionPanel* m_PDP){
+  GalacticSearchPathABlue(DriveSubsystem* m_drive,
+                      IntakeSubsystem* m_intake){
 
      double metersToInches = 39.3701;
     std::vector<SwerveDrivePathGenerator::waypoint_t> path;
@@ -55,10 +52,12 @@ class GalacticSearchPathABlue
     AddCommands(
       frc2::ParallelCommandGroup{
         DropIntake(m_intake),
-        IntakesDefaultCommand(m_intake,m_PDP),
+        IntakesDefaultCommand(m_intake),
 
         PathFollowerCommand(m_drive, path, "path path" ,true),
-      }
+        
+      },
+      EngageBakeCommand(m_drive)
     );
   }
 };

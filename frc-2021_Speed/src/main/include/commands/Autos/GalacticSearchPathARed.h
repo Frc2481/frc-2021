@@ -25,28 +25,26 @@
 
 #include "subsystems/DriveSubsystem.h"
 #include "subsystems/IntakeSubsystem.h"
-#include <frc/PowerDistributionPanel.h>
 
 #include "commands/Intake/IntakesDefaultCommand.h"
 #include "commands/Intake/DropIntake.h"
-
+#include "commands/Drive/EngageBakeCommand.h"
+#include "commands/Drive/EngageBakeCommand.h"
 class GalacticSearchPathARed
     : public frc2::CommandHelper<frc2::SequentialCommandGroup,
                                  GalacticSearchPathARed> {
  private:
   
  public:
-  GalacticSearchPathARed(SwerveDrivePathFollower* m_follower,
-                      DriveSubsystem* m_drive,
-                      IntakeSubsystem* m_intake,
-                      frc::PowerDistributionPanel* m_PDP){
+  GalacticSearchPathARed(DriveSubsystem* m_drive,
+                      IntakeSubsystem* m_intake){
 
      double metersToInches = 39.3701;
     std::vector<SwerveDrivePathGenerator::waypoint_t> path;
-    path.push_back(SwerveDrivePathGenerator::waypoint_t {43.5, 90, 0, 0, 0});//start path
-    path.push_back(SwerveDrivePathGenerator::waypoint_t {90, 90, 0, RobotParameters::k_maxSpeed*metersToInches, 0});//pick up ball 1
+    path.push_back(SwerveDrivePathGenerator::waypoint_t {43, 90, 0, 0, 0});//start path
+    path.push_back(SwerveDrivePathGenerator::waypoint_t {90, 90, 0, RobotParameters::k_maxSpeed*metersToInches, 0});//pick up ball 1 
     path.push_back(SwerveDrivePathGenerator::waypoint_t {150, 60, -26.5, RobotParameters::k_maxSpeed*metersToInches, 0});//pick up ball 2
-    path.push_back(SwerveDrivePathGenerator::waypoint_t {180, 150, -26.5, RobotParameters::k_maxSpeed*metersToInches, 0});//pick up ball 3
+    path.push_back(SwerveDrivePathGenerator::waypoint_t {177/*180*/, 150, -26.5, RobotParameters::k_maxSpeed*metersToInches, 0});//pick up ball 3
     path.push_back(SwerveDrivePathGenerator::waypoint_t {330, 150, -26.5, RobotParameters::k_maxSpeed*metersToInches, 0});//head to end
     path.push_back(SwerveDrivePathGenerator::waypoint_t {360, 150, -26.5, 0, 0});//final 30in after endzone
 
@@ -54,11 +52,13 @@ class GalacticSearchPathARed
     
     AddCommands(
       frc2::ParallelCommandGroup{
-        DropIntake(m_intake),
-        IntakesDefaultCommand(m_intake,m_PDP),
+        // DropIntake(m_intake),
+        IntakesDefaultCommand(m_intake),
 
         PathFollowerCommand(m_drive, path, "path path" ,true),
-      }
+        
+      },
+      EngageBakeCommand(m_drive)
     );
   }
 };

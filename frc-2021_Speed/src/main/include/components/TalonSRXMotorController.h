@@ -44,6 +44,7 @@ class TalonSRXMotorController : public CommonMotorController {
   void SetEncoderPosition(double pos);
   void SetVelocityConversionFactor(double factor);
   double GetClosedLoopError();
+  double GetCurrentOutput();
   ControlMode CommonModeToControllMode(CommonModes mode);
   NeutralMode CommonDriveToControlType(CommonDrive mode);
 private:

@@ -9,6 +9,7 @@
 
 TalonSRXMotorController::TalonSRXMotorController(int motorID, const std::string &name): CommonMotorController(motorID, name){
     m_pMotor = new TalonSRX(motorID);
+    
 }
 void  TalonSRXMotorController::SetStatusFramePeriod(StatusFrameEnhanced frame, uint8_t periodMs, int timeoutMs){
     m_pMotor->SetStatusFramePeriod(frame, periodMs, timeoutMs);
@@ -111,6 +112,9 @@ void TalonSRXMotorController::SetVelocityConversionFactor(double factor){
 }
 double TalonSRXMotorController::GetClosedLoopError(){
     return m_pMotor->GetClosedLoopError();
+}
+double TalonSRXMotorController::GetCurrentOutput(){
+    return m_pMotor->GetOutputCurrent();
 }
 ControlMode TalonSRXMotorController::CommonModeToControllMode(CommonModes mode){
     switch(mode)

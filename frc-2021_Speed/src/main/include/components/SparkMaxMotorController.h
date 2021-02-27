@@ -38,5 +38,6 @@ class SparkMaxMotorController : public CommonMotorController{
   bool CommonDriveToControlType(CommonDrive mode, rev::CANSparkMax::IdleMode &retMode);
   void SetNeutralMode(CommonDrive mode);
   double GetPos();
+  double GetCurrentOutput();
   
 };

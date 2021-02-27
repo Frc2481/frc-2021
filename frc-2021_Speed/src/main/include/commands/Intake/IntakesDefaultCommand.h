@@ -8,8 +8,6 @@
 #include <frc2/command/CommandHelper.h>
 #include "subsystems/IntakeSubsystem.h"
 
-
-#include "frc/PowerDistributionPanel.h"
 #include "Constants.h"
 /**
  * An example command.
@@ -23,11 +21,9 @@ class IntakesDefaultCommand
     : public frc2::CommandHelper<frc2::CommandBase, IntakesDefaultCommand> {
   private:
      IntakeSubsystem* m_pIntake;
-     frc::PowerDistributionPanel* m_pPDP;
      int count;
  public:
-  IntakesDefaultCommand(IntakeSubsystem* pIntake, frc::PowerDistributionPanel* PDP){
-    m_pPDP = PDP;
+  IntakesDefaultCommand(IntakeSubsystem* pIntake){
     m_pIntake = pIntake;
     AddRequirements(m_pIntake);
   }
@@ -38,7 +34,7 @@ class IntakesDefaultCommand
   }
 
   void Execute() override{
-    if(m_pPDP->GetCurrent(9) >= IntakeConstants::kMaxIntakeAmp){
+    if(m_pIntake->getIntakeACurrent() >= IntakeConstants::kMaxIntakeAmp){
       count++;
     }else{
       count = 0;
@@ -51,6 +47,7 @@ class IntakesDefaultCommand
   void End(bool interrupted) override{
     m_pIntake->setAIntakeSpeed(0);
     m_pIntake->setBIntakeSpeed(0);
+    printf("intake was Interupted: %d", (int)interrupted);
   }
 
   bool IsFinished() override{

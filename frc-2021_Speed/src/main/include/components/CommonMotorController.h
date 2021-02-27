@@ -124,4 +124,8 @@ class CommonMotorController {
     printf("Warning: %s is calling GetPos() which is not implemented\n", m_name.c_str());
     return 0.0;
   }
+  virtual double GetCurrentOutput(){
+    printf("Warning: %s is calling GetCurrentOutput() which is not implemented\n", m_name.c_str());
+    return 0.0;
+  }
 };

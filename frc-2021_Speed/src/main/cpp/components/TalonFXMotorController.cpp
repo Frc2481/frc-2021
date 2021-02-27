@@ -128,6 +128,9 @@ void TalonFXMotorController::Follow(TalonFX* motor){
 double TalonFXMotorController::GetPos(){
     return m_pMotor->GetSelectedSensorPosition();
 }
+double TalonFXMotorController::GetCurrentOutput(){
+    return m_pMotor->GetOutputCurrent();
+}
 // void TalonFXMotorController::SetNeutralMode(ctre::phoenix::motorcontrol::NeutralMode mode){
 //     m_pMotor->SetNeutralMode(mode);
 // }

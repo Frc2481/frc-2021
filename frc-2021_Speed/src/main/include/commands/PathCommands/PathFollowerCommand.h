@@ -29,14 +29,17 @@ class PathFollowerCommand : public frc2::CommandHelper<frc2::CommandBase, PathFo
   frc2::Timer m_timer;
   std::string m_name;
   double metersToInches = 39.3701;
+  bool m_stopAtEnd;
  public:
   PathFollowerCommand(DriveSubsystem* driveTrain,
                       std::vector<SwerveDrivePathGenerator::waypoint_t> &waypoints, const std::string &name,
-                      bool zero = false){
+                      bool zero = false,
+                      bool stopAtEnd = true){
   m_pFollower.generatePath(waypoints, name);
   m_pDriveSubsystem = driveTrain;
   m_zero = zero;
   m_name = name;
+  m_stopAtEnd = stopAtEnd;
   AddRequirements(m_pDriveSubsystem);
   }
 
@@ -65,7 +68,10 @@ class PathFollowerCommand : public frc2::CommandHelper<frc2::CommandBase, PathFo
   }
 
   void End(bool interrupted) override{
-    m_pDriveSubsystem->stop();
+    if(m_stopAtEnd){
+      m_pDriveSubsystem->stop();
+    }
+    
     printf("path follower time since Initialize %f\n", m_timer.Get().to<double>());
     m_timer.Stop();
   }

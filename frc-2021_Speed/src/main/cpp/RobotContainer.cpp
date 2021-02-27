@@ -71,9 +71,6 @@ void RobotContainer::ConfigureButtonBindings(){
   frc::SmartDashboard::PutData("Set Brake", new InstantDisabledCommand([this](){
     m_drive.setBrake();
   }));
-  frc::SmartDashboard::PutData("Get Current of 9", new InstantDisabledCommand([this](){
-    frc::SmartDashboard::PutNumber("Current 9", m_PDP.GetCurrent(9));
-  }));
   frc::SmartDashboard::PutData("Zero Steer Encoders", new InstantDisabledCommand([this](){
     m_drive.ResetEncoders();
   }));
@@ -90,10 +87,10 @@ void RobotContainer::ConfigureButtonBindings(){
                               },{&m_drive}));
                     
     m_lBumperDriver.WhenPressed(new frc2::InstantCommand([this]{m_drive.toggleFieldCentricForJoystick();},{&m_drive}));
-    m_yButtonDriver.WhenPressed(new IntakesDefaultCommand(&m_intake, &m_PDP));//ToggleIntakeCommand(&m_intake));
+    m_yButtonDriver.WhenPressed(new IntakesDefaultCommand(&m_intake));//ToggleIntakeCommand(&m_intake));
     m_bButtonDriver.WhileHeld(new DropBallsCommand(&m_intake));
     m_aButtonDriver.WhenPressed(new DropIntake(&m_intake));
-    m_rTriggerDriver.WhileHeld(new IntakesDefaultCommand(&m_intake, &m_PDP));
+    m_rTriggerDriver.WhileHeld(new IntakesDefaultCommand(&m_intake));
     //operator
 }
 
@@ -104,26 +101,26 @@ frc2::Command* RobotContainer::GetAutonomousCommand() {
     
     switch(gameData[0]){
       case 'A':
-        return new GalacticSearchPathARed(&m_follower, &m_drive, &m_intake, &m_PDP);
+        return new GalacticSearchPathARed(&m_drive, &m_intake);
       case 'B':
-        return new GalacticSearchPathBRed(&m_follower, &m_drive, &m_intake, &m_PDP);
+        return new GalacticSearchPathBRed(&m_drive, &m_intake);
       case 'C':
-        return new GalacticSearchPathABlue(&m_follower, &m_drive, &m_intake, &m_PDP);
+        return new GalacticSearchPathABlue(&m_drive, &m_intake);
       case 'D':
-        return new GalacticSearchPathBBlue(&m_follower, &m_drive, &m_intake, &m_PDP);
+        return new GalacticSearchPathBBlue(&m_drive, &m_intake);
       case 'E':
-        return new AutoNavPathA(&m_follower, &m_drive);
+        return new AutoNavPathA(&m_drive);
       case 'F':
-        return new AutoNavPathB(&m_follower, &m_drive);
+        return new AutoNavPathB(&m_drive);
       case 'G':
-        return new AutoNavPathC(&m_follower, &m_drive);
+        return new AutoNavPathC(&m_drive);
       case 'T':
-        return new TestSpeedsAuto(&m_follower, &m_drive, &m_intake, &m_PDP);
+        return new TestSpeedsAuto(&m_drive, &m_intake);
       default:
-        return new GalacticSearchPathARed(&m_follower, &m_drive, &m_intake, &m_PDP);
+        return new GalacticSearchPathARed(&m_drive, &m_intake);
     }
   }else{
-    return new GalacticSearchPathARed(&m_follower, &m_drive, &m_intake, &m_PDP);
+    return new GalacticSearchPathARed(&m_drive, &m_intake);
   }
 }
 

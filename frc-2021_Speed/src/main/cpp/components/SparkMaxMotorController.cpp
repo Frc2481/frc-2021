@@ -87,6 +87,9 @@ void SparkMaxMotorController::SetNeutralMode(CommonDrive mode){
 double SparkMaxMotorController::GetPos(){
     return m_pMotor->GetEncoder().GetPosition();
 }
+double SparkMaxMotorController::GetCurrentOutput(){
+    return m_pMotor->GetOutputCurrent();
+}
 // void SparkMaxMotorController::ConfigFactoryDefault(){//TODO finish
 //     m_pMotor->RestoreFactoryDefaults();
 // }

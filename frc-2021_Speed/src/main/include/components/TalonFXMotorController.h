@@ -44,6 +44,7 @@ class TalonFXMotorController : public CommonMotorController {
   void SetEncoderPosition(double pos);
   void SetVelocityConversionFactor(double factor);
   double GetClosedLoopError();
+  double GetCurrentOutput();
   ControlMode FalconModeToCommonMode(CommonModes mode);
   NeutralMode CommonDriveToControlType(CommonDrive mode);
   TalonFX* GetBase();
