@@ -36,7 +36,7 @@ class SwerveDrivePathFollower {
    * Will be called periodically whenever the CommandScheduler runs.
    */
   void Update(frc::Pose2d pose);
-  void generatePath(std::vector<SwerveDrivePathGenerator::waypoint_t> &waypoints, const std::string &name);
+  void generatePath(std::vector<SwerveDrivePathGenerator::waypoint_t> &waypoints, const std::string &name, double targetZone = .05);
   double getXVel();
   double getYVel();
   double getYawRate();
@@ -72,8 +72,8 @@ class SwerveDrivePathFollower {
   double m_yawRate = 0;
 
   double m_time;
-
+double metersToInches = 39.87;
 	std::ofstream m_File;
 	frc2::PIDController m_turningPIDController{
-      8, 0, 0};
+      4, 0, 0};
 };

@@ -17,6 +17,7 @@
 #include <fstream>
 
 
+
 using namespace DriveConstants;
 
 DriveSubsystem::DriveSubsystem()
@@ -54,7 +55,6 @@ DriveSubsystem::DriveSubsystem()
       m_odometry{kDriveKinematics,
                  frc::Rotation2d(units::degree_t(0)),
                  frc::Pose2d()},
-
       m_pChassisIMU{frc::SPI::kMXP}{
       setBrake();
       }
@@ -65,7 +65,9 @@ void DriveSubsystem::Periodic() {
   m_odometry.Update(frc::Rotation2d(units::degree_t(GetHeading())),
                     m_frontLeft.GetState(), m_backLeft.GetState(),
                     m_frontRight.GetState(), m_backRight.GetState());
-  
+  frc::Pose2d frcPose(m_odometry.GetPose().Y(), -m_odometry.GetPose().X(),m_odometry.GetPose().Rotation());
+  m_pField.SetRobotPose(frcPose);
+  frc::SmartDashboard::PutData(&m_pField);
   if(cycle == 0){
     
     frc::SmartDashboard::PutNumber("fr state angle", m_frontRight.GetState().angle.Degrees().to<double>());
@@ -84,9 +86,9 @@ void DriveSubsystem::Periodic() {
     frc::SmartDashboard::PutNumber("bl state speed", m_backLeft.GetState().speed.to<double>());
     frc::SmartDashboard::PutNumber("bl encoder ticks", fabs(m_backLeft.getDriveEncoder()));
   }else{
-    frc::SmartDashboard::PutNumber("robot speed", sqrt((GetRobotVelocity().vx *GetRobotVelocity().vx +GetRobotVelocity().vy*GetRobotVelocity().vy).to<double>()));
+    frc::SmartDashboard::PutNumber("robot speed", sqrt((GetRobotVelocity().vx *GetRobotVelocity().vx +GetRobotVelocity().vy*GetRobotVelocity().vy).to<double>())*metersToInches);
     frc::SmartDashboard::PutNumber("Odometry X", GetPose().Translation().X().to<double>()*metersToInches);
-    frc::SmartDashboard::PutNumber("Odometry Y", GetPose().Translation().Y().to<double>()*metersToInches);
+    frc::SmartDashboard::PutNumber("Odometry Y", -1.0*GetPose().Translation().Y().to<double>()*metersToInches);
     frc::SmartDashboard::PutNumber("Odometry Yaw", GetPose().Rotation().Degrees().to<double>());
     cycle = 0;
   }
@@ -105,11 +107,13 @@ void DriveSubsystem::Drive(units::meters_per_second_t xSpeed,
   if(fabs(rot.to<double>()) > base){
     rot = rot * 2.2;
   }                        
+
   auto states = kDriveKinematics.ToSwerveModuleStates(
       fieldRelative ? frc::ChassisSpeeds::FromFieldRelativeSpeeds(
                           xSpeed, ySpeed, rot,
                           frc::Rotation2d(GetPose().Rotation().Degrees()))
                     : frc::ChassisSpeeds{xSpeed, ySpeed, rot});
+  
   kDriveKinematics.NormalizeWheelSpeeds(&states, units::meters_per_second_t(RobotParameters::k_maxSpeed));
   auto [fl, fr, bl, br] = states;
   m_frontLeft.SetDesiredState(fl, percentMode);
@@ -118,8 +122,7 @@ void DriveSubsystem::Drive(units::meters_per_second_t xSpeed,
   m_backRight.SetDesiredState(br, percentMode);
 }
 
-void DriveSubsystem::SetModuleStates(
-    wpi::array<frc::SwerveModuleState, 4> desiredStates, bool percentMode) {
+void DriveSubsystem::SetModuleStates(wpi::array<frc::SwerveModuleState, 4> desiredStates, bool percentMode) {
   kDriveKinematics.NormalizeWheelSpeeds(&desiredStates, units::meters_per_second_t(RobotParameters::k_maxSpeed));
   m_frontLeft.SetDesiredState(desiredStates[0], percentMode);
   m_backLeft.SetDesiredState(desiredStates[1],percentMode);

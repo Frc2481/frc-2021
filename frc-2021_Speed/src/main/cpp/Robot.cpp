@@ -29,7 +29,9 @@ void Robot::DisabledInit() {
   m_container.GetBrakeCommand()->Schedule();
 }
 
-void Robot::DisabledPeriodic() {}
+void Robot::DisabledPeriodic() {
+  m_container.GetBrakeCommand()->Schedule();
+}
 
 /**
  * This autonomous runs the autonomous command selected by your {@link

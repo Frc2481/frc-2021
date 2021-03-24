@@ -88,7 +88,7 @@ enum class CommonDrive{
 };
 namespace IntakeConstants{
     static constexpr double kMaxIntakeAmp = 29.0;
-    static constexpr double kAIntakeSpeed = 1.0;
+    static constexpr double kAIntakeSpeed = 0.9;
     static constexpr double kAIntakeReverse = -0.6;
     static constexpr double kBIntakeSpeed = 1.0;
     static constexpr double kBIntakeReverse = -0.5;
@@ -97,6 +97,6 @@ namespace IntakeConstants{
     static constexpr double kBIntakeCurrent = 25.0;
 }
 namespace PathConstants{
-    static constexpr double kMinLookAhead = 6*.0254;
+    static constexpr double kMinLookAhead = 6*.0254;//6
     static constexpr double kMaxLookAhead = RobotParameters::k_maxSpeed * .16255997;//calculated constant based off of last years robot and max look ahead
 }

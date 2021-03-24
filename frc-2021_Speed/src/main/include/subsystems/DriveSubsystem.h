@@ -25,6 +25,7 @@
 #include "Utils/PoseDot2D.h"
 #include <iostream>
 #include <fstream>
+#include <frc/smartdashboard/Field2d.h>
 class DriveSubsystem : public frc2::SubsystemBase {
  public:
   DriveSubsystem();
@@ -141,4 +142,5 @@ class DriveSubsystem : public frc2::SubsystemBase {
   double metersToInches = 39.3701;
   double cycle = 0;
   std::ofstream m_File;
+  frc::Field2d m_pField;
 };

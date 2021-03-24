@@ -46,6 +46,7 @@ class SwerveDrivePathFollower {
   int lookAheadIndex();
   bool isPathFinished();
   frc::Pose2d getPointPos(int index);
+  frc::Pose2d getFollowerPos();
   // bool targetPosFound();
   // void setTargetPos();
   void stop(bool interrupted);

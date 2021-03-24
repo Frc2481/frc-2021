@@ -23,6 +23,7 @@ public:
    void setAIntakeCurrent(double current);
    void setBIntakeCurrent(double current);
    double getIntakeACurrent();
+   double getIntakeBCurrent();
 
    double getBIntakeSpeed();
    double getAIntakeSpeed();

@@ -17,7 +17,7 @@ namespace RobotParameters {
     static constexpr double k_maxSpeed = 240*.0254; //24*12
     static constexpr double k_feedForwardMaxSpeed = 260*.0254;
     static constexpr double k_maxAccel = 450*.0254; //250//177.64
-    static constexpr double k_maxDeccel = -456*.0254;//was 150in//200//-177.64
+    static constexpr double k_maxDeccel = -456*.0254;//456was 150in//200//-177.64
     static constexpr double k_steerEncoderToWheelGearRatio = 1; // gear ratio from steer encoder to wheel
     static constexpr double k_driveMotorGearRatio = (26.0 / 16.0) * 3.0;
     static constexpr double k_ticksPerRev = 2048.0;//ticks per 100ms
@@ -32,7 +32,7 @@ namespace RobotParameters {
     static constexpr double k_minYawRate = k_minRobotVelocity / k_wheelLeverArm *180 / MATH_CONSTANTS_PI;
 
     //pathfollowing 
-    static constexpr double  k_maxCentripAccel = 10.0;//10
+    static constexpr double  k_maxCentripAccel = 15.0;//20//10
 
     // // steer motors
     static constexpr double k_steerMotorControllerKp = 3;

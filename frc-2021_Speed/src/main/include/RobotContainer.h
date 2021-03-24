@@ -45,7 +45,15 @@ class RobotContainer {
 
   DriveSubsystem m_drive;
   IntakeSubsystem m_intake;
-  SwerveDrivePathFollower m_follower;
+  SwerveDrivePathFollower m_followerNavPathA;
+  SwerveDrivePathFollower m_followerNavPathB;
+//Auto nav path C  
+  SwerveDrivePathFollower m_followerNavPathC[5];//4 BUT ADDED A RETURN
+//Auto nav path C
+  SwerveDrivePathFollower m_followerPathABlue;
+  SwerveDrivePathFollower m_followerPathARed;
+  SwerveDrivePathFollower m_followerPathBBlue;
+  SwerveDrivePathFollower m_followerPathBRed;
 
   
   frc2::Button m_startDriver{[&] { return m_driverController.GetRawButton(XBOX_START_BUTTON); }};//

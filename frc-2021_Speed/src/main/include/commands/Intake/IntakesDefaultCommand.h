@@ -7,7 +7,7 @@
 #include <frc2/command/CommandBase.h>
 #include <frc2/command/CommandHelper.h>
 #include "subsystems/IntakeSubsystem.h"
-
+#include <frc/Timer.h>
 #include "Constants.h"
 /**
  * An example command.
@@ -21,7 +21,8 @@ class IntakesDefaultCommand
     : public frc2::CommandHelper<frc2::CommandBase, IntakesDefaultCommand> {
   private:
      IntakeSubsystem* m_pIntake;
-     int count;
+     int countB;
+     int countA;
  public:
   IntakesDefaultCommand(IntakeSubsystem* pIntake){
     m_pIntake = pIntake;
@@ -35,18 +36,32 @@ class IntakesDefaultCommand
 
   void Execute() override{
     if(m_pIntake->getIntakeACurrent() >= IntakeConstants::kMaxIntakeAmp){
-      count++;
+      countA++;
     }else{
-      count = 0;
+      countA = 0;
     }
-    if(count > 7){
+    if(countA > 7){
       m_pIntake->setAIntakeSpeed(0);
+      frc::Wait(.05);
+      m_pIntake->setAIntakeSpeed(IntakeConstants::kBIntakeSpeed);
+    }
+    if(m_pIntake->getIntakeBCurrent() >= IntakeConstants::kMaxIntakeAmp){
+      countB++;
+    }else{
+      countB = 0;
+    }
+    if(countB > 3){
+      m_pIntake->setBIntakeSpeed(0);
+      frc::Wait(.05);
+      m_pIntake->setBIntakeSpeed(IntakeConstants::kBIntakeSpeed);
     }
   }
 
   void End(bool interrupted) override{
     m_pIntake->setAIntakeSpeed(0);
     m_pIntake->setBIntakeSpeed(0);
+    countA = 0;
+    countB = 0;
     printf("intake was Interupted: %d", (int)interrupted);
   }
 

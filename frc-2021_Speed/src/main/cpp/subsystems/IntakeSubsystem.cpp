@@ -10,6 +10,7 @@
         m_aIntakeMotor->ConfigFactoryDefault();
         m_bIntakeMotor = new TalonSRXMotorController(TalonIDs::kBIntakeID,"Left Intake Motor");
         m_bIntakeMotor->ConfigFactoryDefault();
+        m_bIntakeMotor->SetNeutralMode(CommonDrive::Brake);
     }
 
     void IntakeSubsystem::Periodic(){
@@ -30,7 +31,9 @@
     double IntakeSubsystem::getIntakeACurrent(){
         return m_aIntakeMotor->GetCurrentOutput();
     }
-
+    double IntakeSubsystem::getIntakeBCurrent(){
+        return m_bIntakeMotor->GetCurrentOutput();
+    }
     double IntakeSubsystem::getBIntakeSpeed(){
         return m_bIntakeMotor->GetVelocity();
     }

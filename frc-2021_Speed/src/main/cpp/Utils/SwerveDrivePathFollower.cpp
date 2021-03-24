@@ -11,7 +11,7 @@
 SwerveDrivePathFollower::SwerveDrivePathFollower():
 					m_lastPointReached(false),
 		m_distToEnd(std::numeric_limits<double>::infinity()),
-		m_targetZone(0.05),
+		m_targetZone(0.05),//.05
 		m_time(0){
 		m_xVect.push_back(0);
 	m_xVect.push_back(RobotParameters::k_maxSpeed);
@@ -115,26 +115,26 @@ void SwerveDrivePathFollower::Update(frc::Pose2d pose){
 
 	double actualYaw = pose.Rotation().Degrees().to<double>();
 	m_File << m_path[m_pathIndex].time << ",";
-	m_File << closestX << ",";
-	m_File << closestY << ",";
-	m_File << robotVel << ",";
+	m_File << closestX * metersToInches<< ",";
+	m_File << closestY * metersToInches << ",";
+	m_File << robotVel * metersToInches << ",";
 	m_File << followerYaw << ",";
 	m_File << robotYawRate << ",";//6
 
 
-	m_File << pose.Translation().X().to<double>() << ",";
-	m_File << pose.Translation().Y().to<double>() << ",";
+	m_File << pose.Translation().X().to<double>() * metersToInches << ",";
+	m_File << pose.Translation().Y().to<double>() * metersToInches << ",";
 	m_File << actualYaw << ",";
 	m_File << skipped << ",";//4
 
 
 	//look ahead info
-	m_File << m_path[m_lookAheadIndex].xPos << ",";
-	m_File << m_path[m_lookAheadIndex].yPos << ",";
+	m_File << m_path[m_lookAheadIndex].xPos * metersToInches << ",";
+	m_File << m_path[m_lookAheadIndex].yPos * metersToInches << ",";
 	m_File << vectorAngle*180/MATH_CONSTANTS_PI << ",";
-	m_File << cos(vectorAngle)*robotVel << ",";
-	m_File << sin(vectorAngle)*robotVel << ",";//5	
-	m_File << m_lookAhead <<"\n";
+	m_File << cos(vectorAngle)*robotVel * metersToInches << ",";
+	m_File << sin(vectorAngle)*robotVel * metersToInches << ",";//5	
+	m_File << m_lookAhead * metersToInches <<"\n";
 }
 
 
@@ -151,8 +151,9 @@ bool SwerveDrivePathFollower::isPathFinished(){
     return (m_distToEnd < m_targetZone) || m_lastPointReached;
 }
 
-void SwerveDrivePathFollower::generatePath(std::vector<SwerveDrivePathGenerator::waypoint_t> &waypoints, const std::string &name){
+void SwerveDrivePathFollower::generatePath(std::vector<SwerveDrivePathGenerator::waypoint_t> &waypoints, const std::string &name, double targetZone){
     double metersToInches = 39.87;
+	m_targetZone = targetZone;
 	SwerveDrivePathGenerator pathGenerator(
 		waypoints,//tempWaypoints,
 		RobotParameters::k_updateRate,
@@ -176,9 +177,9 @@ void SwerveDrivePathFollower::generatePath(std::vector<SwerveDrivePathGenerator:
     m_turningPIDController.EnableContinuousInput(-180, 180);
     // std::remove("home/lvuser/ActualPath"+name+".csv");
     m_File.open("home/lvuser/ActualPath"+name+".csv",std::ofstream::out);
-    m_File <<"time(s), xPos (m), yPos (m), vel (deg), yaw (m/s), YawRate (deg/s)," << //7
-                "ActualXPos(m), ActualYPos(m), ActualYaw(deg), skipped,"<<//8
-                "look ahead x (m), look ahead y(m), look ahead vectorAngle, commanded x vel, commanded y vel, look ahead (m)\n";//5
+    m_File <<"time(s), xPos (in), yPos (in), vel (deg), yaw (in/s), YawRate (deg/s)," << //7
+                "ActualXPos(in), ActualYPos(in), ActualYaw(deg), skipped,"<<//8
+                "look ahead x (in), look ahead y(in), look ahead vectorAngle, commanded x vel (in), commanded y vel (in), look ahead (in)\n";//5
     
     
     frc::SmartDashboard::PutBoolean("auto interrupted", false);

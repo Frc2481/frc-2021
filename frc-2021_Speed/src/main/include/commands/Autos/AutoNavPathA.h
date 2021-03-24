@@ -41,8 +41,8 @@ class AutoNavPathA
     AddCommands(
 
       //Break Into Multiple Commands
-        PathFollowerCommand2(m_drive, follower, "path path" ,true),
-        EngageBakeCommand(m_drive)
+        PathFollowerCommand2(m_drive, follower, "path path" ,true)
+        // EngageBakeCommand(m_drive)
     );
   }
 };

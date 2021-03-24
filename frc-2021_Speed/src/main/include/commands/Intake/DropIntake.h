@@ -21,6 +21,6 @@ class DropIntake
   }
 
   void Initialize() override{
-    m_pIntake->setServoAngle(180);
+    m_pIntake->setServoAngle(0);//180
   }
 };

@@ -14,7 +14,7 @@
 #include <frc2/command/ParallelRaceGroup.h>
 #include <frc2/command/InstantCommand.h>
 
-#include "commands/pathCommands/PathFollowerCommand.h"
+#include "commands/pathCommands/PathFollowerCommand2.h"
 
 
 #include "commands/Drive/DriveOpenLoopCommand.h"
@@ -37,25 +37,17 @@ class GalacticSearchPathBBlue
   
  public:
   GalacticSearchPathBBlue(DriveSubsystem* m_drive,
-                      IntakeSubsystem* m_intake){
+                      IntakeSubsystem* m_intake,
+                      SwerveDrivePathFollower* m_follower){
 
-     double metersToInches = 39.3701;
-    std::vector<SwerveDrivePathGenerator::waypoint_t> path;
-    path.push_back(SwerveDrivePathGenerator::waypoint_t {43.5, 60, 0, 0, 0});//start path
-    path.push_back(SwerveDrivePathGenerator::waypoint_t {180, 60, 0, RobotParameters::k_maxSpeed*metersToInches, 0});//pick up ball 1
-    path.push_back(SwerveDrivePathGenerator::waypoint_t {240, 120, -45, RobotParameters::k_maxSpeed*metersToInches, 0});//pick up ball 2
-    path.push_back(SwerveDrivePathGenerator::waypoint_t {300, 60, -45, RobotParameters::k_maxSpeed*metersToInches, 0});//pick up ball 3
-    path.push_back(SwerveDrivePathGenerator::waypoint_t {330, 60, -45, RobotParameters::k_maxSpeed*metersToInches, 0});//head to end
-    path.push_back(SwerveDrivePathGenerator::waypoint_t {360, 60, -45, 0, 0});//final 30in after endzone
 
-    std::vector<SwerveDrivePathGenerator::waypoint_t> tempWaypoints;//if meters
     
     AddCommands(
       frc2::ParallelCommandGroup{
         DropIntake(m_intake),
         IntakesDefaultCommand(m_intake),
 
-        PathFollowerCommand(m_drive, path, "path path" ,true),
+        PathFollowerCommand2(m_drive, m_follower, "path path" ,true),
         
       },
       EngageBakeCommand(m_drive)

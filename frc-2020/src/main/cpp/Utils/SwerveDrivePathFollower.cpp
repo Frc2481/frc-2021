@@ -191,6 +191,9 @@ double SwerveDrivePathFollower::getYawRate(){
 frc::Pose2d SwerveDrivePathFollower::getPointPos(int index){
 	return frc::Pose2d(units::meter_t(m_path[index].xPos),units::meter_t(m_path[index].yPos), frc::Rotation2d(units::degree_t(m_path[index].yaw)));
 }
+frc::Pose2d SwerveDrivePathFollower::getFollowerPos(){
+	return frc::Pose2d(units::meter_t(m_path[m_pathIndex].xPos),units::meter_t(m_path[m_pathIndex].yPos), frc::Rotation2d(units::degree_t(m_path[m_pathIndex].yaw)));
+}
 void SwerveDrivePathFollower::stop(bool interrupted){
     // m_File.close();
     frc::SmartDashboard::PutBoolean("auto interrupted", interrupted);

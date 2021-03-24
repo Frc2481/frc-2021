@@ -64,7 +64,7 @@ class RotateWithMotionMagic
       m_turnInput = nt::NetworkTableInstance::GetDefault().GetTable("limelight")->GetNumber("tx",0);
     }
     
-    double diff = normalizeToRange::RangedDifference(target-m_turnInput, -180,180)*.8;//.7frc::SmartDashboard::GetNumber("scale motion error", 1)
+    double diff = normalizeToRange::RangedDifference(target-m_turnInput, -180,180)*.7;//.8//.7frc::SmartDashboard::GetNumber("scale motion error", 1)
     m_pSwerveDrive->DriveArc(RobotParameters::k_wheelLeverArm * diff * MATH_CONSTANTS_PI/180);
     if(fabs(diff) < m_targetZone){
       m_count++;

@@ -25,48 +25,36 @@
 
 #include "subsystems/DriveSubsystem.h"
 #include "commands/Drive/EngageBakeCommand.h"
+#include "commands/Drive/CheckInRangeCommand.h"
 class AutoNavPathC
     : public frc2::CommandHelper<frc2::SequentialCommandGroup,
                                  AutoNavPathC> {
- private:
-  double metersToInches = 39.3701;
-  double curveSmall = 17;//half of robot(12) + half of cone(2.5) + buffer(2.5)
-  double curveBig = 25;
  public:
-  AutoNavPathC(DriveSubsystem* m_drive){
+  AutoNavPathC(DriveSubsystem* m_drive, SwerveDrivePathFollower m_follower[]){
 
-    std::vector<SwerveDrivePathGenerator::waypoint_t> one;
-    one.push_back(SwerveDrivePathGenerator::waypoint_t {60 + RobotParameters::k_wheelBase*metersToInches/2, 100, 0, 0, 0});//start
-    one.push_back(SwerveDrivePathGenerator::waypoint_t {60 + RobotParameters::k_wheelBase*metersToInches/2 + curveBig, 100 + curveBig, 0, RobotParameters::k_maxSpeed*metersToInches, 0});//clear start zone
-    one.push_back(SwerveDrivePathGenerator::waypoint_t {90, 150 + curveBig, 0, RobotParameters::k_maxSpeed*metersToInches, 0});//bounce point 1
-
-    std::vector<SwerveDrivePathGenerator::waypoint_t> two;
-    two.push_back(SwerveDrivePathGenerator::waypoint_t {90, 150, 0, RobotParameters::k_maxSpeed*metersToInches, 0});//bounce point 1
-    two.push_back(SwerveDrivePathGenerator::waypoint_t {130 - curveBig, 60 - curveBig, 0, RobotParameters::k_maxSpeed*metersToInches, 0});//curve around d5
-    two.push_back(SwerveDrivePathGenerator::waypoint_t {130 + curveSmall, 60 - curveSmall, 0, RobotParameters::k_maxSpeed*metersToInches, 0});//curve around d5
-    two.push_back(SwerveDrivePathGenerator::waypoint_t {180, 150 + curveBig, 0, RobotParameters::k_maxSpeed*metersToInches, 0});//bounce point 2
-
-    std::vector<SwerveDrivePathGenerator::waypoint_t> three;
-    three.push_back(SwerveDrivePathGenerator::waypoint_t {180, 150, 0, RobotParameters::k_maxSpeed*metersToInches, 0});//bounce point 2
-    three.push_back(SwerveDrivePathGenerator::waypoint_t {210 - curveBig, 60 - curveBig, 0, RobotParameters::k_maxSpeed*metersToInches, 0});//curve around d7
-    three.push_back(SwerveDrivePathGenerator::waypoint_t {240 + curveSmall, 60 - curveSmall, 0, RobotParameters::k_maxSpeed*metersToInches, 0});//curve around d8
-    three.push_back(SwerveDrivePathGenerator::waypoint_t {270, 150 + curveBig, 0, RobotParameters::k_maxSpeed*metersToInches, 0});//bounce point 3
-
-    std::vector<SwerveDrivePathGenerator::waypoint_t> four;
-    four.push_back(SwerveDrivePathGenerator::waypoint_t {270, 150, 0, RobotParameters::k_maxSpeed*metersToInches, 0});//bounce point 3
-    four.push_back(SwerveDrivePathGenerator::waypoint_t {300 - curveBig, 120 - curveBig, 0, RobotParameters::k_maxSpeed*metersToInches, 0});//head to end
-    four.push_back(SwerveDrivePathGenerator::waypoint_t {300, 100, 0, RobotParameters::k_maxSpeed*metersToInches, 0});//curve into end
-    four.push_back(SwerveDrivePathGenerator::waypoint_t {360, 100, 0, 0, 0});//decelerate
-
-    std::vector<SwerveDrivePathGenerator::waypoint_t> tempWaypoints;//if meters
-    
     AddCommands(
-      //Break Into Multiple Commands
-        PathFollowerCommand(m_drive, one, "path path" ,true,false),
-        PathFollowerCommand(m_drive, two, "path path" ,true,false),
-        PathFollowerCommand(m_drive, three, "path path" ,true,false),
-        PathFollowerCommand(m_drive, four, "path path" ,true,false),
-        EngageBakeCommand(m_drive)
+      frc2::ParallelRaceGroup{
+        PathFollowerCommand2(m_drive, &m_follower[0], "path path" ,true,false),
+        CheckInRangeCommand(m_drive, 133.0, 1)
+      },
+      frc2::ParallelRaceGroup{
+        PathFollowerCommand2(m_drive, &m_follower[1], "path path" ,true,false),
+        frc2::SequentialCommandGroup{
+          frc2::WaitCommand(1_s),
+          CheckInRangeCommand(m_drive, 147.0, 1)//144
+        }
+        
+      },
+      frc2::ParallelRaceGroup{
+        PathFollowerCommand2(m_drive, &m_follower[2], "path path" ,true,false),
+        frc2::SequentialCommandGroup{
+          frc2::WaitCommand(2_s),
+          CheckInRangeCommand(m_drive, 144.0, 1)//146
+        }
+      },
+      PathFollowerCommand2(m_drive, &m_follower[3], "path path" ,true,false),
+      PathFollowerCommand2(m_drive, &m_follower[4], "path path" ,true,false),
+      EngageBakeCommand(m_drive)
     );
   }
 };
