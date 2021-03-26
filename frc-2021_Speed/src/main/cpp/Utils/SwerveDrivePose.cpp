@@ -90,6 +90,4 @@ void SwerveDrivePose::update(
 		robotYawRateWheelMeas);
     m_poseDot = PoseDot2D(robotVelWheelMeas.X().to<double>(), robotVelWheelMeas.X().to<double>(), yawRateGyro);
 
-    // @TODO: potential improvements...
-    // fuse multiple observations from different sensors (IMU, lidar, etc.)
 }

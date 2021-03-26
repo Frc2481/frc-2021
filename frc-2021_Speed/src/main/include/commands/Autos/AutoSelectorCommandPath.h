@@ -16,6 +16,7 @@
 #include "subsystems/DriveSubsystem.h"
 #include "subsystems/IntakeSubsystem.h"
 #include "Utils/SwerveDrivePathFollower.h"
+#include <frc/smartdashboard/SmartDashboard.h>
 
 using namespace nt;
 /**
@@ -55,21 +56,31 @@ class AutoSelectorCommandPath
 
   void Execute() override{
     if((bool)NetworkTableInstance::GetDefault().GetTable("limelight")->GetNumber("tv",0)){
-      targetDistance = NetworkTableInstance::GetDefault().GetTable("limelight")->GetNumber("tx",0);
+      targetDistance = NetworkTableInstance::GetDefault().GetTable("limelight")->GetNumber("ty",0);
       targetY = NetworkTableInstance::GetDefault().GetTable("limelight")->GetNumber("tx",0);
-      if(targetDistance > 30 && targetDistance < 120){//RED
+      frc::SmartDashboard::PutNumber("target Distance", targetDistance);
+      frc::SmartDashboard::PutNumber("target Y", targetY);
+      if(targetDistance < 0){//RED
         if(targetY > 0){
+          frc::SmartDashboard::PutString("PATH", "A Red");
+          // printf("A Red");
           GalacticSearchPathARed(m_pDrive, m_pIntake, m_followerARed);
           m_finished = true;
         }else{
+          frc::SmartDashboard::PutString("PATH", "B Red");
+          // printf("B Red");
           GalacticSearchPathBRed(m_pDrive, m_pIntake, m_followerBRed);
           m_finished = true;
         }
-      }else if(targetDistance > 120 && targetDistance < 300){//Blue
+      }else if(targetDistance > 0){//Blue
         if(targetY > 0){
+          frc::SmartDashboard::PutString("PATH", "A Blue");
+          // printf("A Blue");
           GalacticSearchPathABlue(m_pDrive, m_pIntake, m_followerABlue);
           m_finished = true;
         }else{
+          frc::SmartDashboard::PutString("PATH", "B Blue");
+          // printf("B Blue");
           GalacticSearchPathBBlue(m_pDrive, m_pIntake, m_followerBBlue);
           m_finished = true;
         }

@@ -41,7 +41,7 @@ class TestSpeedsAuto
 //     double curveSmall = 17;//17;                      //17//half of robot(12) + half of cone(2.5) + buffer(2.5)
 //     double curveBig = 25;
 //     double testSpeed = RobotParameters::k_maxSpeed*metersToInches*1;
-// double tempCurve = 12;// todo make part of curve add to the other two cones
+// double tempCurve = 12;
 // const double radCurveC = 24;
     //  double distToAccel = (std::pow(RobotParameters::k_maxSpeed,2)/(2*RobotParameters::k_maxAccel)) * metersToInches;
     //  double distToDeccel = fabs((std::pow(RobotParameters::k_maxSpeed,2)/(2*RobotParameters::k_maxDeccel)) * metersToInches);

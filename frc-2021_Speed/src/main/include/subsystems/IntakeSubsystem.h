@@ -1,5 +1,4 @@
-    //TODO: Pulled from 2020, still needs dual-intake compatability but CAD hasn't figured out how that needs to be done yet. -Sean H.
-    //TODO Copied this from 2020 because intake supposedly similar, INCOMPLETE. -Sean H.
+
     
 #pragma once
 

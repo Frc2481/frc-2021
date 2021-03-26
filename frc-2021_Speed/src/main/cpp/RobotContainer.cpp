@@ -113,7 +113,7 @@ RobotContainer::RobotContainer(): m_driverController(0),
 // const double tempSpeed = RobotParameters::k_maxSpeed*metersToInches*1.0;//
 // const double fakeStopSpeed = 20.0;
 // const double radCurveC = 24;
-// const double tempCurve = 12;//12;// todo make part of curve you added it to the other two but didn't test it yet
+// const double tempCurve = 12;//12;
 //   //Auto Nav Path C waypoints
 //   std::vector<SwerveDrivePathGenerator::waypoint_t> navPathCA;
 //   navPathCA.push_back(SwerveDrivePathGenerator::waypoint_t {30 + RobotParameters::k_robotWidth/2, 100, angle, 0, 0});//start
@@ -138,42 +138,54 @@ RobotContainer::RobotContainer(): m_driverController(0),
 //   navPathCD.push_back(SwerveDrivePathGenerator::waypoint_t {300 + slipX, slipB +  100 - 5 - 15 - RobotParameters::k_robotWidth/2, angle, tempSpeed, 0});//curve into end
 //   navPathCD.push_back(SwerveDrivePathGenerator::waypoint_t {360 + slipX, slipB +  100 - 5 - 15 - RobotParameters::k_robotWidth/2, angle, 0, 0});//decelerate
 //   m_followerNavPathC[3].generatePath(navPathCD, "pathBRed");
-//   std::vector<SwerveDrivePathGenerator::waypoint_t> navPathCE;//TODO REMOVE
+//   std::vector<SwerveDrivePathGenerator::waypoint_t> navPathCE;
 //   navPathCE.push_back(SwerveDrivePathGenerator::waypoint_t {360, 100, angle, 0, 0});//bounce point 3
 //   navPathCE.push_back(SwerveDrivePathGenerator::waypoint_t {200, 100, angle, 30, 0});//bounce point 3
 //   navPathCE.push_back(SwerveDrivePathGenerator::waypoint_t {30 - RobotParameters::k_robotWidth/2, 100, angle, 0, 0});//decelerate
-//   m_followerNavPathC[4].generatePath(navPathCE, "pathBRed");//TODO REMOVE
+//   m_followerNavPathC[4].generatePath(navPathCE, "pathBRed");
 
 
   //Galactic Search Path A Red waypoints
-  const int selectOffset = 5;
+  const int selectOffset = 4.5;
   std::vector<SwerveDrivePathGenerator::waypoint_t> pathARed;
-  pathARed.push_back(SwerveDrivePathGenerator::waypoint_t {43, 90 + selectOffset, 0, 0, 0});//start pathARed
-  pathARed.push_back(SwerveDrivePathGenerator::waypoint_t {45, 90, 10, RobotParameters::k_maxSpeed*metersToInches, 0});//pick up ball 1 
-  pathARed.push_back(SwerveDrivePathGenerator::waypoint_t {90, 90, 0, RobotParameters::k_maxSpeed*metersToInches, 0});//pick up ball 1 
-  pathARed.push_back(SwerveDrivePathGenerator::waypoint_t {150, 60, -26.5, RobotParameters::k_maxSpeed*metersToInches, 0});//pick up ball 2
-  pathARed.push_back(SwerveDrivePathGenerator::waypoint_t {177/*180*/, 150, -26.5, RobotParameters::k_maxSpeed*metersToInches, 0});//pick up ball 3
-  pathARed.push_back(SwerveDrivePathGenerator::waypoint_t {330, 150, -26.5, RobotParameters::k_maxSpeed*metersToInches, 0});//head to end
-  pathARed.push_back(SwerveDrivePathGenerator::waypoint_t {360, 150, -26.5, 0, 0});//final 30in after endzone
+  // pathARed.push_back(SwerveDrivePathGenerator::waypoint_t {43, 90 + selectOffset, 0, 0, 0});//start pathARed
+  // pathARed.push_back(SwerveDrivePathGenerator::waypoint_t {45, 90, 10, RobotParameters::k_maxSpeed*metersToInches, 0});//pick up ball 1 
+  // pathARed.push_back(SwerveDrivePathGenerator::waypoint_t {90, 90, 0, RobotParameters::k_maxSpeed*metersToInches, 0});//pick up ball 1 
+  // pathARed.push_back(SwerveDrivePathGenerator::waypoint_t {150, 60, -26.5, RobotParameters::k_maxSpeed*metersToInches, 0});//pick up ball 2
+  // pathARed.push_back(SwerveDrivePathGenerator::waypoint_t {177/*180*/, 150, -26.5, RobotParameters::k_maxSpeed*metersToInches, 0});//pick up ball 3
+  // pathARed.push_back(SwerveDrivePathGenerator::waypoint_t {330, 150, -26.5, RobotParameters::k_maxSpeed*metersToInches, 0});//head to end
+  // pathARed.push_back(SwerveDrivePathGenerator::waypoint_t {360, 150, -26.5, 0, 0});//final 30in after endzone
+
+  pathARed.push_back(SwerveDrivePathGenerator::waypoint_t {43, 90 + selectOffset, 0, 0, 0});
+  pathARed.push_back(SwerveDrivePathGenerator::waypoint_t {45, 120, 10, 40, 0});
+  pathARed.push_back(SwerveDrivePathGenerator::waypoint_t {360, 150 + selectOffset, 0, 0, 0});
+
+
   m_followerPathARed.generatePath(pathARed,"pathARed");
 
   //Galactic Search Path B Red waypoints
   std::vector<SwerveDrivePathGenerator::waypoint_t> pathBRed;
-  pathBRed.push_back(SwerveDrivePathGenerator::waypoint_t {43.5, 120 - selectOffset, 0, 0, 0});//start pathBRed
-  pathBRed.push_back(SwerveDrivePathGenerator::waypoint_t {90, 120, 0, RobotParameters::k_maxSpeed*metersToInches, 0});//pick up ball 1
-  pathBRed.push_back(SwerveDrivePathGenerator::waypoint_t {150, 60, -45, RobotParameters::k_maxSpeed*metersToInches, 0});//pick up ball 2
-  pathBRed.push_back(SwerveDrivePathGenerator::waypoint_t {210, 120, -45, RobotParameters::k_maxSpeed*metersToInches, 0});//pick up ball 3
-  pathBRed.push_back(SwerveDrivePathGenerator::waypoint_t {330, 120, -45, RobotParameters::k_maxSpeed*metersToInches, 0});//head to end
-  pathBRed.push_back(SwerveDrivePathGenerator::waypoint_t {360, 120, -45, 0, 0});//final 30in after endzone
+  // pathBRed.push_back(SwerveDrivePathGenerator::waypoint_t {43.5, 120 - selectOffset, 0, 0, 0});//start pathBRed
+  // pathBRed.push_back(SwerveDrivePathGenerator::waypoint_t {90, 120, 0, RobotParameters::k_maxSpeed*metersToInches, 0});//pick up ball 1
+  // pathBRed.push_back(SwerveDrivePathGenerator::waypoint_t {150, 60, -45, RobotParameters::k_maxSpeed*metersToInches, 0});//pick up ball 2
+  // pathBRed.push_back(SwerveDrivePathGenerator::waypoint_t {210, 120, -45, RobotParameters::k_maxSpeed*metersToInches, 0});//pick up ball 3
+  // pathBRed.push_back(SwerveDrivePathGenerator::waypoint_t {330, 120, -45, RobotParameters::k_maxSpeed*metersToInches, 0});//head to end
+  // pathBRed.push_back(SwerveDrivePathGenerator::waypoint_t {360, 120, -45, 0, 0});//final 30in after endzone
+
+  pathBRed.push_back(SwerveDrivePathGenerator::waypoint_t {43.5, 60 - selectOffset, 0, 0, 0});//start pathBRed
+  pathBRed.push_back(SwerveDrivePathGenerator::waypoint_t {43.5, 75, 0, 40, 0});//pick up ball 1
+  pathBRed.push_back(SwerveDrivePathGenerator::waypoint_t {43.5, 90 - selectOffset, 0, 0, 0});//final 30in after endzone
+
+
   m_followerPathBRed.generatePath(pathBRed, "pathBRed");
 
   //Galactic Search Path A Blue waypoints
   const double slip = -10;
   std::vector<SwerveDrivePathGenerator::waypoint_t> pathABlue;
   pathABlue.push_back(SwerveDrivePathGenerator::waypoint_t {43.5, 30 + selectOffset, 0, 0, 0});//start pathABlue
-  pathABlue.push_back(SwerveDrivePathGenerator::waypoint_t {55, 30, 0, RobotParameters::k_maxSpeed*metersToInches, 0});//pick up ball 1
-  pathABlue.push_back(SwerveDrivePathGenerator::waypoint_t {65, 30, 15, RobotParameters::k_maxSpeed*metersToInches, 0});//pick up ball 1
-  pathABlue.push_back(SwerveDrivePathGenerator::waypoint_t {75, 30, 0, RobotParameters::k_maxSpeed*metersToInches, 0});//pick up ball 1
+  pathABlue.push_back(SwerveDrivePathGenerator::waypoint_t {55, 30, 0, RobotParameters::k_maxSpeed*metersToInches, 0});//Drop Intakes
+  pathABlue.push_back(SwerveDrivePathGenerator::waypoint_t {65, 30, 15, RobotParameters::k_maxSpeed*metersToInches, 0});//Drop Intakes
+  pathABlue.push_back(SwerveDrivePathGenerator::waypoint_t {75, 30, 0, RobotParameters::k_maxSpeed*metersToInches, 0});//Drop Intakes
   pathABlue.push_back(SwerveDrivePathGenerator::waypoint_t {180, 30, 0, RobotParameters::k_maxSpeed*metersToInches, 0});//pick up ball 1
   pathABlue.push_back(SwerveDrivePathGenerator::waypoint_t {210, 120, -26.5, RobotParameters::k_maxSpeed*metersToInches, 0});//pick up ball 2
   pathABlue.push_back(SwerveDrivePathGenerator::waypoint_t {270, 90 + slip, -26.5, RobotParameters::k_maxSpeed*metersToInches, 0});//pick up ball 3
@@ -184,7 +196,9 @@ RobotContainer::RobotContainer(): m_driverController(0),
   //Galactic Search Path B Blue waypoints
   std::vector<SwerveDrivePathGenerator::waypoint_t> pathBBlue;
   pathBBlue.push_back(SwerveDrivePathGenerator::waypoint_t {43.5, 60 - selectOffset, 0, 0, 0});//start pathBBlue
-  pathBBlue.push_back(SwerveDrivePathGenerator::waypoint_t {180, 60, 0, RobotParameters::k_maxSpeed*metersToInches, 0});//pick up ball 1
+  pathBBlue.push_back(SwerveDrivePathGenerator::waypoint_t {55, 60, 0, RobotParameters::k_maxSpeed*metersToInches, 0});//Drop Intake
+  pathBBlue.push_back(SwerveDrivePathGenerator::waypoint_t {65, 60, 15, RobotParameters::k_maxSpeed*metersToInches, 0});//Drop Intake
+  pathBBlue.push_back(SwerveDrivePathGenerator::waypoint_t {75, 60, 0, RobotParameters::k_maxSpeed*metersToInches, 0});//Drop Intake
   pathBBlue.push_back(SwerveDrivePathGenerator::waypoint_t {240, 120, -45, RobotParameters::k_maxSpeed*metersToInches, 0});//pick up ball 2
   pathBBlue.push_back(SwerveDrivePathGenerator::waypoint_t {300, 60, -45, RobotParameters::k_maxSpeed*metersToInches, 0});//pick up ball 3
   pathBBlue.push_back(SwerveDrivePathGenerator::waypoint_t {330, 60, -45, RobotParameters::k_maxSpeed*metersToInches, 0});//head to end

@@ -21,6 +21,6 @@ double m_speed;
   }
 
   void Initialize() override{
-    m_pIntake->setAIntakeSpeed(m_speed);//TODO check if inverted
+    m_pIntake->setAIntakeSpeed(m_speed);
   }
 };

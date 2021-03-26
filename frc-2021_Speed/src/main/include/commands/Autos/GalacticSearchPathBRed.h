@@ -40,8 +40,7 @@ class GalacticSearchPathBRed
                       IntakeSubsystem* m_intake,
                       SwerveDrivePathFollower* m_follower){
     AddCommands(
-      frc2::ParallelCommandGroup{
-        DropIntake(m_intake),
+      frc2::ParallelRaceGroup{
         IntakesDefaultCommand(m_intake),
         PathFollowerCommand2(m_drive, m_follower, "path path" ,true),
         

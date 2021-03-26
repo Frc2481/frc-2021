@@ -42,7 +42,7 @@ class GalacticSearchPathARed
 
     
     AddCommands(
-      frc2::ParallelCommandGroup{
+      frc2::ParallelRaceGroup{
         // DropIntake(m_intake),
         IntakesDefaultCommand(m_intake),
 

@@ -42,7 +42,7 @@ class GalacticSearchPathABlue
 
     
     AddCommands(
-      frc2::ParallelCommandGroup{
+      frc2::ParallelRaceGroup{
         IntakesDefaultCommand(m_intake),
         PathFollowerCommand2(m_drive, m_follower, "path path" ,true),
       },
