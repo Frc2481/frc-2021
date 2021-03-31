@@ -51,10 +51,15 @@ class RobotContainer {
   // PanelManipulatorSubsystem m_colorSensor;
   // PanelManipulatorSubsystem::Color_t m_color;
   FeederSubsystem m_feeder;
-  SwerveDrivePathFollower m_follower;
+  
   ClimberSubsystem m_climber;
   IndexerSubsystem m_indexer;
   
+
+  SwerveDrivePathFollower m_followerLeft[4];
+  // SwerveDrivePathFollower m_followerLeftOne;
+
+
   frc2::Button m_startDriver{[&] { return m_driverController.GetRawButton(XBOX_START_BUTTON); }};//
   frc2::Button m_backDriver{[&] { return m_driverController.GetRawButton(XBOX_BACK_BUTTON); }};//
 

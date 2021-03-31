@@ -32,7 +32,6 @@ class LimelightUpdatePose
   void Initialize() override{
     double tx = NetworkTableInstance::GetDefault().GetTable("limelight")->GetNumber("tx",0);
     double ty = (nt::NetworkTableInstance::GetDefault().GetTable("limelight")->GetNumber("ty",0)+LimeLightConstants::kLimeLightAngle)*MATH_CONSTANTS_PI/180;
-    double ta = NetworkTableInstance::GetDefault().GetTable("limelight")->GetNumber("ta",0);
     double height = LimeLightConstants::kTargetHeight - LimeLightConstants::kLimeLightHeight;
     // frc::Translation2d targetPose = Translation2d(0, 0); //target on one side of field//TODO check coordinate frame
     double headingToTarget = m_driveTrain->GetPose().Rotation().Radians().to<double>()+ tx*MATH_CONSTANTS_PI/180 + MATH_CONSTANTS_PI/2;

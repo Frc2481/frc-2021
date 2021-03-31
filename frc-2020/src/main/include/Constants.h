@@ -8,9 +8,9 @@
 #include <frc/geometry/Translation2d.h>
 #include <frc/kinematics/SwerveDriveKinematics.h>
 #include <frc/trajectory/TrapezoidProfile.h>
-#include <units/units.h>
+#include <units/velocity.h>
 #include <wpi/math>
-
+#include "RobotParameters.h"
 #pragma once
 
 /**
@@ -103,9 +103,8 @@ using radians_per_second_squared_t =
     units::compound_unit<units::radians,
                          units::inverse<units::squared<units::second>>>;
 
-constexpr auto kMaxSpeed = units::meters_per_second_t(3);
-constexpr auto kMaxAcceleration = units::meters_per_second_squared_t(3);
-constexpr auto kMaxAngularSpeed = units::radians_per_second_t(3.142);
+constexpr auto kMaxSpeed = units::meters_per_second_t(RobotParameters::k_maxSpeed);
+constexpr auto kMaxAngularSpeed = units::degrees_per_second_t(RobotParameters::k_maxYawRate);
 constexpr auto kMaxAngularAcceleration =
     units::unit_t<radians_per_second_squared_t>(3.142);
 
@@ -153,7 +152,7 @@ namespace IndexerConstants{
 // static constexpr double test = -(1 -.059) /(1-.38) +1;
 namespace FeederConstants{
     static constexpr double kDefaultFeederSpeed = .8;
-    static constexpr double kIntakeBallDistance = 30;//28 - 35 tested
+    static constexpr double kIntakeBallDistance = 28;//28 - 35 tested was 30
     static constexpr double kLastBallDistance = 26;//28 - 35 tested
     static constexpr double kShootingFarFeederSpeed = .5;//28 - 35 tested
     static constexpr double kShootingFeederSpeed = 1;//28 - 35 tested

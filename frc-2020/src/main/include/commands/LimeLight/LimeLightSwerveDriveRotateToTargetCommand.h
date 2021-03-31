@@ -80,7 +80,7 @@ class LimeLightSwerveDriveRotateToTargetCommand
     // printf("Limelight Yaw: %.01f",yawRate);
     m_drive->Drive(units::meters_per_second_t(-xleftHand), // set the driveTrain
                    units::meters_per_second_t(-yleftHand),
-                   units::radians_per_second_t(yawRate),
+                   units::radians_per_second_t(yawRate),//*2.2
                    false);
     frc::SmartDashboard::PutNumber("YawRate", yawRate);
 

@@ -12,27 +12,44 @@
 #include <frc2/command/WaitCommand.h>
 #include <frc2/command/ParallelCommandGroup.h>
 #include <frc2/command/ParallelRaceGroup.h>
+#include <frc2/command/InstantCommand.h>
+
+
 #include "commands/pathCommands/AutoSwerveFollowPathCommand.h"
 #include "commands/pathCommands/WaitForPathToFinishCommand.h"
 #include "commands/pathCommands/PathFollowerCommand.h"
-#include "commands/pathCommands/StartPathFollowing.h"
-#include "commands/pathCommands/StopPathFollowing.h"
-#include "commands/pathCommands/WaitForPosCommand.h"
-#include "commands/pathCommands/FollowPathToPosCommandGroup.h"
-#include "commands/DriveOpenLoopCommand.h"
-#include "commands/WaitForBallCountCommand.h"
-#include "subsystems/DriveSubsystem.h"
+#include "commands/pathCommands/PathFollowerShootingCommand.h"
+
+
+#include "commands/Drive/DriveOpenLoopCommand.h"
+#include "commands/Drive/RotateToAngleCommand.h"
+#include "commands/Drive/RotateWithTrajectoryCommand.h"
+
+#include "commands/Intake/WaitForBallCountCommand.h"
+#include "commands/Intake/RetractIntakeCommand.h"
+#include "commands/Intake/ExtendIntakeCommand.h"
+#include "commands/Intake/FeederDefaultCommand.h"
+#include "commands/Intake/QueFeederCommand.h"
+#include "commands/LimeLight/LimeLightRotateToTargetCommand.h"
+#include "commands/LimeLight/TurnLimeLightOff.h"
+#include "commands/LimeLight/TurnLimeLightOn.h"
+#include "commands/LimeLight/LimeLightRotateToTargetCommand.h"
+#include "commands/Drive/RotateWithMotionMagic.h"
+#include "commands/LimeLight/LimeLightRotateTillOnTarget.h"
+
 #include "Utils/SwerveDrivePathFollower.h"
+
+
+#include "commands/shooter/SetShooterRangeCommand.h"
+#include "commands/shooter/SetShooterSpeedCommand.h"
+#include "commands/Shooter/FarShotCommand.h"
+
 #include "subsystems/ShooterSubsystem.h"
 #include "subsystems/IntakeSubsystem.h"
 #include "subsystems/FeederSubsystem.h"
-#include "commands/LimeLight/LimeLightRotateToTargetCommand.h"
-#include "commands/shooter/SetShooterRangeCommand.h"
-#include "commands/shooter/SetShooterSpeedCommand.h"
-#include <frc2/command/WaitCommand.h>
-#include "commands/RetractIntakeCommand.h"
-#include "commands/ExtendIntakeCommand.h"
-#include "commands/LimeLight/LimeLightRotateToTargetCommand.h"
+#include "subsystems/DriveSubsystem.h"
+
+
 class AutoTestCommandGroup
     : public frc2::CommandHelper<frc2::SequentialCommandGroup,
                                  AutoTestCommandGroup> {
@@ -46,27 +63,15 @@ class AutoTestCommandGroup
                       IntakeSubsystem* m_intake){
 
     //  double metersToInches = 39.3701;
-    std::vector<SwerveDrivePathGenerator::waypoint_t> waypoints;
-    waypoints.push_back(SwerveDrivePathGenerator::waypoint_t {0, 0, 90, 0, 0});//start
-    waypoints.push_back(SwerveDrivePathGenerator::waypoint_t {0, 100, 180, 100000, 0});//
-    waypoints.push_back(SwerveDrivePathGenerator::waypoint_t {0, 200, -90, 100000, 0});//
-    waypoints.push_back(SwerveDrivePathGenerator::waypoint_t {0, 300, 0, 100000, 0});
-    waypoints.push_back(SwerveDrivePathGenerator::waypoint_t {0, 400, 90, 100000, 0});
-    std::vector<SwerveDrivePathGenerator::waypoint_t> tempWaypoints;
-
-    // CoordinateTranslation::WPILibToNolan(waypoints, tempWaypoints);
-
+      std::vector<SwerveDrivePathGenerator::waypoint_t> start;
+    start.push_back(SwerveDrivePathGenerator::waypoint_t {0, 0, 0, 0, 0});//start
+    start.push_back(SwerveDrivePathGenerator::waypoint_t {-90, 0, 0, 100, 0});
+    start.push_back(SwerveDrivePathGenerator::waypoint_t {-180, 0, 0, 0, 0});//pick up ball 4 and 5
+    std::vector<SwerveDrivePathGenerator::waypoint_t> tempWaypoints;//if meters
     
-    // workaround of vel and accel zero at start
 
-    // m_follower->generatePath(Waypoints);
-    
-    // m_follower.start(waypoints);
     AddCommands(
-        PathFollowerCommand(m_drive, waypoints, "test", true)
-    //   StartPathFollowing(m_follower, m_drive),//start
-    //   PathFollowerCommand(m_follower,m_drive),//head to end
-    //   StopPathFollowing(m_follower, m_drive)
+          PathFollowerShootingCommand(m_drive, m_shooter, m_feeder, 1, start, "start path" ,true)//head to end
     );
   }
 };

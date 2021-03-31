@@ -24,7 +24,7 @@ class CoordinateTranslation {
     wpiPath.clear();
     double inchesToMeters = .0254;
     for(int i = 0; i < (int)nolanPath.size();i++){
-      printf("NolanToWPILib cycle: %d\n", i);
+      // printf("NolanToWPILib cycle: %d\n", i);
       SwerveDrivePathGenerator::finalPathPoint_t wpiPoint = nolanPath[i];
       wpiPoint.xPos = nolanPath[i].yPos*inchesToMeters;
       wpiPoint.yPos = -nolanPath[i].xPos*inchesToMeters;
@@ -53,7 +53,7 @@ class CoordinateTranslation {
 		m_File <<"xPos (m), yPos (m), yaw (deg), speed (m/s),   radCurve\n";
     nolanPath.clear();
     for(int i = 0; i < (int)wpiPath.size();i++){
-      printf("WPILibToNolan cycle: %d\n", i);
+      // printf("WPILibToNolan cycle: %d\n", i);
       SwerveDrivePathGenerator::waypoint_t nolanPoint = wpiPath[i];
       nolanPoint.xPos = -wpiPath[i].yPos*metersToInches;
       nolanPoint.yPos = wpiPath[i].xPos*metersToInches;

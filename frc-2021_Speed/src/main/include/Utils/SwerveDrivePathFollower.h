@@ -18,7 +18,6 @@
 #include <frc/geometry/Translation2d.h>
 #include <frc/geometry/Rotation2d.h>
 #include "Utils/PoseDot2D.h"
-#include <frc/smartdashboard/SmartDashboard.h>
 #include <cmath>
 #include <iostream>
 #include <fstream>
@@ -36,8 +35,8 @@ class SwerveDrivePathFollower {
   /**
    * Will be called periodically whenever the CommandScheduler runs.
    */
-  void generatePath(std::vector<SwerveDrivePathGenerator::waypoint_t> &waypoints, const std::string &name);
   void Update(frc::Pose2d pose);
+  void generatePath(std::vector<SwerveDrivePathGenerator::waypoint_t> &waypoints, const std::string &name, double targetZone = .05);
   double getXVel();
   double getYVel();
   double getYawRate();
@@ -46,8 +45,7 @@ class SwerveDrivePathFollower {
   int lookAheadIndex();
   bool isPathFinished();
   frc::Pose2d getPointPos(int index);
-  // bool targetPosFound();
-  // void setTargetPos();
+  frc::Pose2d getFollowerPos();
   void stop(bool interrupted);
 
  private:
@@ -58,11 +56,11 @@ class SwerveDrivePathFollower {
   
 
   bool m_pathFinished = false;
-    bool m_lastPointReached;
-    double m_distToEnd;
-    double m_targetZone;
+  bool m_lastPointReached;
+  double m_distToEnd;
+  double m_targetZone;
 
-    int m_lookAheadIndex = 0;
+  int m_lookAheadIndex = 0;
   int m_pathIndex = 0;
 
 
@@ -74,8 +72,8 @@ class SwerveDrivePathFollower {
   double m_yawRate = 0;
 
   double m_time;
-
+double metersToInches = 39.87;
 	std::ofstream m_File;
 	frc2::PIDController m_turningPIDController{
-      8, 0, 0};
+      4, 0, 0};
 };

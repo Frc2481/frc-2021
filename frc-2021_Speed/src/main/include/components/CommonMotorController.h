@@ -5,7 +5,6 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 #include <ctre/Phoenix.h>
-#include <rev/CANSparkMax.h>
 #include "Constants.h"
 
 #pragma once
@@ -53,10 +52,7 @@ class CommonMotorController {
   virtual void  ConfigMaxIntegralAccumulator(int slotIdx, double iaccum, int timeoutMs = 0){
     printf("Warning: %s is calling ConfigMaxIntegralAccumulator() which is not implemented\n", m_name.c_str());
   }
-  virtual void  SetNeutralMode(NeutralMode neutralMode){
-    printf("Warning: %s is calling SetNeutralMode() which is not implemented\n", m_name.c_str());
-  }
-  virtual void SetNeutralMode(rev::CANSparkMax::IdleMode mode){
+  virtual void SetNeutralMode(CommonDrive mode){
     printf("Warning: %s is calling SetNeutralMode() which is not implemented\n", m_name.c_str());
   }
   virtual void  EnableVoltageCompensation(bool enable){
@@ -126,6 +122,10 @@ class CommonMotorController {
   }
   virtual double GetPos(){
     printf("Warning: %s is calling GetPos() which is not implemented\n", m_name.c_str());
+    return 0.0;
+  }
+  virtual double GetCurrentOutput(){
+    printf("Warning: %s is calling GetCurrentOutput() which is not implemented\n", m_name.c_str());
     return 0.0;
   }
 };

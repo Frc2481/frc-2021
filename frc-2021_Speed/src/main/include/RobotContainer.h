@@ -29,6 +29,9 @@
 
 #include "subsystems/IntakeSubsystem.h"
 #include "subsystems/DriveSubsystem.h"
+
+#include "Utils/SwerveDrivePathFollower.h"
+
 class RobotContainer {
  public:
   RobotContainer();
@@ -42,8 +45,15 @@ class RobotContainer {
 
   DriveSubsystem m_drive;
   IntakeSubsystem m_intake;
-
-  SwerveDrivePathFollower m_follower;
+  SwerveDrivePathFollower m_followerNavPathA;
+  SwerveDrivePathFollower m_followerNavPathB;
+//Auto nav path C  
+  SwerveDrivePathFollower m_followerNavPathC[5];//4 BUT ADDED A RETURN
+//Auto nav path C
+  SwerveDrivePathFollower m_followerPathABlue;
+  SwerveDrivePathFollower m_followerPathARed;
+  SwerveDrivePathFollower m_followerPathBBlue;
+  SwerveDrivePathFollower m_followerPathBRed;
 
   
   frc2::Button m_startDriver{[&] { return m_driverController.GetRawButton(XBOX_START_BUTTON); }};//
@@ -84,10 +94,8 @@ class RobotContainer {
   void ConfigureButtonBindings();
   void TrajectoryToCSV(frc::Trajectory trajectory);
 
-//tuning drive
   int cycle = 0;
-  double setPoint = 0;
-  double counting = 0;
+  
   std::vector<SwerveDrivePathGenerator::finalPathPoint_t> m_path;
 	
 

@@ -1,37 +1,50 @@
-    //TODO Copied this from 2020 because intake supposedly similar, INCOMPLETE. -Sean H.
+
 
 #include "subsystems/IntakeSubsystem.h"
 #include "Constants.h"
 #include "RobotParameters.h"
-
-    IntakeSubsystem::IntakeSubsystem() :
-    leftSpeed(0.0),
-    rightSpeed(0.0)
-    {
-        m_beamBreak = new frc::DigitalInput(BeamBreaks::kBeamBreakID);
-        m_rightMotor = new VictorMotorController(VictorIDs::kRightIntakeID, "Left Intake Motor");
-        m_leftMotor = new VictorMotorController(VictorIDs::kLeftIntakeID,"Right Intake Motor");
+#include "Constants.h"
+    IntakeSubsystem::IntakeSubsystem(){
+        m_servo = new frc::Servo(0);
+        m_aIntakeMotor = new TalonSRXMotorController(TalonIDs::kAIntakeID, "Front Intake Motor");
+        m_aIntakeMotor->ConfigFactoryDefault();
+        m_bIntakeMotor = new TalonSRXMotorController(TalonIDs::kBIntakeID,"Left Intake Motor");
+        m_bIntakeMotor->ConfigFactoryDefault();
+        m_bIntakeMotor->SetNeutralMode(CommonDrive::Brake);
     }
 
     void IntakeSubsystem::Periodic(){
     }
-    void IntakeSubsystem::setLeftSpeed(double speed){
-        leftSpeed = speed;
-        m_leftMotor->Set(speed);
+    void IntakeSubsystem::setBIntakeSpeed(double speed){
+        m_bIntakeMotor->Set(speed);
     }
-    void IntakeSubsystem::setRightSpeed(double speed){
-        rightSpeed = speed;
-        m_rightMotor->Set(speed);
-    }
-    double IntakeSubsystem::getLeftSpeed(){
-        return leftSpeed;
-    }
-    double IntakeSubsystem::getRightSpeed(){
-        return rightSpeed;
-    }
-    double IntakeSubsystem::getBeamBreak(){
-        return m_beamBreak->Get();
+    void IntakeSubsystem::setAIntakeSpeed(double speed){
+        m_aIntakeMotor->Set(speed);
     }
 
+    void IntakeSubsystem::setAIntakeCurrent(double current){
+        m_aIntakeMotor->Set(CommonModes::Current, current);
+    }
+    void IntakeSubsystem::setBIntakeCurrent(double current){
+        m_bIntakeMotor->Set(CommonModes::Current, current);
+    }
+    double IntakeSubsystem::getIntakeACurrent(){
+        return m_aIntakeMotor->GetCurrentOutput();
+    }
+    double IntakeSubsystem::getIntakeBCurrent(){
+        return m_bIntakeMotor->GetCurrentOutput();
+    }
+    double IntakeSubsystem::getBIntakeSpeed(){
+        return m_bIntakeMotor->GetVelocity();
+    }
+    double IntakeSubsystem::getAIntakeSpeed(){
+        return m_aIntakeMotor->GetVelocity();
+    }
+    double IntakeSubsystem::getServoAngle(){
+        return m_servo->GetAngle();
+    }
+    void IntakeSubsystem::setServoAngle(double angle){
+        m_servo->SetAngle(angle);
+    }
     
     

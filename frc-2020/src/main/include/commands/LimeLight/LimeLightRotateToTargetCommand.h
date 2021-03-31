@@ -77,7 +77,7 @@ LimeLightRotateToTargetCommand
 
     m_drive->Drive(units::meters_per_second_t(0), // set the driveTrain
                    units::meters_per_second_t(0),
-                   units::degrees_per_second_t(yawRate),
+                   units::degrees_per_second_t(yawRate),//*2.2
                    false);
     
     frc::SmartDashboard::PutNumber("YawRate", yawRate);

@@ -47,8 +47,9 @@ void  TalonFXMotorController::Config_IntegralZone(int slotIdx, int izone, int ti
 void  TalonFXMotorController::ConfigMaxIntegralAccumulator(int slotIdx, double iaccum, int timeoutMs) {
     m_pMotor->ConfigMaxIntegralAccumulator (slotIdx, iaccum, timeoutMs);
 }
-void  TalonFXMotorController::SetNeutralMode(NeutralMode neutralMode) {
-    m_pMotor->SetNeutralMode(neutralMode);
+void  TalonFXMotorController::SetNeutralMode(CommonDrive neutralMode) {
+    
+    m_pMotor->SetNeutralMode(CommonDriveToControlType(neutralMode));
 }
 void  TalonFXMotorController::EnableVoltageCompensation(bool enable) {
     m_pMotor->EnableVoltageCompensation(enable);
@@ -99,7 +100,6 @@ void TalonFXMotorController::ConfigSelectedFeedbackSensor(ctre::phoenix::motorco
     m_pMotor->ConfigSelectedFeedbackSensor(feedbackDevice, pidIdx, timeoutMs);
 }
 int TalonFXMotorController::GetSelectedSensorPosition(int id){
-    // printf("+++++++++++getting pos+++++++++++\n");
     return m_pMotor->GetSelectedSensorPosition(id);
 }
 int TalonFXMotorController::isSensorConnected(){
@@ -128,6 +128,9 @@ void TalonFXMotorController::Follow(TalonFX* motor){
 double TalonFXMotorController::GetPos(){
     return m_pMotor->GetSelectedSensorPosition();
 }
+double TalonFXMotorController::GetCurrentOutput(){
+    return m_pMotor->GetOutputCurrent();
+}
 // void TalonFXMotorController::SetNeutralMode(ctre::phoenix::motorcontrol::NeutralMode mode){
 //     m_pMotor->SetNeutralMode(mode);
 // }
@@ -147,5 +150,15 @@ ControlMode TalonFXMotorController::FalconModeToCommonMode(CommonModes mode){
     case CommonModes::MotionProfileArc: return ControlMode::MotionProfileArc;
     case CommonModes::Disabled:         return ControlMode::Disabled;
     default: return ControlMode::PercentOutput;
+    }
+}
+
+NeutralMode TalonFXMotorController::CommonDriveToControlType(CommonDrive mode){
+    switch(mode)
+    {
+    case CommonDrive::Brake:         return NeutralMode::Brake;
+    case CommonDrive::Coast:         return NeutralMode::Coast;
+    case CommonDrive::EEPROMSetting: return NeutralMode::EEPROMSetting;
+    default: return NeutralMode::Brake;
     }
 }

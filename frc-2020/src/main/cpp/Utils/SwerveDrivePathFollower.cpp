@@ -105,7 +105,6 @@ void SwerveDrivePathFollower::Update(frc::Pose2d pose){
 		frc::SmartDashboard::PutNumber("pathSpeed", m_path[m_pathIndex].vel);
 		m_time += 1.0/RobotParameters::k_updateRate;
 
-		double robotYawRate = m_path[m_pathIndex].yawRate;
 		// double robotXVel = m_path[m_pathIndex].xVel;
 		// double robotYVel = m_path[m_pathIndex].yVel;
 		double robotVel = m_path[m_pathIndex].vel;
@@ -113,8 +112,6 @@ void SwerveDrivePathFollower::Update(frc::Pose2d pose){
 		double poseY = m_path[m_lookAheadIndex].yPos;
 		double followerYaw = m_path[m_pathIndex].yaw;
 		double followerYawRate = m_path[m_pathIndex].yawRate;
-		double closestX = m_path[m_pathIndex].xPos;
-		double closestY = m_path[m_pathIndex].yPos;
 		//calculating new vector
 		double distX = poseX - pose.Translation().X().to<double>();
 		double distY = poseY - pose.Translation().Y().to<double>();
@@ -130,29 +127,6 @@ void SwerveDrivePathFollower::Update(frc::Pose2d pose){
 		// printf("path x vel update method %f\n", m_xVel);
 		frc::SmartDashboard::PutNumber("x follower pos", poseX);
 		frc::SmartDashboard::PutNumber("y follower pos", poseY);	
-
-				double actualYaw = pose.Rotation().Degrees().to<double>();
-		// m_File << m_path[m_pathIndex].time << ",";
-		// m_File << closestX << ",";
-		// m_File << closestY << ",";
-		// m_File << robotVel << ",";
-		// m_File << followerYaw << ",";
-		// m_File << robotYawRate << ",";//6
-
-
-		// m_File << pose.Translation().X().to<double>() << ",";
-		// m_File << pose.Translation().Y().to<double>() << ",";
-		// m_File << actualYaw << ",";
-		// m_File << skipped << ",";//4
-
-
-		// //look ahead info
-		// m_File << m_path[m_lookAheadIndex].xPos << ",";
-		// m_File << m_path[m_lookAheadIndex].yPos << ",";
-		// m_File << vectorAngle*180/MATH_CONSTANTS_PI << ",";
-		// m_File << cos(vectorAngle)*robotVel << ",";
-		// m_File << sin(vectorAngle)*robotVel << ",";//5	
-		// m_File << m_lookAhead <<"\n";
 }
 
 
@@ -216,6 +190,9 @@ double SwerveDrivePathFollower::getYawRate(){
 }
 frc::Pose2d SwerveDrivePathFollower::getPointPos(int index){
 	return frc::Pose2d(units::meter_t(m_path[index].xPos),units::meter_t(m_path[index].yPos), frc::Rotation2d(units::degree_t(m_path[index].yaw)));
+}
+frc::Pose2d SwerveDrivePathFollower::getFollowerPos(){
+	return frc::Pose2d(units::meter_t(m_path[m_pathIndex].xPos),units::meter_t(m_path[m_pathIndex].yPos), frc::Rotation2d(units::degree_t(m_path[m_pathIndex].yaw)));
 }
 void SwerveDrivePathFollower::stop(bool interrupted){
     // m_File.close();

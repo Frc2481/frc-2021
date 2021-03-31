@@ -12,7 +12,8 @@
 #include "Utils/SwerveDrivePathFollower.h"
 #include <vector>
 #include "subsystems/DriveSubsystem.h"
-#include "units/units.h"
+
+#include <units/velocity.h>
 #include <frc/smartdashboard/SmartDashboard.h>
 #include <iostream>
 #include <fstream>
@@ -47,7 +48,7 @@ class PathFollowerCommand : public frc2::CommandHelper<frc2::CommandBase, PathFo
     if(m_zero){
       m_pDriveSubsystem->ResetOdometry(m_pFollower.getPointPos(0));
     }
-    printf("initialize\n");
+    // printf("initialize\n");
     // m_pDrivetrain->ZeroHeading();//starting at first point in the path
     
 

@@ -42,6 +42,7 @@ class VictorMotorController : public CommonMotorController {
   void SetEncoderPosition(double pos);
   void SetVelocityConversionFactor(double factor);
   double GetClosedLoopError();
+  
   ControlMode CommonModeToControllMode(CommonModes mode);
 private:
   VictorSPX* m_pMotor;

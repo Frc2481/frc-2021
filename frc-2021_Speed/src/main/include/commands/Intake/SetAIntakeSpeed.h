@@ -7,20 +7,20 @@
 #include <frc2/command/CommandHelper.h>
 #include <frc2/command/InstantCommand.h>
 #include "subsystems/IntakeSubsystem.h"
-class SetRightIntakeSpeed
+class SetAIntakeSpeed
     : public frc2::CommandHelper<frc2::InstantCommand,
-                                 SetRightIntakeSpeed> {
+                                 SetAIntakeSpeed> {
  private:
 IntakeSubsystem* m_pIntake;
 double m_speed;
  public:
-  SetRightIntakeSpeed(IntakeSubsystem* intake, double speed){
+  SetAIntakeSpeed(IntakeSubsystem* intake, double speed){
     m_pIntake = intake;
     m_speed = speed;
     AddRequirements(m_pIntake);
   }
 
   void Initialize() override{
-    m_pIntake->setLeftSpeed(m_speed);//TODO check if inverted
+    m_pIntake->setAIntakeSpeed(m_speed);
   }
 };

@@ -40,14 +40,15 @@
 
 
 #include "commands/Autos/AutoLeftCommandGroup.h"
-// #include "commands/Autos/AutoRightCommandGroup.h"
+// #include "commands/Autos/AutoLeftCommandGroupStrafe.h"
 // #include "commands/Autos/AutoTestCommandGroup.h"
-
+#include "commands/Autos/FordAuto.h"
 
 #include <frc/geometry/Pose2d.h>
 #include <frc/geometry/Translation2d.h>
 #include <frc/smartdashboard/SmartDashboard.h>
-#include <units/units.h>
+#include <units/angle.h>
+#include <units/velocity.h>
 #include "Constants.h"
 #include <frc2/command/WaitCommand.h>
 
@@ -80,13 +81,41 @@
 
 
 
+#include "Paths.h"
 using namespace DriveConstants;
 
 RobotContainer::RobotContainer(): m_driverController(0),
                                   m_auxController(1),
                                   m_tDpadAux(&m_auxController, XBOX_DPAD_TOP),
                                   m_bDpadAux(&m_auxController, XBOX_DPAD_BOTTOM){
-  ConfigureButtonBindings();
+    ConfigureButtonBindings();
+    double metersToInches = 39.87;
+  std::vector<SwerveDrivePathGenerator::waypoint_t> one;
+  one.push_back(SwerveDrivePathGenerator::waypoint_t {RobotParameters::k_robotLength/2.0, 120 + (metersToInches*RobotParameters::k_wheelBase)/2.0, 90, 0, 0});//start
+  one.push_back(SwerveDrivePathGenerator::waypoint_t {56, 206, 21.57, 1000, 10000});
+  one.push_back(SwerveDrivePathGenerator::waypoint_t {103.315+30.76, 246.906-8.805+6, 21.57, 0, 0});//pick up ball 4 and 5
+  m_followerLeft[0].generatePath(one, "one");//247  147
+  
+  std::vector<SwerveDrivePathGenerator::waypoint_t> two;
+  two.push_back(SwerveDrivePathGenerator::waypoint_t {103.315+30.76, 246.906-8.805+6, 21.57, 0, 0});//pick up ball 4 and 5
+  two.push_back(SwerveDrivePathGenerator::waypoint_t {101.67+2.39-2.868-12, 231.5-6.577-0.877-3.5, 90, RobotParameters::k_maxSpeed*39.38, 0});//move
+  two.push_back(SwerveDrivePathGenerator::waypoint_t {77.2, 231.5-6.577-0.877-7.01+2.86+2.86, 180, 0, 0});//move to shoot
+  m_followerLeft[1].generatePath(two, "two");//92 234
+
+  std::vector<SwerveDrivePathGenerator::waypoint_t> three;
+  three.push_back(SwerveDrivePathGenerator::waypoint_t {77.2, 231.5-6.577-0.877-7.01+2.86+2.86, 188, 0, 0});//shoot pose
+  three.push_back(SwerveDrivePathGenerator::waypoint_t {36, 189, 90, (RobotParameters::k_maxSpeed)*39.38, 0}); // move
+  three.push_back(SwerveDrivePathGenerator::waypoint_t {32, 320, 90, 0, 0}); // pick up ball 6 - 8
+  m_followerLeft[2].generatePath(three, "three");
+
+
+  std::vector<SwerveDrivePathGenerator::waypoint_t> four;
+  four.push_back(SwerveDrivePathGenerator::waypoint_t {32, 320, 90, 0, 0}); // move
+  four.push_back(SwerveDrivePathGenerator::waypoint_t {54, 249, 130, (RobotParameters::k_maxSpeed)*39.38, 0}); // move
+  four.push_back(SwerveDrivePathGenerator::waypoint_t {77, 240, 187, 0, 0}); // move to shoot
+  m_followerLeft[3].generatePath(four, "four");
+
+
   // frc::SmartDashboard::PutData("swerve drive sub", &m_drive);
   frc::SmartDashboard::PutData("rotate to angle", new RotateWithTrajectoryCommand(&m_drive,frc::SmartDashboard::GetNumber("angle to rotate", 0),.55));
   
@@ -106,8 +135,8 @@ RobotContainer::RobotContainer(): m_driverController(0),
   frc::SmartDashboard::PutNumber("limeLight Izone", RobotParameters::k_limeLightIZone);
 
   frc::SmartDashboard::PutNumber("Lime light X", 0);
-    frc::SmartDashboard::PutNumber("Lime light Y", 0);
-    frc::SmartDashboard::PutNumber("Lime light yaw", 0);
+  frc::SmartDashboard::PutNumber("Lime light Y", 0);
+  frc::SmartDashboard::PutNumber("Lime light yaw", 0);
   frc::SmartDashboard::PutData("limelight to angle", new LimeLightRotateToTargetCommand(&m_drive,.01));
   frc::SmartDashboard::PutNumber("motion magic target angle", 0);
   frc::SmartDashboard::PutData("motion magic to angle", new RotateWithMotionMagic(&m_drive, 20,1,true));
@@ -161,8 +190,8 @@ RobotContainer::RobotContainer(): m_driverController(0),
     m_climber.zeroPos();
   },{&m_climber}));
    
-   frc::SmartDashboard::PutNumber("climberSetPos", 0);
-   frc::SmartDashboard::PutData("climb to pos", new frc2::InstantCommand([this]{
+  frc::SmartDashboard::PutNumber("climberSetPos", 0);
+  frc::SmartDashboard::PutData("climb to pos", new frc2::InstantCommand([this]{
     m_climber.goToPos(frc::SmartDashboard::GetNumber("climberSetPos", 0));
   },{&m_climber}));
 
@@ -256,12 +285,14 @@ void RobotContainer::ConfigureButtonBindings(){
 frc2::Command* RobotContainer::GetAutonomousCommand() {
   
   // return nullptr;
- return new AutoLeftCommandGroup(&m_follower, &m_drive, &m_shooter, &m_feeder, &m_intake);
+  // return new FordAuto(&m_follower, &m_drive, &m_shooter, &m_feeder, &m_intake);
+  return new AutoLeftCommandGroup(&m_drive, &m_shooter, &m_feeder, &m_intake, m_followerLeft);
+  // return new AutoTestCommandGroup(&m_follower, &m_drive, &m_shooter, &m_feeder, &m_intake); //
 }
 
 frc2::InstantCommand* RobotContainer::GetBrakeCommand(){
   return new frc2::InstantCommand([this]{m_drive.setBrake(); TurnLimeLightOff();},{&m_drive});
 }
-  frc2::InstantCommand* RobotContainer::GetCoastCommand(){
-    return new frc2::InstantCommand([this]{m_drive.setCoast();},{&m_drive});
-  }
+frc2::InstantCommand* RobotContainer::GetCoastCommand(){
+  return new frc2::InstantCommand([this]{m_drive.setCoast();},{&m_drive});
+}

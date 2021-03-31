@@ -8,9 +8,9 @@
 #include <frc/geometry/Translation2d.h>
 #include <frc/kinematics/SwerveDriveKinematics.h>
 #include <frc/trajectory/TrapezoidProfile.h>
-#include <units/units.h>
 #include <wpi/math>
 
+#include "RobotParameters.h"
 #pragma once
 
 /**
@@ -23,85 +23,45 @@
  */
 
 namespace TalonIDs{
-    static constexpr int kFrontRightTurningMotorID = 3;//1
-    static constexpr int kFrontLeftTurningMotorID = 1;//4
-    static constexpr int kRearRightTurningMotorID = 4;//3
-    static constexpr int kRearLeftTurningMotorID = 2;//2   
+    static constexpr int kFrontLeftTurningMotorID = 1;
+    static constexpr int kFrontRightTurningMotorID = 2;
+    static constexpr int kBackLeftTurningMotorID = 3;
+    static constexpr int kBackRightTurningMotorID = 4;
+    static constexpr int kAIntakeID = 9;
+    static constexpr int kBIntakeID = 10;   
 }
 
 namespace FalconIDs{
-    static constexpr int kFrontRightDriveMotorID = 7;//5
-    static constexpr int kFrontLeftDriveMotorID = 5;//6
-    static constexpr int kRearRightDriveMotorID = 8;//7
-    static constexpr int kRearLeftDriveMotorID = 6;//8
+    static constexpr int kFrontLeftDriveMotorID = 5;
+    static constexpr int kFrontRightDriveMotorID = 6;
+    static constexpr int kBackLeftDriveMotorID = 7;
+    static constexpr int kBackRightDriveMotorID = 8;
 
 }
-namespace VictorIDs{
-    static constexpr int kRightIntakeID = 11;
-    static constexpr int kLeftIntakeID = 12;
-}
 
-namespace BeamBreaks{
-    static constexpr int kBeamBreakID = 762;
-}
 namespace DriveConstants {
 
-constexpr bool kFrontLeftTurningEncoderReversed = true;
-constexpr bool kRearLeftTurningEncoderReversed = true;
-constexpr bool kFrontRightTurningEncoderReversed = true;
-constexpr bool kRearRightTurningEncoderReversed = true;
+    constexpr bool kFrontLeftTurningEncoderReversed = true;
+    constexpr bool kBackLeftTurningEncoderReversed = true;
+    constexpr bool kFrontRightTurningEncoderReversed = true;
+    constexpr bool kBackRightTurningEncoderReversed = true;
 
-constexpr bool kFrontLeftTurningMotorReversed = false;
-constexpr bool kRearLeftTurningMotorReversed = false;
-constexpr bool kFrontRightTurningMotorReversed = false;
-constexpr bool kRearRightTurningMotorReversed = false;
+    constexpr bool kFrontLeftTurningMotorReversed = false;
+    constexpr bool kBackLeftTurningMotorReversed = false;
+    constexpr bool kFrontRightTurningMotorReversed = false;
+    constexpr bool kBackRightTurningMotorReversed = false;
 
-constexpr bool kFrontLeftDriveEncoderReversed = false;//true
-constexpr bool kRearLeftDriveEncoderReversed = false;//true
-constexpr bool kFrontRightDriveEncoderReversed = false;//true
-constexpr bool kRearRightDriveEncoderReversed = false;//true
+    constexpr bool kFrontLeftDriveEncoderReversed = false;
+    constexpr bool kBackLeftDriveEncoderReversed = false;
+    constexpr bool kFrontRightDriveEncoderReversed = false;
+    constexpr bool kBackRightDriveEncoderReversed = false;
 
-constexpr bool kGyroReversed = true;
+    constexpr bool kGyroReversed = true;
 
 }  // namespace DriveConstants
 
-namespace ModuleConstants {
-constexpr int kEncoderCPR = 4096;
-constexpr double kWheelDiameterMeters = .15;
-constexpr double kDriveEncoderDistancePerPulse =
-    // Assumes the encoders are directly mounted on the wheel shafts
-    (kWheelDiameterMeters * wpi::math::pi) / static_cast<double>(kEncoderCPR);
-
-constexpr double kTurningEncoderDistancePerPulse =
-    // Assumes the encoders are directly mounted on the wheel shafts
-    (wpi::math::pi * 2) / static_cast<double>(kEncoderCPR);
-
-constexpr double kPModuleTurningController = 1;
-constexpr double kPModuleDriveController = 1;
-}  // namespace ModuleConstants
-
-namespace AutoConstants {
-using radians_per_second_squared_t =
-    units::compound_unit<units::radians,
-                         units::inverse<units::squared<units::second>>>;
-
-constexpr auto kMaxSpeed = units::meters_per_second_t(3);
-constexpr auto kMaxAcceleration = units::meters_per_second_squared_t(3);
-constexpr auto kMaxAngularSpeed = units::radians_per_second_t(3.142);
-constexpr auto kMaxAngularAcceleration =
-    units::unit_t<radians_per_second_squared_t>(3.142);
-
-constexpr double kPXController = 0.5;
-constexpr double kPYController = 0.5;
-constexpr double kPThetaController = 0.5;
-
-extern const frc::TrapezoidProfile<units::radians>::Constraints
-    kThetaControllerConstraints;
-
-}  // namespace AutoConstants
-
 namespace OIConstants {
-constexpr int kDriverControllerPort = 0;
+    constexpr int kDriverControllerPort = 0;
 }  // namespace OIConstants
 
 
@@ -120,16 +80,23 @@ enum class CommonModes{
     MotionProfileArc = 11,
     Disabled = 15
 };
-namespace LimeLightConstants{
-    static constexpr double kLimeLightHeight = 1.09;//ft
-    static constexpr double kLimeLightAngle = 20;//deg
-    static constexpr double kLimeLightHardWarePanAngle = 12;//deg
-    static constexpr double kTargetHeight =  2.03;//m
-}
+
+enum class CommonDrive{
+    Brake = 0,
+    Coast = 1,
+    EEPROMSetting = 2
+};
 namespace IntakeConstants{
-    static constexpr double kDefaultIntakeRollerSpeed = -.7; //TODO: Improve these speeds
+    static constexpr double kMaxIntakeAmp = 29.0;
+    static constexpr double kAIntakeSpeed = 0.9;
+    static constexpr double kAIntakeReverse = -0.6;
+    static constexpr double kBIntakeSpeed = 1.0;
+    static constexpr double kBIntakeReverse = -0.5;
+
+    static constexpr double kAIntakeCurrent = 25.0;
+    static constexpr double kBIntakeCurrent = 25.0;
 }
 namespace PathConstants{
-    static constexpr double kMinLookAhead = 6*.0254;
-    static constexpr double kMaxLookAhead = 24*.0254;
+    static constexpr double kMinLookAhead = 6*.0254;//6
+    static constexpr double kMaxLookAhead = RobotParameters::k_maxSpeed * .16255997;//calculated constant based off of last years robot and max look ahead
 }

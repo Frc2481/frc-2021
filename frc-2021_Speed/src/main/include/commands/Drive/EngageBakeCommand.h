@@ -6,22 +6,20 @@
 
 #include <frc2/command/CommandHelper.h>
 #include <frc2/command/InstantCommand.h>
-#include "subsystems/IntakeSubsystem.h"
-class CheckBeamBreak
+
+#include "subsystems/DriveSubsystem.h"
+
+class EngageBakeCommand
     : public frc2::CommandHelper<frc2::InstantCommand,
-                                 CheckBeamBreak> {
+                                 EngageBakeCommand> {
  private:
- IntakeSubsystem* m_pIntake;
+  DriveSubsystem* m_pDrive;
  public:
-  CheckBeamBreak(IntakeSubsystem* intake){
-    m_pIntake = intake;
-    AddRequirements(m_pIntake);
+  EngageBakeCommand(DriveSubsystem* drive){
+    m_pDrive = drive;
   }
 
   void Initialize() override{
-    if(m_pIntake->getBeamBreak()){
-      m_pIntake->setLeftSpeed(0);//TODO check if it is right or left
-    }
+    m_pDrive->setBrake();
   }
-
 };

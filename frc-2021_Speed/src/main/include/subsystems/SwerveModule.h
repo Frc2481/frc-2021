@@ -8,9 +8,8 @@
 #pragma once
 
 #include <ctre/Phoenix.h>
-#include <rev/CANSparkMax.h>
 #include <frc/Encoder.h>
-#include <frc/Spark.h>
+// #include <frc/Spark.h>
 #include <frc/controller/PIDController.h>
 #include <frc/controller/ProfiledPIDController.h>
 #include <frc/geometry/Rotation2d.h>
@@ -25,7 +24,6 @@
 #include "components/CommonMotorController.h"
 #include "components/TalonSRXMotorController.h"
 #include "components/TalonFXMotorController.h"
-#include "components/SparkMaxMotorController.h"
 
 class SwerveModule {
   using radians_per_second_squared_t =
@@ -46,6 +44,8 @@ class SwerveModule {
     void setCoast();
     void setBrake();
     void DriveArc(double arcLength, double wheelAngle);
+    double getDriveEncoder();
+    void resetDriveEncoder();
  private:
   // We have to use meters here instead of radians due to the fact that
   // ProfiledPIDController's constraints only take in meters per second and

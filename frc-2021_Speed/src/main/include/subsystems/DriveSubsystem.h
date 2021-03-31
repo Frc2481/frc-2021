@@ -25,6 +25,7 @@
 #include "Utils/PoseDot2D.h"
 #include <iostream>
 #include <fstream>
+#include <frc/smartdashboard/Field2d.h>
 class DriveSubsystem : public frc2::SubsystemBase {
  public:
   DriveSubsystem();
@@ -99,16 +100,17 @@ class DriveSubsystem : public frc2::SubsystemBase {
 
   void toggleFieldCentricForJoystick();
   bool getFiedCentricForJoystick();
-void setCoast();
-void setBrake();
-frc::SwerveModuleState getFrontRightMotor();
-frc::SwerveModuleState getFrontLeftMotor();
-frc::SwerveModuleState getBackRightMotor();
-frc::SwerveModuleState getBackLeftMotor();
-void tuneDrivePID(double p, double i, double d, double f);
-void tuneSteerPID(double p, double i, double d);
-void stop();
-frc::ChassisSpeeds GetRobotVelocity();
+  void setCoast();
+  void setBrake();
+  frc::SwerveModuleState getFrontRightMotor();
+  frc::SwerveModuleState getFrontLeftMotor();
+  frc::SwerveModuleState getBackRightMotor();
+  frc::SwerveModuleState getBackLeftMotor();
+  void tuneDrivePID(double p, double i, double d, double f);
+  void tuneSteerPID(double p, double i, double d);
+  void stop();
+  void resetDriveEncoders();
+  frc::ChassisSpeeds GetRobotVelocity();
 
   units::meter_t kTrackWidth =
       units::meter_t(RobotParameters::k_wheelTrack);  // Distance between centers of right and left wheels on robot 
@@ -125,9 +127,9 @@ frc::ChassisSpeeds GetRobotVelocity();
   // Components (e.g. motor controllers and sensors) should generally be
   // declared private and exposed only through public methods.
   SwerveModule m_frontLeft;
-  SwerveModule m_rearLeft;
+  SwerveModule m_backLeft;
   SwerveModule m_frontRight;
-  SwerveModule m_rearRight;
+  SwerveModule m_backRight;
     
   // The gyro sensor
   // frc::ADXRS450_Gyro m_gyro;
@@ -137,6 +139,8 @@ frc::ChassisSpeeds GetRobotVelocity();
   frc::SwerveDriveOdometry<4> m_odometry;
   AHRS m_pChassisIMU;
   bool m_fieldCentricForJoystick = false;
-
-  	std::ofstream m_File;
+  double metersToInches = 39.3701;
+  double cycle = 0;
+  std::ofstream m_File;
+  frc::Field2d m_pField;
 };

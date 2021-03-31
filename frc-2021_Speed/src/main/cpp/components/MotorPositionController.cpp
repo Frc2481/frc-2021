@@ -1,6 +1,5 @@
 #include "components/MotorPositionController.h"
 #include "Utils/Sign.h"
-#include <frc/smartdashboard/SmartDashboard.h>
 
 MotorPositionController::MotorPositionController()
 	: m_pDriveMotor(nullptr),
@@ -43,7 +42,7 @@ MotorPositionController::MotorPositionController(
 	m_pDriveMotor->Config_kD(0, kd, 10);
     m_pDriveMotor->Config_IntegralZone(0, iZone, 10);
     m_pDriveMotor->ConfigMaxIntegralAccumulator (0, iErrorLim, 10);
-    m_pDriveMotor->SetNeutralMode(NeutralMode::Brake);
+    m_pDriveMotor->SetNeutralMode(CommonDrive::Brake);
     m_pDriveMotor->EnableVoltageCompensation(true);
     m_pDriveMotor->ConfigVoltageCompSaturation(12.0, 0);
     m_pDriveMotor->ConfigNeutralDeadband(0.04, 0);
@@ -139,7 +138,6 @@ void MotorPositionController::updateLinear(double refP, double refV, double refA
     else {
         m_pDriveMotor->Set(CommonModes::MotionMagic, refP, DemandType::DemandType_ArbitraryFeedForward, feedforwardControl);
     }
-    // frc::SmartDashboard::PutNumber("Set Refp", refP);
 }
 
 double MotorPositionController::getEncoderZero() const {

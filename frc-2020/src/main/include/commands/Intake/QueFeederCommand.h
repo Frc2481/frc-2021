@@ -9,7 +9,7 @@
 
 #include <frc2/command/CommandBase.h>
 #include <frc2/command/CommandHelper.h>
-#include "networktables/NetworkTableInstance.h"
+#include "subsystems/FeederSubsystem.h"
 /**
  * An example command.
  *
@@ -17,18 +17,33 @@
  * directly; this is crucially important, or else the decorator functions in
  * Command will *not* work!
  */
-class LimeLightVisable
-    : public frc2::CommandHelper<frc2::CommandBase, LimeLightVisable> {
+class QueFeederCommand
+    : public frc2::CommandHelper<frc2::CommandBase, QueFeederCommand> {
+ private:
+  FeederSubsystem*  m_pFeeder;
+  double m_speed;
  public:
-  LimeLightVisable(){}
+  QueFeederCommand(FeederSubsystem* feeder, double speed){
+    m_pFeeder = feeder;
+    m_speed = speed;
 
-  void Initialize() override{}
+    AddRequirements(m_pFeeder);
+  }
 
-  void Execute() override{}
+  void Initialize() override{
+        // printf("QueFeederCommand\n");
+    m_pFeeder->setFeederSpeed(m_speed);
+  }
 
-  void End(bool interrupted) override{}
+  void Execute() override{
+    
+  }
+
+  void End(bool interrupted) override{
+    m_pFeeder->setFeederSpeed(0);
+  }
 
   bool IsFinished() override{
-    return (bool)nt::NetworkTableInstance::GetDefault().GetTable("limelight")->GetNumber("tv",0);
+    return m_pFeeder->isBallInTopBeamBreak();
   }
 };

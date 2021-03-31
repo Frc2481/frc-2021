@@ -6,10 +6,10 @@
 /*----------------------------------------------------------------------------*/
 
 #include "components/TalonSRXMotorController.h"
-#include <frc/smartdashboard/SmartDashboard.h>
 
 TalonSRXMotorController::TalonSRXMotorController(int motorID, const std::string &name): CommonMotorController(motorID, name){
     m_pMotor = new TalonSRX(motorID);
+    
 }
 void  TalonSRXMotorController::SetStatusFramePeriod(StatusFrameEnhanced frame, uint8_t periodMs, int timeoutMs){
     m_pMotor->SetStatusFramePeriod(frame, periodMs, timeoutMs);
@@ -48,8 +48,8 @@ void  TalonSRXMotorController::Config_IntegralZone(int slotIdx, int izone, int t
 void  TalonSRXMotorController::ConfigMaxIntegralAccumulator(int slotIdx, double iaccum, int timeoutMs) {
     m_pMotor->ConfigMaxIntegralAccumulator (slotIdx, iaccum, timeoutMs);
 }
-void  TalonSRXMotorController::SetNeutralMode(NeutralMode neutralMode) {
-    m_pMotor->SetNeutralMode(neutralMode);
+void  TalonSRXMotorController::SetNeutralMode(CommonDrive neutralMode) {
+    m_pMotor->SetNeutralMode(CommonDriveToControlType(neutralMode));
 }
 void  TalonSRXMotorController::EnableVoltageCompensation(bool enable) {
     m_pMotor->EnableVoltageCompensation(enable);
@@ -113,6 +113,9 @@ void TalonSRXMotorController::SetVelocityConversionFactor(double factor){
 double TalonSRXMotorController::GetClosedLoopError(){
     return m_pMotor->GetClosedLoopError();
 }
+double TalonSRXMotorController::GetCurrentOutput(){
+    return m_pMotor->GetOutputCurrent();
+}
 ControlMode TalonSRXMotorController::CommonModeToControllMode(CommonModes mode){
     switch(mode)
     {
@@ -127,7 +130,17 @@ ControlMode TalonSRXMotorController::CommonModeToControllMode(CommonModes mode){
     case CommonModes::MotionProfile:      return ControlMode::MotionProfile;
     case CommonModes::MotionMagic:      return ControlMode::MotionMagic;
     case CommonModes::MotionProfileArc:      return ControlMode::MotionProfileArc;
-    case CommonModes::Disabled:      return ControlMode::Disabled;
+    case CommonModes::Disabled:         return ControlMode::Disabled;
     default: return ControlMode::PercentOutput;
+    }
+}
+
+NeutralMode TalonSRXMotorController::CommonDriveToControlType(CommonDrive mode){
+    switch(mode)
+    {
+    case CommonDrive::Brake:         return NeutralMode::Brake;
+    case CommonDrive::Coast:         return NeutralMode::Coast;
+    case CommonDrive::EEPROMSetting: return NeutralMode::EEPROMSetting;
+    default: return NeutralMode::Brake;
     }
 }
