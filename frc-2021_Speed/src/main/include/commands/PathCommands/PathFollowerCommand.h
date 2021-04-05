@@ -54,12 +54,12 @@ class PathFollowerCommand : public frc2::CommandHelper<frc2::CommandBase, PathFo
   void Execute() override{
     
     m_pFollower.Update(m_pDriveSubsystem->GetPose());
-    frc::SmartDashboard::PutNumber("follow path command x", m_pFollower.getFollowerPos().Translation().X().to<double>());
-    frc::SmartDashboard::PutNumber("follow path command y", m_pFollower.getFollowerPos().Translation().Y().to<double>());
-    frc::SmartDashboard::PutNumber("actual x vel", m_pDriveSubsystem->GetRobotVelocity().vx.to<double>());
-    frc::SmartDashboard::PutNumber("actual y vel", m_pDriveSubsystem->GetRobotVelocity().vy.to<double>());
+    frc::SmartDashboard::PutNumber("follow path command x", -m_pFollower.getFollowerPos().Translation().X().to<double>()*metersToInches);
+    frc::SmartDashboard::PutNumber("follow path command y", -m_pFollower.getFollowerPos().Translation().Y().to<double>()*metersToInches);
+    frc::SmartDashboard::PutNumber("actual x vel", m_pDriveSubsystem->GetRobotVelocity().vx.to<double>()*metersToInches);
+    frc::SmartDashboard::PutNumber("actual y vel", m_pDriveSubsystem->GetRobotVelocity().vy.to<double>()*metersToInches);
     frc::SmartDashboard::PutNumber("x path vel", m_pFollower.getXVel()*metersToInches);
-    frc::SmartDashboard::PutNumber("y path vel", m_pFollower.getYVel()*metersToInches);
+    frc::SmartDashboard::PutNumber("y path vel", -m_pFollower.getYVel()*metersToInches);
     m_pDriveSubsystem->Drive(units::meters_per_second_t(m_pFollower.getXVel()), 
                              units::meters_per_second_t(m_pFollower.getYVel()), 
                              units::degrees_per_second_t(m_pFollower.getYawRate()),

@@ -81,27 +81,28 @@ class TestSpeedsAuto
 // start.push_back(SwerveDrivePathGenerator::waypoint_t {curve, -curve, 0, 30, radCurveC});//cone 1, point 4
 // start.push_back(SwerveDrivePathGenerator::waypoint_t {-curve, -curve, 0, 0, radCurveC});//cone 1, point 2
     AddCommands(
-        frc2::ParallelCommandGroup{
-            PathFollowerCommand(m_drive, start, "path path" ,true,false),
-            frc2::SequentialCommandGroup{
-                IntakesDefaultCommand(m_intake),
-                frc2::WaitCommand(.1_s),
-                ReverseIntakesCommands(m_intake),
-                frc2::WaitCommand(.1_s),
-                IntakesDefaultCommand(m_intake),
-                frc2::WaitCommand(.1_s),
-                ReverseIntakesCommands(m_intake),
-                frc2::WaitCommand(.1_s),
-                IntakesDefaultCommand(m_intake),
-                frc2::WaitCommand(.1_s),
-                ReverseIntakesCommands(m_intake),
-                frc2::WaitCommand(.1_s),
-                IntakesDefaultCommand(m_intake),
-                frc2::WaitCommand(.1_s),
-                ToggleIntakeCommand(m_intake)
-            }
+        // frc2::ParallelCommandGroup{
+        PathFollowerCommand(m_drive, start, "path path" ,true,false),
+        EngageBakeCommand(m_drive)
+            // frc2::SequentialCommandGroup{
+            //     IntakesDefaultCommand(m_intake),
+            //     frc2::WaitCommand(.1_s),
+            //     ReverseIntakesCommands(m_intake),
+            //     frc2::WaitCommand(.1_s),
+            //     IntakesDefaultCommand(m_intake),
+            //     frc2::WaitCommand(.1_s),
+            //     ReverseIntakesCommands(m_intake),
+            //     frc2::WaitCommand(.1_s),
+            //     IntakesDefaultCommand(m_intake),
+            //     frc2::WaitCommand(.1_s),
+            //     ReverseIntakesCommands(m_intake),
+            //     frc2::WaitCommand(.1_s),
+            //     IntakesDefaultCommand(m_intake),
+            //     frc2::WaitCommand(.1_s),
+            //     ToggleIntakeCommand(m_intake)
+            // }
             
-        }
+        // }
       
     );
   }

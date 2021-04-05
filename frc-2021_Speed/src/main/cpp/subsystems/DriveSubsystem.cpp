@@ -107,7 +107,8 @@ void DriveSubsystem::Drive(units::meters_per_second_t xSpeed,
   if(fabs(rot.to<double>()) > base){
     rot = rot * 2.2;
   }                        
-
+  // rot = rot * 0.0;//TODO Remove
+  // printf("there is no Yaw control");
   auto states = kDriveKinematics.ToSwerveModuleStates(
       fieldRelative ? frc::ChassisSpeeds::FromFieldRelativeSpeeds(
                           xSpeed, ySpeed, rot,

@@ -35,21 +35,21 @@ class AutoNavPathC
     AddCommands(
       frc2::ParallelRaceGroup{
         PathFollowerCommand2(m_drive, &m_follower[0], "path path" ,true,false),
-        CheckInRangeCommand(m_drive, 133.0, 1)
+        CheckInRangeCommand(m_drive, 126.0, 1)
       },
       frc2::ParallelRaceGroup{
         PathFollowerCommand2(m_drive, &m_follower[1], "path path" ,true,false),
         frc2::SequentialCommandGroup{
-          frc2::WaitCommand(1_s),
-          CheckInRangeCommand(m_drive, 147.0, 1)//144
+          frc2::WaitCommand(2.2_s),
+          CheckInRangeCommand(m_drive, 144.0, 1)//144
         }
         
       },
       frc2::ParallelRaceGroup{
         PathFollowerCommand2(m_drive, &m_follower[2], "path path" ,true,false),
         frc2::SequentialCommandGroup{
-          frc2::WaitCommand(2_s),
-          CheckInRangeCommand(m_drive, 144.0, 1)//146
+          frc2::WaitCommand(2_s),//2
+          CheckInRangeCommand(m_drive, 140.0, 1)//146
         }
       },
       PathFollowerCommand2(m_drive, &m_follower[3], "path path" ,true,false),

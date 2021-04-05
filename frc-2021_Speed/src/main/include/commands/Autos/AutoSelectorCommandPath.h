@@ -64,24 +64,24 @@ class AutoSelectorCommandPath
         if(targetY > 0){
           frc::SmartDashboard::PutString("PATH", "A Red");
           // printf("A Red");
-          GalacticSearchPathARed(m_pDrive, m_pIntake, m_followerARed);
+           GalacticSearchPathARed(m_pDrive, m_pIntake, m_followerARed);
           m_finished = true;
         }else{
           frc::SmartDashboard::PutString("PATH", "B Red");
           // printf("B Red");
-          GalacticSearchPathBRed(m_pDrive, m_pIntake, m_followerBRed);
+           GalacticSearchPathBRed(m_pDrive, m_pIntake, m_followerBRed);
           m_finished = true;
         }
       }else if(targetDistance > 0){//Blue
         if(targetY > 0){
           frc::SmartDashboard::PutString("PATH", "A Blue");
           // printf("A Blue");
-          GalacticSearchPathABlue(m_pDrive, m_pIntake, m_followerABlue);
+           GalacticSearchPathABlue(m_pDrive, m_pIntake, m_followerABlue);
           m_finished = true;
         }else{
           frc::SmartDashboard::PutString("PATH", "B Blue");
           // printf("B Blue");
-          GalacticSearchPathBBlue(m_pDrive, m_pIntake, m_followerBBlue);
+           GalacticSearchPathBBlue(m_pDrive, m_pIntake, m_followerBBlue);
           m_finished = true;
         }
       }

@@ -90,7 +90,7 @@ namespace IntakeConstants{
     static constexpr double kMaxIntakeAmp = 29.0;
     static constexpr double kAIntakeSpeed = 0.9;
     static constexpr double kAIntakeReverse = -0.6;
-    static constexpr double kBIntakeSpeed = 1.0;
+    static constexpr double kBIntakeSpeed = 0.8;//1;
     static constexpr double kBIntakeReverse = -0.5;
 
     static constexpr double kAIntakeCurrent = 25.0;
